@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { peopleApiSlice } from "./features/People/store/PeopleApiSlice";
 import PeopleSlice from "./features/People/store/PeopleSlice";
+import QuerySlice from "./store/QuerySlice";
 
 export const store = configureStore({
   reducer: {
     PeopleSlice: PeopleSlice,
+    QuerySlice: QuerySlice,
     [peopleApiSlice.reducerPath]: peopleApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
