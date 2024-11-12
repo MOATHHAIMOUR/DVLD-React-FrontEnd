@@ -1,16 +1,54 @@
 import ManagePeopleLogo from "../features/People/components/Logo";
 import Filter from "../features/People/components/Filter";
-import DataGrid from "../features/People/components/DataGrid";
+import PeopleList from "../features/People/components/PeopleList";
+import Button from "../components/ui/Button";
+import Row from "../components/ui/Row";
+import Col from "../components/ui/Col";
+import Modal from "../components/ui/Modal";
+import { useState } from "react";
+import ConfirmDeletePerson from "../features/People/components/ConfirmDeletePerson";
+import Pagination from "../components/ui/Pagination";
+import { useFetchPeopleQuery } from "../features/People/store/PeopleApiSlice";
 
 const ManagePeople = () => {
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
+  const { totalPages } = useFetchPeopleQuery(
+    {},
+    {
+      selectFromResult: ({ data }) => ({
+        totalPages: data?.meta.totalPages || 1,
+      }),
+    }
+  );
+
+  function handleCloseModal() {
+    setConfirmDeleteModal(false);
+  }
+  function handleOpenModal() {
+    setConfirmDeleteModal(true);
+  }
+
   return (
-    <div className="flex flex-col gap-6">
+    <Col className="gap-6 h-full ">
       <ManagePeopleLogo />
-      <div>
+      <Row className="items-center justify-between">
         <Filter />
-      </div>
-      <DataGrid />
-    </div>
+        <Row className="gap-3">
+          <Button className="text-white px-4 bg-slate-700 p-1 rounded-md ">
+            Add Person
+          </Button>
+        </Row>
+      </Row>
+      <PeopleList handleOpenModal={handleOpenModal} />
+      <Pagination numberOfDisplayPages={5} totalPages={totalPages} />
+      <Modal
+        onClose={handleCloseModal} // Use `onClose` instead of `HandleCloseModal`
+        isOpen={confirmDeleteModal}
+        title="Confirm Deletion"
+      >
+        <ConfirmDeletePerson CloseModal={handleCloseModal} />
+      </Modal>
+    </Col>
   );
 };
 

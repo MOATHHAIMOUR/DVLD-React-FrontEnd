@@ -1,14 +1,18 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Box from "../components/ui/Box";
+import Row from "../components/ui/Row";
 
 const RootLayout = () => {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="ml-64 flex-grow p-8">
+    <Row className="grid grid-cols-1 sm:grid-cols-[auto,1fr]">
+      <Box className="w-64">
+        <Sidebar />
+      </Box>
+      <Box className="p-8  min-w-0">
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Row>
   );
 };
 

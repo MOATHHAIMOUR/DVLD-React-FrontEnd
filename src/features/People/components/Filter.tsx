@@ -1,14 +1,94 @@
+import { useState } from "react";
+import { FilterByData, IFilterBy, IFilterByPeople } from "../../../data";
+import SelectMenu from "../../../components/ui/SelectMenu";
+import Input from "../../../components/ui/Input";
+
 const Filter = () => {
+  /* ────────────── state  ────────────── */
+  const [selectedFilterBy, setSelectedFilterBy] = useState<
+    IFilterBy<IFilterByPeople>
+  >(FilterByData[0]);
+
+  const [query, setQuery] = useState("");
+
+  /* ────────────── Handlers  ────────────── */
+
+  function handleOnChangeFilterBy(FilterByName: string) {
+    const FilterBy = FilterByData.find((f) => f.value.name === FilterByName);
+    setSelectedFilterBy(FilterBy!);
+    setQuery("");
+  }
+
+  function handleChangeQuery(
+    FilterBy: IFilterBy<IFilterByPeople>["type"],
+    value: string
+  ) {
+    switch (FilterBy) {
+      // accept the value only if it's a number otherwise less
+      case "number":
+        if (!isNaN(Number(value))) {
+          setQuery(value);
+        }
+        break;
+      case "string":
+        if (isNaN(Number(value)) || value === "") {
+          setQuery(value);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  /* ────────────── Render  ────────────── */
+
+  const renderFilterBys = FilterByData.map((filterBy, index) => (
+    <option key={index} value={filterBy.value.name}>
+      {filterBy.value.displayName}
+    </option>
+  ));
+
+  const renderFilterByQueryBox = () => {
+    switch (selectedFilterBy.type) {
+      case "string":
+      case "number":
+        return (
+          <Input
+            value={query}
+            onChange={(e) =>
+              handleChangeQuery(selectedFilterBy.type, e.target.value)
+            }
+            className="shadow-2xl border-2"
+          />
+        );
+      case "category":
+        switch (selectedFilterBy.value.name) {
+          case "Gender":
+            return (
+              <SelectMenu onchange={handleOnChangeFilterBy}>
+                <>
+                  <option value={"Male"}>{"Male"}</option>
+                  <option value={"Female"}>{"Female"}</option>
+                </>
+              </SelectMenu>
+            );
+          default:
+            return <p>No Option is Selected</p>;
+        }
+      default:
+        return <p>No Option is Selected</p>;
+    }
+  };
+
   return (
-    <div className="flex items-center  w-[350px]">
-      <p className="text-[18px] font-semibold w-[100px]">Filter by:</p>
-      <select className="p-1 bg-gray-50   text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option>Choose a country</option>
-        <option value="US">United States</option>
-        <option value="CA">Canada</option>
-        <option value="FR">France</option>
-        <option value="DE">Germany</option>
-      </select>
+    <div className="flex gap-2 items-center">
+      <p className="text-[18px] font-semibold">Filter by:</p>
+      <div className="w-44">
+        <SelectMenu onchange={handleOnChangeFilterBy}>
+          {renderFilterBys}
+        </SelectMenu>
+      </div>
+      <div>{renderFilterByQueryBox()}</div>
     </div>
   );
 };

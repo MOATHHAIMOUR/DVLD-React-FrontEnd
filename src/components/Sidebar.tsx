@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { NavData } from "../data/navbar";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRef, useState } from "react";
+import { NavData } from "../data";
 
 const Sidebar = () => {
   /* ────────────── state  ────────────── */
@@ -12,6 +12,7 @@ const Sidebar = () => {
   function HandleMenuOpen(index: number) {
     setIsSupMenOpen((prev) => (prev === index ? null : index));
   }
+  console.log("object");
 
   /* ────────────── Render  ────────────── */
   const renderLinks = NavData.map((link, index) => {
@@ -71,7 +72,7 @@ const Sidebar = () => {
       >
         <span className="sr-only">Open sidebar</span>
       </button>
-      <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
+      <aside className="fixed top-0 left-0 z-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
           <ul className="space-y-2 font-medium">{renderLinks}</ul>
         </div>
