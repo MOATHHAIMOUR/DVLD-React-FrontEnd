@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IApiResponse } from "../../../interfaces/IApiResponse";
-import { IPerson } from "../../../interfaces/IPerson";
+import { IPerson } from "../interfaces";
 
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",

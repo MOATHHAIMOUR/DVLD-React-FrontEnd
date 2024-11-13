@@ -9,7 +9,7 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "../../../store";
 import { setSelectedPerson } from "../store/PeopleSlice";
-import { IPerson } from "../../../interfaces/IPerson";
+import { IPerson } from "../interfaces";
 import Col from "../../../components/ui/Col";
 
 interface IProps {
@@ -34,7 +34,7 @@ const PeopleList = ({ handleOpenModal }: IProps) => {
     console.log(personId);
     dispatch(
       setSelectedPerson({
-        id: personId,
+        id: personId!,
         name: firstName + lastName,
         NationalNo: nationalNo,
       })
@@ -65,7 +65,7 @@ const PeopleList = ({ handleOpenModal }: IProps) => {
     if (selectedPersonId === personId) return;
     dispatch(
       setSelectedPerson({
-        id: personId,
+        id: personId!,
         name: firstName + lastName,
         NationalNo: nationalNo,
       })

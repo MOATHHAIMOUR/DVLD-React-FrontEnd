@@ -8,4 +8,5 @@ export interface IApiResponse<T> {
 
 interface IMeatPagination {
   totalPages: number;
+  count: number;
 }

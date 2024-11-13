@@ -1,14 +1,14 @@
-import ManagePeopleLogo from "../features/People/components/Logo";
+import ManagePeopleLogo from "../features/People/components/ManagePeopleLogo";
 import Filter from "../features/People/components/Filter";
 import PeopleList from "../features/People/components/PeopleList";
-import Button from "../components/ui/Button";
 import Row from "../components/ui/Row";
 import Col from "../components/ui/Col";
 import Modal from "../components/ui/Modal";
 import { useState } from "react";
 import ConfirmDeletePerson from "../features/People/components/ConfirmDeletePerson";
-import Pagination from "../components/ui/Pagination";
 import { useFetchPeopleQuery } from "../features/People/store/PeopleApiSlice";
+import Pagination from "../components/ui/Pagination";
+import Button from "../components/ui/Button";
 
 const ManagePeople = () => {
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
@@ -40,7 +40,7 @@ const ManagePeople = () => {
         </Row>
       </Row>
       <PeopleList handleOpenModal={handleOpenModal} />
-      <Pagination numberOfDisplayPages={5} totalPages={totalPages} />
+      <Pagination numberOfDisplayPages={5} totalPages={8} />
       <Modal
         onClose={handleCloseModal} // Use `onClose` instead of `HandleCloseModal`
         isOpen={confirmDeleteModal}

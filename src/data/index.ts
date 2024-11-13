@@ -1,9 +1,20 @@
-import { ElementType, ReactElement } from "react";
+import { ElementType } from "react";
 import { BsPersonVcardFill } from "react-icons/bs";
 import { IoIosPeople, IoMdPersonAdd } from "react-icons/io";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
+import {
+  FaIdCard,
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaGlobe,
+  FaCalendarAlt,
+  FaGenderless,
+  FaAddressBook,
+} from "react-icons/fa";
+import { IPostPerson } from "../features/People/interfaces";
 
 // Nav par Data
 export interface INavbar {
@@ -165,6 +176,8 @@ export const PeopleTableHeaderData: Array<string> = [
   "Email",
 ];
 
+//------------------------------------------------
+
 // people context menu
 export interface IContextMenuItem<T> {
   operation: T;
@@ -195,5 +208,101 @@ export const peopleContextMenuItemData: Array<
   {
     operation: "Delete Person",
     Icon: TiDelete,
+  },
+];
+//------------------------------------------------
+
+// generic input filed type
+interface IField<T> {
+  isMenu: boolean;
+  name: keyof T;
+  type: string;
+  displayName: string;
+  placeholder: string;
+  Icon: ElementType;
+}
+
+export const PersonFieldsData: IField<IPostPerson>[] = [
+  {
+    name: "nationalNo",
+    type: "text",
+    displayName: "National Number",
+    placeholder: "Enter National Number",
+    isMenu: false,
+
+    Icon: FaIdCard,
+  },
+  {
+    name: "firstName",
+    type: "text",
+    displayName: "First Name",
+    placeholder: "Enter First Name",
+    isMenu: false,
+
+    Icon: FaUser,
+  },
+  {
+    name: "secondName",
+    type: "text",
+    displayName: "Second Name",
+    placeholder: "Enter Second Name",
+    isMenu: false,
+
+    Icon: FaUser,
+  },
+  {
+    name: "thirdName",
+    type: "text",
+    displayName: "Third Name",
+    placeholder: "Enter Third Name",
+    isMenu: false,
+
+    Icon: FaUser,
+  },
+  {
+    name: "lastName",
+    type: "text",
+    displayName: "Last Name",
+    placeholder: "Enter Last Name",
+    isMenu: false,
+
+    Icon: FaUser,
+  },
+  {
+    name: "dateOfBirth",
+    type: "date",
+    displayName: "Date of Birth",
+    isMenu: false,
+
+    placeholder: "mm/dd/yyyy",
+    Icon: FaCalendarAlt,
+  },
+
+  {
+    name: "address",
+    type: "text",
+    displayName: "Address",
+    placeholder: "Enter Address",
+    isMenu: false,
+
+    Icon: FaAddressBook,
+  },
+  {
+    name: "phone",
+    type: "tel",
+    displayName: "Phone",
+    placeholder: "Enter Phone Number",
+    isMenu: false,
+
+    Icon: FaPhone,
+  },
+  {
+    name: "email",
+    type: "email",
+    displayName: "Email",
+    placeholder: "Enter Email Address",
+    isMenu: false,
+
+    Icon: FaEnvelope,
   },
 ];

@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface IProps {
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 
 const Box = ({ children, className }: IProps) => {

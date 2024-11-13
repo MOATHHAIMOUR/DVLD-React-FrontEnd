@@ -9,7 +9,7 @@ const RootLayout = () => {
       <Box className="w-64">
         <Sidebar />
       </Box>
-      <Box className="p-8  min-w-0">
+      <Box className="p-8 min-w-0 min-h-screen">
         <Outlet />
       </Box>
     </Row>
