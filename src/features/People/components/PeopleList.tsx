@@ -1,141 +1,65 @@
-import { useFetchPeopleQuery } from "../store/PeopleApiSlice";
-import TableSkeletonLoading from "./TableSkeletonLoading";
-import TableWithContextMenu from "../../../components/ui/TableWithContextMenu";
+import { useNavigate } from "react-router-dom";
+import Box from "../../../components/ui/Box";
+import DataGrid from "../../../components/ui/DataGrid";
 import {
   peopleContextMenuItemData,
   PeopleTableHeaderData,
   TPeopleOperation,
 } from "../../../data";
-import { useDispatch } from "react-redux";
-import { AppDispatch, useAppSelector } from "../../../store";
-import { setSelectedPerson } from "../store/PeopleSlice";
-import { IPerson } from "../interfaces";
-import Col from "../../../components/ui/Col";
+import { TSort } from "../../../types";
+import { IPersonTableData } from "../interfaces";
 
 interface IProps {
-  handleOpenModal: () => void;
+  handleOpenModal: (person: IPersonTableData) => void;
+  onSort: (selectedHeader: string, sort: TSort) => void;
+  peopleData: Array<IPersonTableData>;
 }
-const PeopleList = ({ handleOpenModal }: IProps) => {
-  /* ────────────── STORE  ────────────── */
-  const dispatch: AppDispatch = useDispatch();
-
-  const selectedPersonId = useAppSelector((state) => state.PeopleSlice.id);
-
-  const { isLoading, data: response } = useFetchPeopleQuery({});
-
+const PeopleList = ({ handleOpenModal, onSort, peopleData }: IProps) => {
   /* ────────────── SATE  ────────────── */
+  const navigate = useNavigate();
 
-  function HandleSelectedRow({
-    personId,
-    firstName,
-    lastName,
-    nationalNo,
-  }: IPerson) {
-    console.log(personId);
-    dispatch(
-      setSelectedPerson({
-        id: personId!,
-        name: firstName + lastName,
-        NationalNo: nationalNo,
-      })
-    );
-  }
-
-  function HandleSelectedOperation(operation: TPeopleOperation) {
+  /* ────────────── HANDLERS  ────────────── */
+  function HandleSelectedOperation(operation: TPeopleOperation, obj: object) {
+    const person = obj as IPersonTableData;
+    console.log(person.address);
     switch (operation) {
       case "Add Person":
+        navigate("/add-person");
         break;
       case "Delete Person":
-        handleOpenModal();
+        handleOpenModal(person);
         break;
       case "Edit Person":
+        navigate("/edit-person");
         break;
       case "Show Details":
+        navigate(`/person-details?personId=${person.personId}`);
         break;
       default:
         break;
     }
   }
 
-  function handleRightClick(
-    e: React.MouseEvent<HTMLDivElement>,
-    { personId, firstName, lastName, nationalNo }: IPerson
-  ) {
-    e.preventDefault();
-    if (selectedPersonId === personId) return;
-    dispatch(
-      setSelectedPerson({
-        id: personId!,
-        name: firstName + lastName,
-        NationalNo: nationalNo,
-      })
-    );
+  /* ────────────── HANDLERS  ────────────── */
+  function HandleSort(selectedHeader: string, sortType: TSort) {
+    if (sortType === "NONE") onSort(selectedHeader, "NONE");
+    else {
+      onSort(selectedHeader, sortType);
+    }
   }
 
-  /* ────────────── Render  ────────────── */
-
-  const tableRowsRender = response?.data?.map((person) => (
-    <tr
-      key={person.personId}
-      onClick={() => HandleSelectedRow(person)}
-      onContextMenu={(e) => handleRightClick(e, person)}
-      className={`border-b border-gray-200 ${
-        person.personId === selectedPersonId ? "bg-slate-800 text-white" : ""
-      }`}
-    >
-      <th className="px-3 py-1  border border-gray-300 text-center">
-        {person.personId}
-      </th>
-      <th className="px-3 py-1 border border-gray-300 text-center">
-        {person.nationalNo}
-      </th>
-      <th className="px-3 py-1 border border-gray-300 text-center">
-        {person.firstName}
-      </th>
-      <th className="px-3 py-1 border border-gray-300 text-center">
-        {person.secondName}
-      </th>
-      <th className="px-3 py-1 border border-gray-300 text-center">
-        {person.thirdName}
-      </th>
-      <th className=" px-3 py-1 border border-gray-300 text-center">
-        {person.lastName}
-      </th>
-      <th className="px-3 py-1  border border-gray-300 text-center">
-        {person.gender}
-      </th>
-      <th className=" px-3 py-1 border border-gray-300 text-center">
-        {person.dateOfBirth}
-      </th>
-      <th className=" px-3 py-1 border border-gray-300 text-center">
-        {person.countryName}
-      </th>
-      <th className="px-3  py-1 border border-gray-300 text-center">
-        {person.phone}
-      </th>
-      <th className=" px-3 py-1 border border-gray-300 text-center">
-        {person.email}
-      </th>
-    </tr>
-  ));
-
-  const renderTBHeader = PeopleTableHeaderData.map((head, i) => (
-    <th key={i} className="px-4 text-center w-auto whitespace-nowrap py-3">
-      {head}
-    </th>
-  ));
-
-  if (isLoading) return <TableSkeletonLoading />;
   return (
-    <Col>
-      <TableWithContextMenu<TPeopleOperation>
-        tableHeader={renderTBHeader}
-        tableBody={tableRowsRender}
+    <Box className="w-full mx-auto">
+      <DataGrid<TPeopleOperation>
+        tableHeader={PeopleTableHeaderData}
+        tableBody={peopleData}
         contextMenuData={peopleContextMenuItemData}
-        onItemClick={HandleSelectedOperation}
-        SelectedRow={selectedPersonId}
+        onMenuItemClick={HandleSelectedOperation}
+        onSort={(selectedHeaderName, sortType) =>
+          HandleSort(selectedHeaderName, sortType)
+        }
       />
-    </Col>
+    </Box>
   );
 };
 

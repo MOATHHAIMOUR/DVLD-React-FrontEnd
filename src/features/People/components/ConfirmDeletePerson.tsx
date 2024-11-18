@@ -1,29 +1,21 @@
 import Button from "../../../components/ui/Button";
-import { useAppSelector } from "../../../store";
 import { AiOutlineClose, AiOutlineCheck } from "react-icons/ai"; // Importing icons
-import { useDeletePersonMutation } from "../store/PeopleApiSlice";
-import { toast } from "react-toastify";
+import { IPersonDetailView } from "../interfaces";
+import { useDeletePersonHandler } from "../hooks/useDeletePersonHandler";
 
 interface IProps {
   CloseModal: () => void;
+  person: IPersonDetailView;
 }
-const ConfirmDeletePerson = ({ CloseModal }: IProps) => {
-  const selectedPerson = useAppSelector((state) => state.PeopleSlice);
-  const [deletePerson, { isLoading }] = useDeletePersonMutation();
+const ConfirmDeletePerson = ({ CloseModal, person }: IProps) => {
+  const { handleDelete, isLoading } = useDeletePersonHandler();
 
   async function HandleConfirmDeletePerson() {
-    try {
-      await deletePerson(selectedPerson.id!).unwrap(); // Unwrap to handle errors from RTK Query
-      toast.success("Person deleted successfully!", {
-        autoClose: 3000, // Duration of 3 seconds
-        hideProgressBar: true, // Hides the loading/progress bar
-      });
-    } catch (error) {
-      toast.error(error + "Failed to delete person. Please try again.");
-    } finally {
-      CloseModal();
-    }
+    await handleDelete(person.personId!);
+    CloseModal();
   }
+
+  console.log("personId: " + person.personId);
 
   return (
     <>
@@ -32,16 +24,20 @@ const ConfirmDeletePerson = ({ CloseModal }: IProps) => {
       </p>
 
       {/* Displaying selected person details */}
-      <div className="mb-6 text-left bg-gray-100 p-4 rounded-lg">
+      <div className="mb-6 flex flex-col gap-3 text-left bg-gray-100 p-4 rounded-lg">
         <p className="text-lg font-medium text-gray-800">
-          Name: <span className="text-gray-600">{selectedPerson.name}</span>
+          ID: <span className="text-gray-600 ">{person.personId}</span>
         </p>
         <p className="text-lg font-medium text-gray-800">
-          ID: <span className="text-gray-600">{selectedPerson.id}</span>
+          Name:{" "}
+          <span className="text-gray-600 ">
+            {" "}
+            {person.firstName + person.lastName}
+          </span>
         </p>
         <p className="text-lg font-medium text-gray-800">
           National No:{" "}
-          <span className="text-gray-600">{selectedPerson.NationalNo}</span>
+          <span className="text-gray-600 ">{person.nationalNo}</span>
         </p>
       </div>
 

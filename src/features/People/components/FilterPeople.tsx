@@ -2,15 +2,14 @@ import { useRef, useState } from "react";
 import { FilterByData, IFilterBy, IFilterByPeople } from "../../../data";
 import SelectMenu from "../../../components/ui/SelectMenu";
 import Input from "../../../components/ui/Input";
-import { AppDispatch, useAppDispatch } from "../../../store";
-import {
-  AddSimpleFilter,
-  RemoveAdvanceFilter,
-} from "../../../store/QuerySlice";
 import { isNumber } from "../../../utils/index";
 import ErrorMsg from "../../../components/ui/ErrorMsg";
+import { IFilter } from "../../../interfaces";
 
-const Filter = () => {
+interface IProps {
+  onChangeFilter: (filter: IFilter) => void;
+}
+const FilterPeople = ({ onChangeFilter }: IProps) => {
   /* ────────────── state  ────────────── */
   const [selectedFilterBy, setSelectedFilterBy] = useState<
     IFilterBy<IFilterByPeople>
@@ -18,21 +17,16 @@ const Filter = () => {
 
   const refQuery = useRef<HTMLInputElement>(null);
 
-  const dispatch: AppDispatch = useAppDispatch();
-
   const [error, setError] = useState<string | null>(null);
+
   /* ────────────── Handlers  ────────────── */
 
   function QueryBuilder() {
-    if (refQuery?.current?.value === "") {
-      dispatch(RemoveAdvanceFilter(selectedFilterBy.value.name));
-    } else {
-      dispatch(
-        AddSimpleFilter({
-          FilterBy: selectedFilterBy.value.name,
-          FilterValue: refQuery?.current?.value ?? "",
-        })
-      );
+    if (selectedFilterBy) {
+      onChangeFilter({
+        FilterBy: selectedFilterBy.value.name,
+        FilterValue: refQuery.current?.value ?? "",
+      });
     }
   }
 
@@ -134,4 +128,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default FilterPeople;

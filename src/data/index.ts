@@ -2,19 +2,19 @@ import { ElementType } from "react";
 import { BsPersonVcardFill } from "react-icons/bs";
 import { IoIosPeople, IoMdPersonAdd } from "react-icons/io";
 import { IoPersonAddOutline } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdModeEdit } from "react-icons/md";
 import { TiDelete } from "react-icons/ti";
 import {
   FaIdCard,
   FaUser,
   FaPhone,
   FaEnvelope,
-  FaGlobe,
   FaCalendarAlt,
-  FaGenderless,
   FaAddressBook,
+  FaSearch,
 } from "react-icons/fa";
-import { IPostPerson } from "../features/People/interfaces";
+import { IPerson } from "../features/People/interfaces";
+import { GrUserManager } from "react-icons/gr";
 
 // Nav par Data
 export interface INavbar {
@@ -30,14 +30,29 @@ export const NavData: Array<INavbar> = [
     path: "/people",
     children: [
       {
+        name: "People Management",
+        path: "/",
+        Icon: GrUserManager,
+      },
+      {
+        name: "Find Person",
+        path: "/find-person",
+        Icon: FaSearch,
+      },
+      {
         name: "Add Person",
-        path: "/people/add-person",
+        path: "/add-person",
         Icon: IoPersonAddOutline,
       },
       {
         name: "Edit Person",
-        path: "/people/edit-person",
-        Icon: IoPersonAddOutline,
+        path: "/edit-person",
+        Icon: MdModeEdit,
+      },
+      {
+        name: "Delete Person",
+        path: "/delete-person",
+        Icon: MdDelete,
       },
     ],
   },
@@ -77,6 +92,11 @@ export interface IFilterByPeople {
     | "Gender"
     | "Phone"
     | "Email";
+}
+
+export interface ILockupPerson {
+  name: "None" | "PersonID" | "NationalNo";
+  displayName: "None" | "Person ID" | "National No.";
 }
 
 export const FilterByData: Array<IFilterBy<IFilterByPeople>> = [
@@ -159,21 +179,50 @@ export const FilterByData: Array<IFilterBy<IFilterByPeople>> = [
   },
 ];
 
+export const FindPersonData: Array<IFilterBy<ILockupPerson>> = [
+  {
+    type: "None",
+    value: {
+      name: "None",
+      displayName: "None",
+    },
+  },
+  {
+    type: "number",
+    value: {
+      name: "PersonID",
+      displayName: "Person ID",
+    },
+  },
+  {
+    type: "number",
+    value: {
+      name: "NationalNo",
+      displayName: "National No.",
+    },
+  },
+];
+
 //------------------------------------------------
 
+export interface IHeaderData {
+  name: string;
+  displayName: string;
+}
 // People Header Table
-export const PeopleTableHeaderData: Array<string> = [
-  "Person ID",
-  "National No.",
-  "First Name",
-  "Second Name",
-  "Third Name",
-  "Last Name",
-  "Gender",
-  "Date Of Birth",
-  "Nationality",
-  "Phone",
-  "Email",
+export const PeopleTableHeaderData: Array<IHeaderData> = [
+  { displayName: "Person ID", name: "PersonId" },
+  { displayName: "National No.", name: "NationalNo" },
+  { displayName: "First Name", name: "FirstName" },
+  { displayName: "Second Name", name: "SecondName" },
+  { displayName: "Third Name", name: "ThirdName" },
+  { displayName: "Last Name", name: "LastName" },
+  { displayName: "Gender", name: "Gender" },
+  { displayName: "Phone", name: "Phone" },
+  { displayName: "Email", name: "Email" },
+  { displayName: "Address", name: "Address" },
+  { displayName: "Date Of Birth", name: "DateOfBirth" },
+  { displayName: "Nationality", name: "Nationality" },
 ];
 
 //------------------------------------------------
@@ -222,7 +271,7 @@ interface IField<T> {
   Icon: ElementType;
 }
 
-export const PersonFieldsData: IField<IPostPerson>[] = [
+export const PersonFieldsData: IField<IPerson>[] = [
   {
     name: "nationalNo",
     type: "text",
@@ -273,7 +322,6 @@ export const PersonFieldsData: IField<IPostPerson>[] = [
     type: "date",
     displayName: "Date of Birth",
     isMenu: false,
-
     placeholder: "mm/dd/yyyy",
     Icon: FaCalendarAlt,
   },
@@ -304,5 +352,21 @@ export const PersonFieldsData: IField<IPostPerson>[] = [
     isMenu: false,
 
     Icon: FaEnvelope,
+  },
+];
+
+// enum for Save person mode
+export enum enumFormMode {
+  Add,
+  Edit,
+}
+
+//Gender Data
+export const GenderData = [
+  {
+    name: "Male",
+  },
+  {
+    name: "Female",
   },
 ];

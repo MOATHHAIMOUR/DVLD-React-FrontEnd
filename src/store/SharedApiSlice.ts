@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IApiResponse } from "../interfaces/IApiResponse";
+import { IGenericApiResponse } from "../interfaces/IApiResponse";
 
 interface ICountry {
   countryId: number;
@@ -12,11 +12,11 @@ export const sharedApiSlice = createApi({
   reducerPath: "sharedApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1" }), // Adjust the base URL as needed
   endpoints: (builder) => ({
-    fetchCountries: builder.query<IApiResponse<Array<ICountry>>, void>({
+    fetchCountries: builder.query<IGenericApiResponse<Array<ICountry>>, void>({
       query: () => ({
         url: "/GetAllCountries", // Adjust endpoint as needed
       }),
-      transformResponse: (response: IApiResponse<Array<ICountry>>) => {
+      transformResponse: (response: IGenericApiResponse<Array<ICountry>>) => {
         return response;
       },
     }),

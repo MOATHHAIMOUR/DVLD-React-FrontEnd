@@ -1,4 +1,4 @@
-export interface IApiResponse<T> {
+export interface IGenericApiResponse<T> {
   data: T;
   meta: IMeatPagination;
   message: string;

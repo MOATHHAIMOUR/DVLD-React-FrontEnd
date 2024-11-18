@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IApiResponse } from "../../../interfaces/IApiResponse";
-import { IPerson } from "../interfaces";
+import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
+import { IApiPerson, IPerson, IPersonTableData } from "../interfaces";
 
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",
@@ -9,19 +9,24 @@ export const peopleApiSlice = createApi({
     baseUrl: "http://localhost:5121/Api/v1/Person",
   }),
   endpoints: (builder) => ({
-    fetchPeople: builder.query<IApiResponse<Array<IPerson>>, object>({
-      query: () => {
+    fetchPeople: builder.query<
+      IGenericApiResponse<Array<IPersonTableData>>,
+      string
+    >({
+      query: (query) => {
         return {
-          url: "/GetPeople",
+          url: `/GetPeople${query}`,
         };
       },
-      transformResponse: (response: IApiResponse<Array<IPerson>>) => {
+      transformResponse: (
+        response: IGenericApiResponse<Array<IPersonTableData>>
+      ) => {
         // Return only the data (list of people) if successful
         return response;
       },
       transformErrorResponse: (response: {
         status: number;
-        data: IApiResponse<Array<string>>;
+        data: IGenericApiResponse<Array<string>>;
       }) => {
         // Customize the error response here, extracting errors if available
         return {
@@ -31,6 +36,36 @@ export const peopleApiSlice = createApi({
       },
       providesTags: [{ type: "People", id: "LIST" }],
     }),
+    AddPerson: builder.mutation<IGenericApiResponse<IPerson>, IPerson>({
+      query: (newPerson) => ({
+        url: "/AddPerson",
+        method: "POST",
+        body: newPerson,
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => ({
+        status: response.status,
+        errors: response.data.errors || ["An unexpected error occurred"],
+      }),
+      invalidatesTags: [{ type: "People", id: "LIST" }],
+    }),
+    UpdatePerson: builder.mutation<IGenericApiResponse<IPerson>, IPerson>({
+      query: (Person) => ({
+        url: "/UpdatePerson",
+        method: "PUT",
+        body: Person,
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => ({
+        status: response.status,
+        errors: response.data.errors || ["An unexpected error occurred"],
+      }),
+      invalidatesTags: [{ type: "People", id: "LIST" }],
+    }),
     deletePerson: builder.mutation<void, number>({
       query: (id) => ({
         url: `/DeletePerson/${id}`,
@@ -39,7 +74,28 @@ export const peopleApiSlice = createApi({
       // Optionally, you can update the cache after deleting
       invalidatesTags: [{ type: "People", id: "LIST" }],
     }),
+    fetchPerson: builder.query<
+      IGenericApiResponse<IApiPerson>, // Using IApiPerson in the response type
+      string | null // Query parameter
+    >({
+      query: (query) => ({
+        url: `/GetPerson${query}`, // Construct the API URL
+      }),
+      transformResponse: (
+        response: IGenericApiResponse<IApiPerson>
+      ): IGenericApiResponse<IApiPerson> => {
+        // If any transformation is required, it can be done here
+        return response;
+      },
+    }),
   }),
 });
 
-export const { useFetchPeopleQuery, useDeletePersonMutation } = peopleApiSlice;
+export const {
+  useAddPersonMutation,
+  useUpdatePersonMutation,
+  useFetchPeopleQuery,
+  useDeletePersonMutation,
+  useFetchPersonQuery,
+  useLazyFetchPersonQuery,
+} = peopleApiSlice;

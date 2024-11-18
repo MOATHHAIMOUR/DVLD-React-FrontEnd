@@ -3,82 +3,127 @@ import { useState } from "react";
 interface IProps {
   numberOfDisplayPages: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ numberOfDisplayPages, totalPages }: IProps) => {
+const Pagination = ({
+  numberOfDisplayPages,
+  onPageChange,
+  totalPages,
+}: IProps) => {
   /* ────────────── State  ────────────── */
-  const [paginationList, setPaginationList] = useState<Array<number>>(
-    Array.from({ length: numberOfDisplayPages }, (_, index) => index + 1)
-  );
-  const [paginationSlice, setPaginationSlice] = useState(0);
 
-  const paginationLinksRender = paginationList
-    .slice(paginationSlice, paginationSlice + numberOfDisplayPages)
+  const [pagination, setPagination] = useState({
+    offset: 0,
+    list: Array.from({ length: numberOfDisplayPages }, (_, index) => index + 1),
+  });
+  const [selectedPage, setSelectedPage] = useState(1);
+
+  /* ────────────── Render  ────────────── */
+  const paginationLinksRender = pagination.list
+    .slice(pagination.offset)
     .map((pageNumber, i) => (
-      <li key={i}>
-        <a className="flex cursor-pointer items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          {pageNumber}
-        </a>
-      </li>
+      <button
+        key={i}
+        onClick={() => HandleChangePage(pageNumber)}
+        className={`px-4 py-2 border text-sm font-medium 
+      ${
+        selectedPage === pageNumber
+          ? "bg-[#374151] text-white scale-110"
+          : "bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-gray-300"
+      }`}
+      >
+        {pageNumber}
+      </button>
     ));
 
   /* ────────────── Derived Values  ────────────── */
-  const isEnd = paginationList.length === totalPages;
-  const isStart = paginationSlice === 0;
+  const isEnd = pagination.list.length === totalPages;
+  const isStart = pagination.offset === 0;
 
   /* ────────────── Handlers  ────────────── */
-  function HandleNextPaginationSlice() {
-    setPaginationSlice((prev) => prev + 5);
 
-    setPaginationList((prevList) =>
-      totalPages - prevList.length < 5
-        ? [
-            ...prevList,
-            ...Array.from(
-              { length: totalPages - prevList.length },
-              (_, index) => prevList.length + index + 1
-            ),
-          ]
-        : [
-            ...prevList,
-            ...Array.from(
-              { length: numberOfDisplayPages },
-              (_, index) => prevList.length + index + 1
-            ),
-          ]
-    );
+  function HandleChangePage(pageNumber: number) {
+    setSelectedPage(pageNumber);
+    onPageChange(pageNumber);
+  }
+
+  function HandleNextPaginationSlice() {
+    setPagination((prev) => {
+      const newOffset = prev.offset + 5;
+      const newList =
+        totalPages - newOffset < 5
+          ? [
+              ...prev.list,
+              ...Array.from(
+                { length: totalPages - newOffset },
+                (_, index) => prev.list.length + index + 1
+              ),
+            ]
+          : [
+              ...prev.list,
+              ...Array.from(
+                { length: numberOfDisplayPages },
+                (_, index) => prev.list.length + index + 1
+              ),
+            ];
+
+      return {
+        offset: newOffset,
+        list: newList,
+      };
+    });
   }
 
   function HandlePrevPaginationSlice() {
-    setPaginationSlice((prev) => prev - 5);
-    console.log(totalPages === paginationList.length);
-    setPaginationList((prevList) =>
-      totalPages === prevList.length
-        ? [...prevList.slice(0, -(prevList.length % paginationSlice))]
-        : [...prevList.slice(0, -paginationSlice)]
-    );
+    setPagination((prev) => {
+      const newOffset = prev.offset - 5;
+      const newList =
+        totalPages % prev.offset === 0
+          ? [...prev.list.slice(0, -prev.offset)]
+          : [...prev.list.slice(0, -(prev.list.length % prev.offset))];
+
+      return {
+        offset: newOffset,
+        list: newList,
+      };
+    });
   }
 
   return (
-    <div className="flex flex-col flex-grow-[1] ">
-      <nav className="mx-auto flex items-center flex-column flex-wrap md:flex-row justify-between pt-4">
-        <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-          <button disabled={isStart} onClick={HandlePrevPaginationSlice}>
-            <a className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              Previous
-            </a>
-          </button>
-          {paginationLinksRender}
-          <li>
-            <button
-              disabled={isEnd}
-              onClick={HandleNextPaginationSlice}
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              Next
-            </button>
-          </li>
-        </ul>
+    <div className="flex justify-center items-center py-4">
+      <nav
+        className="inline-flex items-center space-x-1"
+        aria-label="Pagination"
+      >
+        {/* Previous Button */}
+        <button
+          disabled={isStart}
+          onClick={HandlePrevPaginationSlice}
+          className={`px-4 py-2 rounded-l-lg border text-sm font-medium 
+          ${
+            isStart
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-[#374151] text-white  hover:bg-slate-800 hover:text-white border-gray-300"
+          }`}
+        >
+          Previous
+        </button>
+
+        {paginationLinksRender}
+
+        <button
+          disabled={isEnd}
+          onClick={HandleNextPaginationSlice}
+          className={`px-4 py-2 rounded-r-lg border text-sm  font-medium 
+          ${
+            isEnd
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-[#374151] text-white  hover:bg-slate-800  hover:text-white border-gray-300"
+          }`}
+        >
+          Next
+        </button>
       </nav>
     </div>
   );

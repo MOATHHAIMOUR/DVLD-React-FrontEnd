@@ -3,6 +3,8 @@ import { HTMLAttributes, ReactNode } from "react";
 interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   isLoading?: boolean;
+  error?: boolean;
+  disabled?: boolean;
   type?: "submit" | "button" | "reset";
 }
 
@@ -11,10 +13,19 @@ const Button = ({
   className,
   children,
   type,
+  error,
+  disabled,
   ...props
 }: ButtonProps) => {
   return (
-    <button type={type} className={className} {...props} disabled={isLoading}>
+    <button
+      type={type}
+      className={`${className} ${
+        error || isLoading ? "cursor-not-allowed" : ""
+      }  flex items-center justify-center`}
+      {...props}
+      disabled={isLoading || error || disabled}
+    >
       {isLoading && (
         <svg
           className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -37,6 +48,7 @@ const Button = ({
           ></path>
         </svg>
       )}
+
       {children}
     </button>
   );

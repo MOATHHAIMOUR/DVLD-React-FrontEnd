@@ -1,60 +1,53 @@
-import * as yup from "yup";
+import { z } from "zod";
 
-const personValidationSchema = yup.object().shape({
-  nationalNo: yup
+export const personSchema = z.object({
+  nationalNo: z
     .string()
-    .required("National Number is required")
-    .matches(/^\d+$/, "National Number must be numeric"),
-
-  firstName: yup
+    .min(1, "National Number is required")
+    .regex(/^\d+$/, "National Number must be numeric"),
+  firstName: z
     .string()
-    .required("First name is required")
+    .min(1, "First name is required")
     .min(2, "First name must be at least 2 characters long"),
-
-  secondName: yup
+  secondName: z
     .string()
-    .required("Second name is required")
+    .min(1, "Second name is required")
     .min(2, "Second name must be at least 2 characters long"),
-
-  thirdName: yup
+  thirdName: z
     .string()
-    .required("Third name is required")
+    .min(1, "Third name is required")
     .min(2, "Third name must be at least 2 characters long"),
-
-  lastName: yup
+  lastName: z
     .string()
-    .required("Last name is required")
+    .min(1, "Last name is required")
     .min(2, "Last name must be at least 2 characters long"),
-
-  phone: yup
+  gender: z
     .string()
-    .required("Phone number is required")
-    .matches(/^[\d-+()]+$/, "Phone number format is invalid"),
-
-  email: yup
+    .min(1, "Gender is required")
+    .refine(
+      (value) => ["male", "female"].includes(value),
+      "Gender must be 'Male' or 'Female'"
+    ),
+  phone: z
     .string()
-    .email("Invalid email format")
-    .required("Email is required"),
-
-  address: yup
+    .min(1, "Phone number is required")
+    .regex(/^[\d-+()]+$/, "Phone number format is invalid"),
+  email: z.string().email("Invalid email format").min(1, "Email is required"),
+  address: z
     .string()
-    .required("Address is required")
+    .min(1, "Address is required")
     .min(5, "Address must be at least 5 characters long"),
+  dateOfBirth: z.coerce.date().refine(
+    (date) => !isNaN(date.getTime()), // Ensure it's a valid date
+    {
+      message: "Date of birth must be a valid date",
+    }
+  ),
 
-  dateOfBirth: yup
-    .date()
-    .required("Date of birth is required")
-    .typeError("Date of birth must be a valid date in ISO format"),
+  //image: z.string().nullable(),
 
-  image: yup.string().url("Image must be a valid URL").nullable(), // Allows the field to be null
-
-  gender: yup.string().required("Gender is required"),
-
-  countryId: yup
+  countryId: z
     .number()
-    .required("Country ID is required")
-    .positive("Country ID must be a positive number")
-    .integer("Country ID must be an integer"),
+    .int("Country ID must be an integer")
+    .positive("Country ID must be a positive number"),
 });
-
-export default personValidationSchema;

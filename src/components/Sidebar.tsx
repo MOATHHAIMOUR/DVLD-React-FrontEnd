@@ -12,7 +12,6 @@ const Sidebar = () => {
   function HandleMenuOpen(index: number) {
     setIsSupMenOpen((prev) => (prev === index ? null : index));
   }
-  console.log("object");
 
   /* ────────────── Render  ────────────── */
   const renderLinks = NavData.map((link, index) => {
@@ -48,9 +47,16 @@ const Sidebar = () => {
             link.children.map((link, index) => {
               return (
                 <NavLink
+                  end
                   key={index}
                   to={link.path}
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg group ${
+                      isActive
+                        ? "text-blue-400 bg-gray-200 dark:bg-gray-800"
+                        : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`
+                  }
                 >
                   <span>
                     <link.Icon />
