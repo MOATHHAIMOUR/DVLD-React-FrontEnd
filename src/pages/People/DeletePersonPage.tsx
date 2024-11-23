@@ -1,5 +1,5 @@
-import Logo from "../components/ui/Logo";
-import LookupPersonToDelete from "../features/People/components/LookupPersonToDelete";
+import Logo from "../../components/ui/Logo";
+import LookupPersonToDelete from "../../features/People/components/LookupPersonToDelete";
 
 const DeletePersonPage = () => {
   return (

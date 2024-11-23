@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
-import Logo from "../components/ui/Logo";
-import PersonDetail from "../features/People/components/PersonDetail";
+import Logo from "../../components/ui/Logo";
+import PersonDetail from "../../features/People/components/PersonDetail";
 
 const PersonDetailsPage = () => {
   /* ────────────── STATE  ────────────── */

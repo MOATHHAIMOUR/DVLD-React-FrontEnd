@@ -1,19 +1,23 @@
-import { useState } from "react";
 import FindPerson from "./FindPerson";
 import PersonDetail from "./PersonDetail";
 import { IQuery } from "../../../interfaces";
+import { useFetchPersonHandler } from "../hooks/useFindPersonHandler";
 
 const LookupPersonToDisplayInfo = () => {
-  const [personId, setSelectedPersonId] = useState<number>(0);
+  const { person, isFetching, isLoading, onFindPersonHandler } =
+    useFetchPersonHandler();
 
-  function onFindPerson(query: IQuery) {
-    setSelectedPersonId(Number(query.Filter?.FilterValue));
-  }
+  const onFindPerson = (query: IQuery) => {
+    onFindPersonHandler(query);
+  };
 
   return (
     <div className="flex flex-col gap-8">
-      <FindPerson isDisabled={personId !== 0} onFindPerson={onFindPerson} />
-      <PersonDetail personId={personId} />
+      <FindPerson
+        isLoading={isFetching || isLoading}
+        onFindPerson={onFindPerson}
+      />
+      <PersonDetail personDetail={person?.data} />
     </div>
   );
 };

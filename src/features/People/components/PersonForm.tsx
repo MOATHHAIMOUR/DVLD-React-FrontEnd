@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // Global Data
-import { enumFormMode, PersonFieldsData } from "../../../data";
+import { PersonFieldsData } from "../data";
 
 // UI Components
 import Box from "../../../components/ui/Box";
@@ -21,6 +21,7 @@ import { personSchema } from "../validations";
 // Shared APIs
 import { useFetchCountriesQuery } from "../../../store/SharedApiSlice";
 import { usePersonFormHandler } from "../hooks/usePersonFormHandler";
+import { enumFormMode } from "../../../interfaces";
 
 interface IProps {
   PersonData?: IPerson;

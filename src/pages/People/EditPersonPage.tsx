@@ -1,5 +1,5 @@
-import Logo from "../components/ui/Logo";
-import LookupPersonToEdit from "../features/People/components/LookupPersonToEdit";
+import Logo from "../../components/ui/Logo";
+import LookupPersonToEdit from "../../features/People/components/LookupPersonToEdit";
 
 const EditPersonPage = () => {
   return (

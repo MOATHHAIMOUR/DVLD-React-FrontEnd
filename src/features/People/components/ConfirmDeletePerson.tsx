@@ -1,11 +1,11 @@
 import Button from "../../../components/ui/Button";
 import { AiOutlineClose, AiOutlineCheck } from "react-icons/ai"; // Importing icons
-import { IPersonDetailView } from "../interfaces";
 import { useDeletePersonHandler } from "../hooks/useDeletePersonHandler";
+import { IPersonTableData } from "../interfaces";
 
 interface IProps {
   CloseModal: () => void;
-  person: IPersonDetailView;
+  person: IPersonTableData;
 }
 const ConfirmDeletePerson = ({ CloseModal, person }: IProps) => {
   const { handleDelete, isLoading } = useDeletePersonHandler();

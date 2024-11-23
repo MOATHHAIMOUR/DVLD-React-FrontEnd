@@ -1,19 +1,19 @@
 import { useRef, useState } from "react";
-import { FilterByData, IFilterBy, IFilterByPeople } from "../../../data";
+import { FilterByPersonData } from "../data";
 import SelectMenu from "../../../components/ui/SelectMenu";
 import Input from "../../../components/ui/Input";
 import { isNumber } from "../../../utils/index";
 import ErrorMsg from "../../../components/ui/ErrorMsg";
-import { IFilter } from "../../../interfaces";
+import { IFilter, IFilterByComboBox } from "../../../interfaces";
 
 interface IProps {
   onChangeFilter: (filter: IFilter) => void;
 }
 const FilterPeople = ({ onChangeFilter }: IProps) => {
   /* ────────────── state  ────────────── */
-  const [selectedFilterBy, setSelectedFilterBy] = useState<
-    IFilterBy<IFilterByPeople>
-  >(FilterByData[0]);
+  const [selectedFilterBy, setSelectedFilterBy] = useState<IFilterByComboBox>(
+    FilterByPersonData[0]
+  );
 
   const refQuery = useRef<HTMLInputElement>(null);
 
@@ -31,7 +31,9 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
   }
 
   function handleOnChangeFilterBy(FilterByName: string) {
-    const FilterBy = FilterByData.find((f) => f.value.name === FilterByName);
+    const FilterBy = FilterByPersonData.find(
+      (f) => f.value.name === FilterByName
+    );
     setSelectedFilterBy(FilterBy!);
     setError(null);
     if (refQuery.current) {
@@ -40,7 +42,7 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
   }
 
   function handleChangeQuery(
-    FilterType: IFilterBy<IFilterByPeople>["type"],
+    FilterType: IFilterByComboBox["type"],
     value: string
   ) {
     switch (FilterType) {
@@ -74,7 +76,7 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
 
   /* ────────────── Render  ────────────── */
 
-  const renderFilterBys = FilterByData.map((filterBy, index) => (
+  const renderFilterBys = FilterByPersonData.map((filterBy, index) => (
     <option key={index} value={filterBy.value.name}>
       {filterBy.value.displayName}
     </option>
@@ -100,7 +102,9 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
         switch (selectedFilterBy.value.name) {
           case "Gender":
             return (
-              <SelectMenu onchange={handleOnChangeFilterBy}>
+              <SelectMenu
+                onChange={(e) => handleOnChangeFilterBy(e.target.value)}
+              >
                 <>
                   <option value={"Male"}>{"Male"}</option>
                   <option value={"Female"}>{"Female"}</option>
@@ -119,7 +123,7 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
     <div className="flex gap-2 items-center">
       <p className="text-[18px] font-semibold">Filter by:</p>
       <div className="w-44">
-        <SelectMenu onchange={handleOnChangeFilterBy}>
+        <SelectMenu onChange={(e) => handleOnChangeFilterBy(e.target.value)}>
           {renderFilterBys}
         </SelectMenu>
       </div>

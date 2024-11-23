@@ -1,41 +1,35 @@
+import { toast } from "react-toastify";
 import Box from "../../../components/ui/Box";
 import FileUploader from "../../../components/ui/FileUploader";
 import { BuildSimpleQuery } from "../../../utils";
-import { IPersonDetailData } from "../interfaces";
+import { IApiPerson } from "../interfaces";
 import { useFetchPersonQuery } from "../store/PeopleApiSlice";
 
 interface IProps {
-  personId: number;
+  personId?: number;
+  personDetail?: IApiPerson;
 }
 
-const PersonDetail = ({ personId }: IProps) => {
-  const { data: response } = useFetchPersonQuery(
-    BuildSimpleQuery("personId", personId.toString())
-  );
+const PersonDetail = ({ personId, personDetail }: IProps) => {
+  const {
+    data: response,
+    isFetching,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useFetchPersonQuery(BuildSimpleQuery("personId", personId!), {
+    skip: personId === undefined,
+  });
 
+  if (isLoading || isFetching) return <p>Loading....</p>;
+  if (isSuccess) toast.success("Person is Fetched");
+  if (isError) toast.error("person not found");
   //get the data form base Person response
-  let person: IPersonDetailData | null = null;
-  if (response)
-    person = {
-      personId: response?.data.personId,
-      nationalNo: response?.data.nationalNo,
-      firstName: response?.data.firstName,
-      secondName: response?.data.secondName,
-      thirdName: response?.data.thirdName,
-      lastName: response?.data.lastName,
-      gender: response?.data.gender,
-      phone: response?.data.phone,
-      email: response?.data.email,
-      address: response?.data.address,
-      dateOfBirth: response?.data.dateOfBirth,
-      imagePath: response?.data.imagePath ?? null,
-      countryName: response?.data.countryName,
-    };
 
   /* ────────────── Render  ────────────── */
 
-  const excludedKeys = ["imagePath"]; // Keys to exclude
-  const fieldsRender = Object.entries(person || {})
+  const excludedKeys = ["imagePath", "countryId"]; // Keys to exclude
+  const fieldsRender = Object.entries(personDetail || response?.data || {})
     .filter(([key]) => !excludedKeys.includes(key)) // Exclude unwanted keys
     .map(([key, value]) => (
       <div key={key} className="flex flex-col">

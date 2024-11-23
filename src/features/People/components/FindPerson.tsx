@@ -1,28 +1,24 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  FilterByData,
-  FindPersonData,
-  IFilterBy,
-  IFilterByPeople,
-} from "../../../data";
+import { FilterByPersonData, FindPersonData } from "../data";
 import SelectMenu from "../../../components/ui/SelectMenu";
 import Input from "../../../components/ui/Input";
 import { isNumber } from "../../../utils/index";
 import ErrorMsg from "../../../components/ui/ErrorMsg";
 import Button from "../../../components/ui/Button";
 import Box from "../../../components/ui/Box";
-import { IQuery } from "../../../interfaces";
+import { IFilterByComboBox, IQuery } from "../../../interfaces";
 
 interface IProps {
   onFindPerson: (query: IQuery) => void;
   isLoading?: boolean;
-  isDisabled: boolean;
+  isDisabled?: boolean;
 }
 const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   /* ────────────── state  ────────────── */
-  const [selectedFilterBy, setSelectedFilterBy] = useState<
-    IFilterBy<IFilterByPeople>
-  >(FilterByData[0]);
+
+  const [selectedFilterBy, setSelectedFilterBy] = useState<IFilterByComboBox>(
+    FindPersonData[0]
+  );
 
   const refQuery = useRef<HTMLInputElement>(null!);
 
@@ -31,7 +27,10 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   /* ────────────── Handlers  ────────────── */
 
   const handleOnChangeFilterBy = useCallback((FilterByName: string) => {
-    const FilterBy = FilterByData.find((f) => f.value.name === FilterByName);
+    const FilterBy = FilterByPersonData.find(
+      (f) => f.value.name === FilterByName
+    );
+
     if (FilterBy) {
       setSelectedFilterBy(FilterBy);
       setError(null);
@@ -42,7 +41,7 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   }, []);
 
   function handleChangeQuery(
-    FilterType: IFilterBy<IFilterByPeople>["type"],
+    FilterType: IFilterByComboBox["type"],
     value: string
   ) {
     switch (FilterType) {
@@ -81,7 +80,6 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   }
 
   /* ────────────── Render  ────────────── */
-
   const renderFilterBys = useMemo(
     () =>
       FindPersonData.map((filterBy, index) => (
@@ -93,7 +91,7 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   );
 
   const renderFilterByQueryBox = () => {
-    switch (selectedFilterBy.type) {
+    switch (selectedFilterBy?.type) {
       case "string":
       case "number":
         return (
@@ -113,7 +111,9 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
         switch (selectedFilterBy.value.name) {
           case "Gender":
             return (
-              <SelectMenu onchange={handleOnChangeFilterBy}>
+              <SelectMenu
+                onChange={(e) => handleOnChangeFilterBy(e.target.value)}
+              >
                 <>
                   <option value={"Male"}>{"Male"}</option>
                   <option value={"Female"}>{"Female"}</option>
@@ -134,7 +134,10 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
         <Box className="flex gap-5">
           <p className="text-[18px] font-semibold">Find by:</p>
           <Box className="w-44">
-            <SelectMenu onchange={handleOnChangeFilterBy}>
+            <SelectMenu
+              value={selectedFilterBy.value.name}
+              onChange={(e) => handleOnChangeFilterBy(e.target.value)}
+            >
               {renderFilterBys}
             </SelectMenu>
           </Box>

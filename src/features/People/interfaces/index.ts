@@ -1,5 +1,3 @@
-import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
-
 //Base api response
 export interface IApiPerson {
   personId: number;
@@ -16,11 +14,12 @@ export interface IApiPerson {
   imagePath?: string | null; // Now allows undefined
   countryId: number;
   countryName: string;
+  isUser: boolean;
 }
 
 // default for add,  update person
 export interface IPerson {
-  personId?: number;
+  personId: number;
   nationalNo: string;
   firstName: string;
   secondName: string;
@@ -67,9 +66,3 @@ export interface IPersonTableData {
   dateOfBirth: string;
   countryName: string;
 }
-
-export type DTOToResponseMap = {
-  AddUpdate: IGenericApiResponse<IPerson>;
-  Detail: IGenericApiResponse<IPersonDetailData>;
-  Table: IGenericApiResponse<IPersonTableData>;
-};

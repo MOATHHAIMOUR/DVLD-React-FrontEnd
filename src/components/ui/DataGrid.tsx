@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { IContextMenuItem, IHeaderData } from "../../data";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
+import { IGenericContextMenuItem, IHeaderData } from "../../interfaces";
 
 interface IProps<T extends string> {
   tableHeader: IHeaderData[];
   tableBody: object[];
-  contextMenuData: Array<IContextMenuItem<T>>;
+  contextMenuData: Array<IGenericContextMenuItem<T>>;
   onMenuItemClick: (operation: T, obj: object) => void;
   onSort: (selectedHeadCell: string, sort: "ASC" | "DESC" | "NONE") => void;
 }
@@ -90,6 +90,7 @@ const DataGrid = <T extends string>({
   };
 
   function HandleClickMenuItem(operation: T) {
+    console.log("SelectedData: " + SelectedData);
     onMenuItemClick(operation, SelectedData);
     setShowMenu(false);
   }
@@ -189,8 +190,8 @@ const DataGrid = <T extends string>({
   ));
 
   return (
-    <div className="overflow-x-auto">
-      <table className=" border-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <div className="overflow-x-auto w-[100%]">
+      <table className=" w-[100%] border-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>{renderTBHeader}</tr>
         </thead>

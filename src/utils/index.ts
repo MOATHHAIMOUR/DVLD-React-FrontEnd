@@ -23,6 +23,10 @@ export function BuildQuery(query: IQuery): string {
   return arrQuery.length > 0 ? `?${arrQuery.join("&")}` : "";
 }
 
-export function BuildSimpleQuery(key: string, value: string): string {
+export function BuildSimpleQuery(key: string, value: string | number): string {
   return `?${key}=${value}`;
 }
+
+export const getQueryData = (location: Location) => {
+  return new URLSearchParams(location.search);
+};

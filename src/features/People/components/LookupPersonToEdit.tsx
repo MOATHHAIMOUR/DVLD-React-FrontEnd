@@ -2,9 +2,9 @@ import Box from "../../../components/ui/Box";
 import FindPerson from "./FindPerson";
 import PersonForm from "./PersonForm";
 import PersonFormLoadingSkeleton from "./PersonFormLoadingSkeleton";
-import { enumFormMode } from "../../../data";
 import Button from "../../../components/ui/Button";
 import { useFetchPersonHandler } from "../hooks/useFindPersonHandler";
+import { enumFormMode } from "../../../interfaces";
 
 const LookupPersonToEdit = () => {
   const {

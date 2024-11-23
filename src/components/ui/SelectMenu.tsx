@@ -1,20 +1,23 @@
-import { memo, ReactNode } from "react";
+import { memo, forwardRef, ReactNode, SelectHTMLAttributes } from "react";
 
-interface IProps {
+interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   children: ReactNode;
-  onchange: (value: string) => void;
   className?: string;
 }
 
-const SelectMenu = ({ children, className, onchange }: IProps) => {
-  return (
-    <select
-      onChange={(e) => onchange(e.target.value)}
-      className={`${className} p-[5px] bg-gray-50   text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-    >
-      {children}
-    </select>
-  );
-};
+const SelectMenu = forwardRef<HTMLSelectElement, IProps>(
+  ({ children, className, onChange, ...rest }, ref) => {
+    return (
+      <select
+        ref={ref}
+        onChange={onChange}
+        className={`${className} p-[5px] bg-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+        {...rest}
+      >
+        {children}
+      </select>
+    );
+  }
+);
 
 export default memo(SelectMenu);

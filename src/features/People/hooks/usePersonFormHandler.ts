@@ -1,11 +1,12 @@
 import { toast } from "react-toastify";
 import { IPerson } from "../interfaces";
-import { enumFormMode } from "../../../data";
+import {} from "../data";
 import {
   useAddPersonMutation,
   useUpdatePersonMutation,
 } from "../store/PeopleApiSlice";
 import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
+import { enumFormMode } from "../../../interfaces";
 
 export const usePersonFormHandler = () => {
   const [addPerson] = useAddPersonMutation();

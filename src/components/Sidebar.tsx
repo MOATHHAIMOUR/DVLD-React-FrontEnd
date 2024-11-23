@@ -5,12 +5,14 @@ import { NavData } from "../data";
 
 const Sidebar = () => {
   /* ────────────── state  ────────────── */
-  const [isSubMenuOpen, setIsSupMenOpen] = useState<number | null>(null);
+  const [SubMenuIndexIsOpened, setSupMenIndexIsOpened] = useState<
+    number | null
+  >(null);
   const submenuRef = useRef<HTMLUListElement | null>(null);
 
   /* ────────────── Handlers  ────────────── */
   function HandleMenuOpen(index: number) {
-    setIsSupMenOpen((prev) => (prev === index ? null : index));
+    setSupMenIndexIsOpened((prev) => (prev === index ? null : index));
   }
 
   /* ────────────── Render  ────────────── */
@@ -24,7 +26,7 @@ const Sidebar = () => {
           <span className="ms-3">{link.name}</span>
           <span
             className={`ml-auto cursor-pointer duration-300  ${
-              isSubMenuOpen === index ? "rotate-180 duration-300" : ""
+              SubMenuIndexIsOpened === index ? "rotate-180 duration-300" : ""
             }`}
             onClick={() => HandleMenuOpen(index)}
           >
@@ -34,11 +36,11 @@ const Sidebar = () => {
         <ul
           ref={submenuRef}
           className={`transition-all duration-300 ease-out overflow-hidden ${
-            isSubMenuOpen === index ? "opacity-100" : "opacity-0"
+            SubMenuIndexIsOpened === index ? "opacity-100" : "opacity-0"
           }`}
           style={{
             height:
-              submenuRef.current && isSubMenuOpen === index
+              submenuRef.current && SubMenuIndexIsOpened === index
                 ? `${submenuRef.current?.scrollHeight}px`
                 : "0px",
           }}

@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
-import { IApiPerson, IPerson, IPersonTableData } from "../interfaces";
+import {
+  IApiPerson,
+  IPerson,
+  IPersonDetailData,
+  IPersonTableData,
+} from "../interfaces";
 
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",
@@ -19,7 +24,7 @@ export const peopleApiSlice = createApi({
         };
       },
       transformResponse: (
-        response: IGenericApiResponse<Array<IPersonTableData>>
+        response: IGenericApiResponse<Array<IPersonDetailData>>
       ) => {
         // Return only the data (list of people) if successful
         return response;
@@ -42,6 +47,7 @@ export const peopleApiSlice = createApi({
         method: "POST",
         body: newPerson,
       }),
+
       transformErrorResponse: (response: {
         status: number;
         data: IGenericApiResponse<Array<string>>;
@@ -79,7 +85,8 @@ export const peopleApiSlice = createApi({
       string | null // Query parameter
     >({
       query: (query) => ({
-        url: `/GetPerson${query}`, // Construct the API URL
+        url: `/GetPerson${query}`,
+        keepUnusedDataFor: 0, // Construct the API URL
       }),
       transformResponse: (
         response: IGenericApiResponse<IApiPerson>

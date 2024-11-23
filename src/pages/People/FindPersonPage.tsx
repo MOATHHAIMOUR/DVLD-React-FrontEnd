@@ -1,5 +1,5 @@
-import Logo from "../components/ui/Logo";
-import LookupPersonToDisplayInfo from "../features/People/components/LookupPersonToDisplayInfo";
+import Logo from "../../components/ui/Logo";
+import LookupPersonToDisplayInfo from "../../features/People/components/LookupPersonToDisplayInfo";
 
 const FindPersonPage = () => {
   return (

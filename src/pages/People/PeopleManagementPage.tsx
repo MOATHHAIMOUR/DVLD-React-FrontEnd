@@ -1,6 +1,6 @@
-import Col from "../components/ui/Col";
-import Logo from "../components/ui/Logo";
-import ManagePeople from "../features/People/components/ManagePeople";
+import Col from "../../components/ui/Col";
+import Logo from "../../components/ui/Logo";
+import ManagePeople from "../../features/People/components/ManagePeople";
 
 const PeopleManagementPage = () => {
   return (

@@ -5,7 +5,7 @@ import {
   peopleContextMenuItemData,
   PeopleTableHeaderData,
   TPeopleOperation,
-} from "../../../data";
+} from "../data";
 import { TSort } from "../../../types";
 import { IPersonTableData } from "../interfaces";
 

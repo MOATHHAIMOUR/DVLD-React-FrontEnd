@@ -83,7 +83,7 @@ const ManagePeople = () => {
       <Pagination
         onPageChange={onPageChange}
         numberOfDisplayPages={5}
-        totalPages={8}
+        totalPages={response?.meta.totalPages ?? 0}
       />
       <Modal
         onClose={handleCloseModal}
