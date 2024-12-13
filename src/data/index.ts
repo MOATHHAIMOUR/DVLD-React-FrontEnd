@@ -1,73 +1,194 @@
-import { FaSearch } from "react-icons/fa";
-import { GrUserManager } from "react-icons/gr";
 import { IoIosPeople } from "react-icons/io";
-import { IoPersonAddOutline } from "react-icons/io5";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import {
+  MdModeEdit,
+  MdDelete,
+  MdPersonSearch,
+  MdHistory,
+  MdPersonAdd,
+  MdSupervisorAccount,
+} from "react-icons/md";
+import { RiTeamFill, RiUser2Fill } from "react-icons/ri";
+import { FaCarSide, FaCarCrash, FaPassport, FaFileAlt } from "react-icons/fa";
+import { HiDocumentText, HiOutlineDocumentAdd } from "react-icons/hi";
+import { AiOutlineSchedule } from "react-icons/ai";
 import { INavbar } from "../interfaces";
-import { RiUser2Fill } from "react-icons/ri";
 
 export const NavData: Array<INavbar> = [
+  // People Management
   {
     name: "Manage People",
     Icon: IoIosPeople,
-    path: "/people",
+    path: "",
     children: [
       {
         name: "People Management",
-        path: "/",
-        Icon: GrUserManager,
+        path: "/people/people-management",
+        Icon: RiTeamFill,
       },
       {
         name: "Find Person",
-        path: "/find-person",
-        Icon: FaSearch,
+        path: "/people/find-person",
+        Icon: MdPersonSearch,
       },
       {
         name: "Add Person",
-        path: "/add-person",
-        Icon: IoPersonAddOutline,
+        path: "/people/add-person",
+        Icon: MdPersonAdd,
       },
       {
         name: "Edit Person",
-        path: "/edit-person",
+        path: "/people/edit-person",
         Icon: MdModeEdit,
       },
       {
         name: "Delete Person",
-        path: "/delete-person",
+        path: "/people/delete-person",
         Icon: MdDelete,
       },
     ],
   },
+
+  // User Management
   {
     name: "Manage Users",
     Icon: RiUser2Fill,
-    path: "/users",
+    path: "",
     children: [
       {
         name: "Users Management",
-        path: "/",
-        Icon: GrUserManager,
+        path: "users/users-management",
+        Icon: MdSupervisorAccount,
       },
       {
         name: "Find User",
-        path: "/find-user",
-        Icon: FaSearch,
+        path: "users/find-user",
+        Icon: MdPersonSearch,
       },
       {
         name: "Add User",
-        path: "/add-user",
-        Icon: IoPersonAddOutline,
+        path: "users/add-user",
+        Icon: MdPersonAdd,
       },
       {
         name: "Edit User",
-        path: "/edit-user",
+        path: "users/edit-user",
         Icon: MdModeEdit,
       },
       {
         name: "Delete User",
-        path: "/delete-user",
+        path: "users/delete-user",
         Icon: MdDelete,
+      },
+    ],
+  },
+
+  // Applications Management
+  {
+    name: "Applications Management",
+    Icon: FaCarSide,
+    path: "",
+    children: [
+      // Local Licenses
+      {
+        name: "Local Licenses Applications",
+        path: "local-driving",
+        Icon: HiDocumentText,
+        children: [
+          {
+            name: "Manage Local Licenses",
+            path: "/local-driving-license/manage-local-driving-licenses",
+            Icon: HiDocumentText,
+          },
+          {
+            name: "Add Local License",
+            path: "/local-driving/add-local-driving-licenses",
+            Icon: HiOutlineDocumentAdd,
+          },
+          {
+            name: "Lookup Local Licenses",
+            path: "/local-driving/lookup-local-driving-licenses",
+            Icon: MdHistory,
+          },
+        ],
+      },
+
+      // Detain & Release
+      {
+        name: "Detain & Release",
+        path: "detain-release",
+        Icon: FaCarCrash,
+        children: [
+          {
+            name: "Release Licenses",
+            path: "/detain-release/release-licenses",
+            Icon: FaCarSide,
+          },
+          {
+            name: "Detain Licenses",
+            path: "/detain-release/detain-licenses",
+            Icon: FaCarCrash,
+          },
+        ],
+      },
+
+      // International Licenses
+      {
+        name: "International Licenses",
+        path: "international",
+        Icon: FaPassport,
+        children: [
+          {
+            name: "Add International License",
+            path: "/international/add-international-license",
+            Icon: FaPassport,
+          },
+          {
+            name: "Lookup International Licenses",
+            path: "/international/lookup-international-license",
+            Icon: MdHistory,
+          },
+        ],
+      },
+
+      // Shared Licenses
+      {
+        name: "Shared Licenses",
+        path: "licenses",
+        Icon: MdHistory,
+        children: [
+          {
+            name: "Licenses History",
+            path: "/licenses/history",
+            Icon: MdHistory,
+          },
+        ],
+      },
+    ],
+  },
+  // Types
+  {
+    name: "Applications Sittings",
+    path: "types",
+    Icon: FaFileAlt,
+    children: [
+      {
+        name: "Application Types",
+        path: "/types/application-types",
+        Icon: FaFileAlt,
+      },
+    ],
+  },
+
+  // Test Management
+  {
+    name: "Renew Licenses Applications",
+    Icon: AiOutlineSchedule,
+    path: "",
+    children: [
+      {
+        name: "Renew Local Licenses",
+        path: "/renew/renew-local-licenses",
+        Icon: AiOutlineSchedule,
       },
     ],
   },

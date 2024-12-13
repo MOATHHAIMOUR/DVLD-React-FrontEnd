@@ -8,6 +8,8 @@ import {
 } from "../data";
 import { TSort } from "../../../types";
 import { IPersonTableData } from "../interfaces";
+import { ConvertGenderEnumToString } from "../../../Enums";
+import { useMemo } from "react";
 
 interface IProps {
   handleOpenModal: (person: IPersonTableData) => void;
@@ -15,6 +17,13 @@ interface IProps {
   peopleData: Array<IPersonTableData>;
 }
 const PeopleList = ({ handleOpenModal, onSort, peopleData }: IProps) => {
+  const processPeopleData = useMemo(() => {
+    return peopleData.map((person) => ({
+      ...person,
+      gender: ConvertGenderEnumToString(person.gender),
+    }));
+  }, [peopleData]);
+
   /* ────────────── SATE  ────────────── */
   const navigate = useNavigate();
 
@@ -24,16 +33,16 @@ const PeopleList = ({ handleOpenModal, onSort, peopleData }: IProps) => {
     console.log(person.address);
     switch (operation) {
       case "Add Person":
-        navigate("/add-person");
+        navigate("/people/add-person");
         break;
       case "Delete Person":
         handleOpenModal(person);
         break;
       case "Edit Person":
-        navigate("/edit-person");
+        navigate("/people/edit-person");
         break;
       case "Show Details":
-        navigate(`/person-details?personId=${person.personId}`);
+        navigate(`/people/person-details?personId=${person.personId}`);
         break;
       default:
         break;
@@ -49,10 +58,10 @@ const PeopleList = ({ handleOpenModal, onSort, peopleData }: IProps) => {
   }
 
   return (
-    <Box className="w-full mx-auto">
+    <Box className="w-full flex-grow-[1] mx-auto">
       <DataGrid<TPeopleOperation>
         tableHeader={PeopleTableHeaderData}
-        tableBody={peopleData}
+        tableBody={processPeopleData}
         contextMenuData={peopleContextMenuItemData}
         onMenuItemClick={HandleSelectedOperation}
         onSort={(selectedHeaderName, sortType) =>

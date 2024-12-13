@@ -1,37 +1,40 @@
+import { EnumGender } from "../../../Enums";
+
 //Base api response
-export interface IApiPerson {
+export interface IFetchPerson {
   personId: number;
   nationalNo: string;
   firstName: string;
   secondName: string;
   thirdName: string;
   lastName: string;
-  gender: string;
+  gender: EnumGender;
   phone: string;
   email: string;
   address: string;
   dateOfBirth: string;
-  imagePath?: string | null; // Now allows undefined
+  imagePath: string; // Now allows undefined
   countryId: number;
   countryName: string;
   isUser: boolean;
 }
 
 // default for add,  update person
-export interface IPerson {
+export interface IPostPerson {
   personId: number;
   nationalNo: string;
   firstName: string;
   secondName: string;
   thirdName: string;
   lastName: string;
-  gender: string;
+  gender: EnumGender;
   phone: string;
   email: string;
   address: string;
-  dateOfBirth: string;
-  imagePath?: string | null; // Now allows undefined
   countryId: number;
+  dateOfBirth: string;
+  ImageFile: File | null;
+  ImagePath: string | null;
 }
 
 // For the detail page
@@ -42,7 +45,7 @@ export interface IPersonDetailData {
   secondName: string;
   thirdName: string;
   lastName: string;
-  gender: string;
+  gender: EnumGender;
   phone: string;
   email: string;
   countryName: string;
@@ -58,11 +61,11 @@ export interface IPersonTableData {
   firstName: string;
   secondName: string;
   thirdName: string;
+  dateOfBirth: string;
   lastName: string;
-  gender: string;
+  gender: EnumGender;
   phone: string;
   email: string;
   address: string;
-  dateOfBirth: string;
   countryName: string;
 }

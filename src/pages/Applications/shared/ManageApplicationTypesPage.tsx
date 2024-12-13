@@ -1,7 +1,7 @@
-import Box from "../../components/ui/Box";
-import Col from "../../components/ui/Col";
-import Logo from "../../components/ui/Logo";
-import ManageApplicationTypes from "../../features/Applications/shared/Components/ManageApplicationTypes";
+import Box from "../../../components/ui/Box";
+import Col from "../../../components/ui/Col";
+import Logo from "../../../components/ui/Logo";
+import ManageApplicationTypes from "../../../features/Applications/shared/Components/ManageApplicationTypes";
 
 const ManageApplicationTypesPage = () => {
   return (

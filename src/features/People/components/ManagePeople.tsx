@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Button from "../../../components/ui/Button";
 import Modal from "../../../components/ui/Modal";
 import Pagination from "../../../components/ui/Pagination";
@@ -11,9 +11,12 @@ import PeopleList from "./PeopleList";
 import { IFilter, IQuery } from "../../../interfaces";
 import { TSort } from "../../../types";
 import { IPersonTableData } from "../interfaces";
+import { useNavigate } from "react-router-dom";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
+import Box from "../../../components/ui/Box";
 
 const defaultFilterValue: IQuery = {
-  AdvanceFilters: "",
+  AdvanceFilters: [],
   Filter: {
     FilterBy: "",
     FilterValue: "",
@@ -28,9 +31,9 @@ const ManagePeople = () => {
   /* ────────────── STATE  ────────────── */
   const [filters, setFilters] = useState<IQuery>(defaultFilterValue);
 
-  const { data: response } = useFetchPeopleQuery(BuildQuery(filters), {
-    skip: false,
-  });
+  const { data: response, error } = useFetchPeopleQuery(BuildQuery(filters));
+
+  const navigate = useNavigate();
 
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
@@ -55,20 +58,36 @@ const ManagePeople = () => {
     }));
   }
 
-  function onFilterChange(filter: IFilter) {
-    setFilters((prevFilters) => ({ ...prevFilters, Filter: filter }));
-  }
+  const onFilterChange = useCallback((filter: IFilter) => {
+    setFilters((prevFilters) => {
+      return {
+        ...prevFilters,
+        Filter: { ...filter },
+      };
+    });
+  }, []);
 
   function onPageChange(Page: number) {
     setFilters((prevFilters) => ({ ...prevFilters, PageNumber: Page }));
   }
 
+  function OnNavigateHandler() {
+    navigate("/people/add-person");
+  }
+
+  console.log("response?.meta.totalPages : " + response?.meta.totalPages);
+
   return (
-    <>
-      <Row className="items-center justify-between">
+    <Box className="flex-grow-[1] flex flex-col">
+      <ErrorHandler error={error} />
+
+      <Row className="items-center justify-between mb-4">
         <FilterPeople onChangeFilter={onFilterChange} />
         <Row className="gap-3">
-          <Button className="text-white px-4 bg-slate-700 p-1 rounded-md ">
+          <Button
+            onClick={OnNavigateHandler}
+            className="px-4 bg-primary text-text p-1 rounded-md hover:bg-primaryHover"
+          >
             Add Person
           </Button>
         </Row>
@@ -80,11 +99,14 @@ const ManagePeople = () => {
           onSortChange(selectedHeader, sortType)
         }
       />
-      <Pagination
-        onPageChange={onPageChange}
-        numberOfDisplayPages={5}
-        totalPages={response?.meta.totalPages ?? 0}
-      />
+      {response?.meta.totalPages && (
+        <Pagination
+          onPageChange={onPageChange}
+          numberOfDisplayPages={5}
+          totalPages={response?.meta.totalPages ?? 0}
+        />
+      )}
+
       <Modal
         onClose={handleCloseModal}
         isOpen={confirmDeleteModal}
@@ -95,7 +117,7 @@ const ManagePeople = () => {
           CloseModal={handleCloseModal}
         />
       </Modal>
-    </>
+    </Box>
   );
 };
 

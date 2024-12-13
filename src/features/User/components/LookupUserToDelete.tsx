@@ -4,15 +4,19 @@ import { useFindUserHandler } from "../hooks/useFindUserHandler";
 import { useDeletePersonHandler } from "../hooks/useDeleteUserHandler";
 import FindUser from "./FindUser";
 import UserDetail from "./UserDetail";
+import Box from "../../../components/ui/Box";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
 
 const LookupUserToDelete = () => {
   /* ────────────── STATE  ────────────── */
 
   const {
     user,
+    userId,
     isFetching: isFetchingFindPerson,
     isLoading: isLoadingFindPerson,
     onFindUserHandler,
+    error,
   } = useFindUserHandler();
 
   const { handleDelete, isLoading: isLoadingDeletePerson } =
@@ -29,20 +33,21 @@ const LookupUserToDelete = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <Box className="flex flex-col gap-4">
+      <ErrorHandler error={error} />
       <FindUser
         isLoading={isFetchingFindPerson || isLoadingFindPerson}
         onFindPerson={onFindPerson}
       />
-      <UserDetail personDetail={user?.data} />
+      <UserDetail userDetail={user?.data} />
       <Button
-        disabled={isLoadingDeletePerson}
+        disabled={isLoadingDeletePerson || userId === 0}
         className="p-2 w-40 bg-red-700 ml-auto rounded-md text-white"
         onClick={HandleDeletePerson}
       >
         Delete
       </Button>
-    </div>
+    </Box>
   );
 };
 

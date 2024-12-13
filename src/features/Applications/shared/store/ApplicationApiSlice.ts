@@ -1,19 +1,29 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IApplicationType } from "../interfaces";
 import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
+import { ILicenseClass } from "../../LocalDrivingApplication/interfaces";
 
 // Create the shared API slice
 export const applicationApiSlice = createApi({
   reducerPath: "applicationApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1" }), // Adjust the base URL as needed
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1/Shared" }), // Adjust the base URL as needed
   endpoints: (builder) => ({
     // Fetch all application types
     fetchApplicationTypes: builder.query<
       IGenericApiResponse<Array<IApplicationType>>,
+      null
+    >({
+      query: () => ({
+        url: `/GetAllApplicationTypes`,
+      }),
+    }),
+
+    fetchLicensesClasses: builder.query<
+      IGenericApiResponse<Array<ILicenseClass>>,
       string
     >({
-      query: (query) => ({
-        url: `/GetAllApplicationTypes${query}`,
+      query: () => ({
+        url: `/GetLicenseClasses`,
       }),
     }),
 
@@ -36,6 +46,7 @@ export const applicationApiSlice = createApi({
 
 // Export hooks for usage in functional components
 export const {
+  useFetchLicensesClassesQuery,
   useFetchApplicationTypesQuery,
   useUpdateApplicationTypeMutation,
 } = applicationApiSlice;

@@ -124,15 +124,17 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
             return <p>No Option is Selected</p>;
         }
       default:
-        return <p>No Option is Selected</p>;
+        return (
+          <p className="font-semibold text-[#1A1F24]">No Option is Selected</p>
+        );
     }
   };
 
   return (
     <Box disabled={isDisabled} className="flex gap-4 items-center">
       <Box className="flex  justify-between w-full">
-        <Box className="flex gap-5">
-          <p className="text-[18px] font-semibold">Find by:</p>
+        <Box className="flex gap-5 items-center">
+          <p className="text-[18px] text-[#1A1F24] font-semibold">Find by:</p>
           <Box className="w-44">
             <SelectMenu
               value={selectedFilterBy.value.name}
@@ -143,10 +145,11 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
           </Box>
           <Box>{renderFilterByQueryBox()}</Box>
           <Button
+            type="button"
             isLoading={isLoading}
             error={error !== null || selectedFilterBy.value.name === "None"}
             onClick={HandleOnFindPerson}
-            className={` w-28 p-1 bg-[#374151] hover:bg-[#3d434d] text-white rounded-md`}
+            className={` w-28 p-1 bg-primary hover:bg-primaryHover text-white rounded-md`}
           >
             Find
           </Button>

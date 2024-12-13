@@ -1,13 +1,14 @@
 import { ToastContainer } from "react-toastify";
-import Router from "./router/Router";
+import Router from "./router";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS here
+import Box from "./components/ui/Box";
 
 function App() {
   return (
-    <div>
+    <Box className="bg-background  border-border">
       <Router />
       <ToastContainer />
-    </div>
+    </Box>
   );
 }
 

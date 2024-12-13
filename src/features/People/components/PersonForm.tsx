@@ -15,34 +15,61 @@ import Input from "../../../components/ui/Input";
 import SelectSearchMenu from "../../../components/ui/SelectSearchMenu";
 
 // Feature-Specific Code
-import { IPerson } from "../interfaces";
+import { IFetchPerson, IPostPerson } from "../interfaces";
 import { personSchema } from "../validations";
 
 // Shared APIs
 import { useFetchCountriesQuery } from "../../../store/SharedApiSlice";
 import { usePersonFormHandler } from "../hooks/usePersonFormHandler";
-import { enumFormMode } from "../../../interfaces";
+import { enumFormMode, EnumGender } from "../../../Enums";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
+import { useEffect } from "react";
 
 interface IProps {
-  PersonData?: IPerson;
+  PersonData?: IFetchPerson;
   isDisabled?: boolean;
   mode: enumFormMode;
+  ResetComponent: () => void;
 }
 
-const PersonForm = ({ PersonData, mode, isDisabled }: IProps) => {
+const PersonForm = ({
+  PersonData,
+  ResetComponent,
+  mode,
+  isDisabled,
+}: IProps) => {
   /* ────────────── STATE  ────────────── */
   const { data: countries } = useFetchCountriesQuery();
 
-  const { handlePersonFormSubmit } = usePersonFormHandler();
+  const {
+    handlePersonFormSubmit,
+    isAddSuccess,
+    isUpdateSuccess,
+    isAdding,
+    isUpdating,
+    addError,
+    updateError,
+  } = usePersonFormHandler();
+
+  useEffect(() => {
+    if (isAddSuccess || isUpdateSuccess) ResetComponent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAddSuccess, isUpdateSuccess]);
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    clearErrors,
     formState: { errors },
-  } = useForm<IPerson>({
+  } = useForm<IPostPerson>({
     resolver: zodResolver(personSchema),
-    defaultValues: PersonData !== undefined ? PersonData : {},
+    defaultValues: {
+      ...PersonData,
+      ImagePath: PersonData?.imagePath ?? null,
+      ImageFile: null,
+    },
   });
 
   /* ────────────── RERENDER  ────────────── */
@@ -56,6 +83,7 @@ const PersonForm = ({ PersonData, mode, isDisabled }: IProps) => {
           {...register(field.name)}
           type={field.type}
           name={field.name}
+          className="text-black"
           placeholder={field.placeholder}
           PrefixIcon={field.Icon}
         />
@@ -86,8 +114,8 @@ const PersonForm = ({ PersonData, mode, isDisabled }: IProps) => {
         control={control}
         title="Gender"
         list={[
-          { label: "Male", value: "male" },
-          { label: "Female", value: "female" },
+          { label: "Male", value: EnumGender.Male },
+          { label: "Female", value: EnumGender.Female },
         ]}
       />
       {errors["gender"] && (
@@ -97,43 +125,78 @@ const PersonForm = ({ PersonData, mode, isDisabled }: IProps) => {
   ];
 
   /* ────────────── Handlers  ────────────── */
-  const onSubmit: SubmitHandler<IPerson> = async (data) => {
-    const person = {
-      ...data,
-      personId: PersonData?.personId ?? 0,
-    };
-    console.log("PersonData: " + person);
-    console.log("handlePersonFormSubmit: " + data.personId);
-
+  const onSubmit: SubmitHandler<IPostPerson> = async (data) => {
+    let person: IPostPerson;
+    if (mode === enumFormMode.Add) {
+      person = {
+        ...data,
+        ImageFile: data.ImageFile ?? null,
+        ImagePath: null,
+        personId: PersonData?.personId ?? 0,
+      };
+    } else {
+      person = {
+        ...data,
+        ImageFile: data.ImageFile ?? null,
+        ImagePath: data.ImagePath ?? null,
+        personId: PersonData?.personId ?? 0,
+      };
+    }
     await handlePersonFormSubmit(mode, person);
   };
 
   return (
-    <Box
-      disabled={isDisabled}
-      className="grid grid-cols-[1fr,auto] gap-10  h-[100%]"
-    >
-      <FormComponent
-        onSubmit={handleSubmit(onSubmit)}
+    <>
+      <Input
+        {...register("personId")}
+        hidden
+        value={PersonData?.personId ?? 0}
+      />
+
+      <ErrorHandler error={addError || updateError} />
+      <Box
+        disabled={isDisabled}
         className="grid grid-cols-[1fr,auto] gap-10  h-[100%]"
       >
-        <Box className="grid grid-cols-3 gap-8 h-[70%]">{personFields}</Box>
-        <Box className="w-[300px]    flex flex-col justify-between">
-          <Box className="">
-            <h1 className="text-2xl py-3">Upload Your Image</h1>
-            <FileUploader />
+        <FormComponent
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-[1fr,auto] gap-10  h-[100%]"
+        >
+          <Box className="grid grid-cols-3 gap-8 h-[70%]">{personFields}</Box>
+          <Box className="w-[300px]    flex flex-col justify-between">
+            <Box>
+              <h1 className="text-2xl py-3">Upload Your Image</h1>
+              <FileUploader
+                isReadOnly={false}
+                onRemoveImage={() => {
+                  setValue("ImagePath", null);
+                  setValue("ImageFile", null);
+                }}
+                value={PersonData?.imagePath ?? null}
+                onChange={(file) => {
+                  setValue("ImageFile", file);
+                  setValue("ImagePath", null);
+                  clearErrors("ImagePath");
+                  clearErrors("ImageFile");
+                }}
+              />
+              {errors && errors["ImagePath"] && (
+                <ErrorMsg message={errors["ImagePath"].message!} />
+              )}
+            </Box>
+            <Box className="ml-auto">
+              <Button
+                type="submit"
+                isLoading={isAdding || isUpdating}
+                className="px-4 py-2  bg-primary text-white rounded-md shadow hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {mode === enumFormMode.Add ? "Add Person " : "Edit Person"}
+              </Button>
+            </Box>
           </Box>
-          <Box className="ml-auto">
-            <Button
-              type="submit"
-              className="px-4 py-2  bg-[#1F2937] text-white rounded-md shadow hover:bg-[#2d3949] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {mode === enumFormMode.Add ? "Add Person " : "Edit Person"}
-            </Button>
-          </Box>
-        </Box>
-      </FormComponent>
-    </Box>
+        </FormComponent>
+      </Box>
+    </>
   );
 };
 

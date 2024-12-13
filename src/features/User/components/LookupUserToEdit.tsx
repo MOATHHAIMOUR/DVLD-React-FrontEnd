@@ -1,6 +1,6 @@
 import Box from "../../../components/ui/Box";
 import Button from "../../../components/ui/Button";
-import { enumFormMode } from "../../../interfaces";
+import { enumFormMode } from "../../../Enums";
 import { useFindUserHandler } from "../hooks/useFindUserHandler";
 import FindUser from "./FindUser";
 import UserForm from "./UserForm";

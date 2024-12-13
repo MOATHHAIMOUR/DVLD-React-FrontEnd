@@ -1,11 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
-import {
-  IApiPerson,
-  IPerson,
-  IPersonDetailData,
-  IPersonTableData,
-} from "../interfaces";
+import { IPersonTableData, IFetchPerson } from "../interfaces";
 
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",
@@ -24,24 +19,20 @@ export const peopleApiSlice = createApi({
         };
       },
       transformResponse: (
-        response: IGenericApiResponse<Array<IPersonDetailData>>
-      ) => {
-        // Return only the data (list of people) if successful
-        return response;
-      },
+        response: IGenericApiResponse<Array<IPersonTableData>>
+      ) => response,
       transformErrorResponse: (response: {
         status: number;
         data: IGenericApiResponse<Array<string>>;
       }) => {
-        // Customize the error response here, extracting errors if available
         return {
-          status: response.status,
-          errors: response.data.errors || ["An unexpected error occurred"],
+          status: response.data.statusCode,
+          message: response.data.errors[0],
         };
       },
       providesTags: [{ type: "People", id: "LIST" }],
     }),
-    AddPerson: builder.mutation<IGenericApiResponse<IPerson>, IPerson>({
+    AddPerson: builder.mutation<IGenericApiResponse<string>, FormData>({
       query: (newPerson) => ({
         url: "/AddPerson",
         method: "POST",
@@ -51,13 +42,16 @@ export const peopleApiSlice = createApi({
       transformErrorResponse: (response: {
         status: number;
         data: IGenericApiResponse<Array<string>>;
-      }) => ({
-        status: response.status,
-        errors: response.data.errors || ["An unexpected error occurred"],
-      }),
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
+
       invalidatesTags: [{ type: "People", id: "LIST" }],
     }),
-    UpdatePerson: builder.mutation<IGenericApiResponse<IPerson>, IPerson>({
+    UpdatePerson: builder.mutation<IGenericApiResponse<string>, FormData>({
       query: (Person) => ({
         url: "/UpdatePerson",
         method: "PUT",
@@ -77,11 +71,20 @@ export const peopleApiSlice = createApi({
         url: `/DeletePerson/${id}`,
         method: "DELETE",
       }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
       // Optionally, you can update the cache after deleting
       invalidatesTags: [{ type: "People", id: "LIST" }],
     }),
     fetchPerson: builder.query<
-      IGenericApiResponse<IApiPerson>, // Using IApiPerson in the response type
+      IGenericApiResponse<IFetchPerson>, // Using IApiPerson in the response type
       string | null // Query parameter
     >({
       query: (query) => ({
@@ -89,10 +92,19 @@ export const peopleApiSlice = createApi({
         keepUnusedDataFor: 0, // Construct the API URL
       }),
       transformResponse: (
-        response: IGenericApiResponse<IApiPerson>
-      ): IGenericApiResponse<IApiPerson> => {
+        response: IGenericApiResponse<IFetchPerson>
+      ): IGenericApiResponse<IFetchPerson> => {
         // If any transformation is required, it can be done here
         return response;
+      },
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
   }),

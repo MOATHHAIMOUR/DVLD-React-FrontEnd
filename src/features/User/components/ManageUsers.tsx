@@ -13,7 +13,7 @@ import FilterUsers from "./FilterUsers";
 import ConfirmDeleteUser from "./ConfirmDeleteUser";
 
 const defaultFilterValue: IQuery = {
-  AdvanceFilters: "",
+  AdvanceFilters: [],
   Filter: {
     FilterBy: "",
     FilterValue: "",
@@ -64,10 +64,10 @@ const ManageUsers = () => {
 
   return (
     <>
-      <Row className="items-center justify-between">
+      <Row className="items-center justify-between mb-4">
         <FilterUsers onChangeFilter={onFilterChange} />
         <Row className="gap-3">
-          <Button className="text-white px-4 bg-slate-700 p-1 rounded-md ">
+          <Button className="text-white px-4 bg-[#1A1F24] p-1 rounded-md ">
             Add Person
           </Button>
         </Row>
@@ -79,11 +79,14 @@ const ManageUsers = () => {
           onSortChange(selectedHeader, sortType)
         }
       />
-      <Pagination
-        onPageChange={onPageChange}
-        numberOfDisplayPages={5}
-        totalPages={8}
-      />
+      {response?.meta.totalPages && (
+        <Pagination
+          onPageChange={onPageChange}
+          numberOfDisplayPages={5}
+          totalPages={response?.meta.totalPages ?? 0}
+        />
+      )}
+
       <Modal
         onClose={handleCloseModal}
         isOpen={confirmDeleteModal}

@@ -2,23 +2,42 @@ import FindPerson from "./FindPerson";
 import PersonDetail from "./PersonDetail";
 import { IQuery } from "../../../interfaces";
 import { useFetchPersonHandler } from "../hooks/useFindPersonHandler";
+import Box from "../../../components/ui/Box";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../../store";
+import { setSelectedPerson } from "../store/PeopleSlice";
 
 const LookupPersonToDisplayInfo = () => {
-  const { person, isFetching, isLoading, onFindPersonHandler } =
+  const { person, isFetching, isLoading, onFindPersonHandler, error } =
     useFetchPersonHandler();
 
+  const dispatch = useAppDispatch();
   const onFindPerson = (query: IQuery) => {
     onFindPersonHandler(query);
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(
+        setSelectedPerson({
+          IsUser: null,
+          NationalNo: null,
+          PersonId: null,
+        })
+      );
+    };
+  }, [dispatch]);
+
   return (
-    <div className="flex flex-col gap-8">
+    <Box className="flex flex-col gap-8">
+      <ErrorHandler error={error} />
       <FindPerson
         isLoading={isFetching || isLoading}
         onFindPerson={onFindPerson}
       />
       <PersonDetail personDetail={person?.data} />
-    </div>
+    </Box>
   );
 };
 

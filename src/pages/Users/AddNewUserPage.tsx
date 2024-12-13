@@ -1,6 +1,6 @@
 import Logo from "../../components/ui/Logo";
+import { enumFormMode } from "../../Enums";
 import UserForm from "../../features/User/components/UserForm";
-import { enumFormMode } from "../../interfaces";
 
 const AddNewUserPage = () => {
   return (

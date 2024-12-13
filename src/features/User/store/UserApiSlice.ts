@@ -14,23 +14,6 @@ export const UserApiSlice = createApi({
         url: `/GetUsers${query}`,
       }),
       providesTags: [{ type: "Users", id: "LIST" }],
-      transformResponse: (
-        response: IGenericApiResponse<Array<IApiUser>>
-      ): IGenericApiResponse<Array<IUserView>> => {
-        // Map over the response data to transform isActive
-        const transformedData: Array<IUserView> = response.data.map((user) => ({
-          userId: user.userId,
-          personId: user.personId,
-          username: user.username,
-          isActive: user.isActive ? "Yes" : "No", // Convert boolean to "Yes"/"No"
-        }));
-
-        // Return the transformed response
-        return {
-          ...response,
-          data: transformedData,
-        };
-      },
       transformErrorResponse: (response: {
         status: number;
         data: IGenericApiResponse<Array<IApiUser>>;
@@ -42,22 +25,21 @@ export const UserApiSlice = createApi({
         return "An unexpected error occurred";
       },
     }),
-    fetchUser: builder.query<IGenericApiResponse<IApiUser>, string>({
+    fetchUser: builder.query<IGenericApiResponse<IUserView>, string>({
       query: (query) => ({
         url: `/GetUser${query}`,
       }),
-      transformResponse: (response: IGenericApiResponse<IApiUser>) => {
+      transformResponse: (response: IGenericApiResponse<IUserView>) => {
         return response;
       },
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<Array<IApiUser>>;
-      }): string => {
-        // Check if the response contains errors
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
     deleteUser: builder.mutation<IGenericApiResponse<null>, number>({
@@ -71,13 +53,12 @@ export const UserApiSlice = createApi({
       },
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<null>;
-      }): string => {
-        // Check if the response contains errors
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
     addUser: builder.mutation<IGenericApiResponse<string>, IApiUser>({
@@ -124,5 +105,6 @@ export const {
   useLazyFetchUserQuery,
   useAddUserMutation,
   useFetchUsersQuery,
+  useFetchUserQuery,
   useDeleteUserMutation,
 } = UserApiSlice;

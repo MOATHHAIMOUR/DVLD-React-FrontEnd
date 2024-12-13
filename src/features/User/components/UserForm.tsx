@@ -9,7 +9,6 @@ import SelectMenu from "../../../components/ui/SelectMenu";
 import Input from "../../../components/ui/Input";
 import { IApiUser, IFormUser } from "../interfaces";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { enumFormMode } from "../../../interfaces";
 import FormComponent from "../../../components/ui/FormComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema } from "../validation";
@@ -17,6 +16,8 @@ import ErrorMsg from "../../../components/ui/ErrorMsg";
 import { useUserFormHandler } from "../hooks/userUserFormHandler";
 import { useAppSelector } from "../../../store";
 import { toast } from "react-toastify";
+import { enumFormMode } from "../../../Enums";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
 
 interface IProps {
   mode: enumFormMode;
@@ -29,6 +30,7 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -43,14 +45,20 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
     },
   });
 
-  const { handleUserFormSubmit } = useUserFormHandler();
+  const {
+    handleUserFormSubmit,
+    addUserError,
+    isAddingUser,
+    isUpdatingUser,
+    updateUserError,
+  } = useUserFormHandler();
 
   const personSlice = useAppSelector((state) => state.peopleSlice);
 
   /* ────────────── HANDLERS  ────────────── */
 
   function HandleAddPerson() {
-    navigate("/add-person");
+    navigate("/people/add-person");
   }
 
   const handleNext = () => {
@@ -126,8 +134,10 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
     return null; // Handle unexpected field types gracefully
   });
 
+  console.log("peopleAlice: " + personSlice.IsUser);
   return (
     <Box disabled={isDisabled} className="flex flex-col ">
+      <ErrorHandler error={addUserError || updateUserError} />
       {mode === enumFormMode.Add && (
         <Stepper
           activeStep={currentStep}
@@ -143,6 +153,7 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
             labelFontSize: "1em", // Font size for the label text
             borderRadius: "50%", // Border radius for the step circle
             fontWeight: "bold", // Font weight for step labels
+            labelMarginTop: "0.5em", // Add spacing between step and label
           }}
           connectorStyleConfig={{
             activeColor: "#1d2a3a", // Active connector color
@@ -178,12 +189,12 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
           </Box>
         )}
 
-        {currentStep === 1 ||
-          (mode === enumFormMode.Edit && (
-            <Box className="w-1/2 flex flex-col gap-5">{renderUserFields}</Box>
-          ))}
+        {currentStep === 1 && (
+          <Box className="w-1/2 flex flex-col gap-5">{renderUserFields}</Box>
+        )}
+
         <Box className="flex justify-end gap-4 mt-5">
-          {currentStep === 0 && mode === enumFormMode.Add && (
+          {mode === enumFormMode.Add && (
             <Button
               type="button"
               className="bg-[#1F2937] rounded-md p-2 text-white w-32"
@@ -196,6 +207,7 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
 
           {currentStep === 0 && mode === enumFormMode.Add && (
             <Button
+              disabled={personSlice.IsUser ?? false}
               type="button"
               className="bg-[#1F2937] rounded-md p-2 text-white w-32"
               onClick={handleNext}
@@ -203,15 +215,15 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
               Next
             </Button>
           )}
-          {currentStep === 1 ||
-            (mode === enumFormMode.Edit && (
-              <Button
-                type="submit"
-                className="bg-[#1F2937] rounded-md p-2 text-white w-32"
-              >
-                Submit
-              </Button>
-            ))}
+          {(currentStep === 1 || mode === enumFormMode.Edit) && (
+            <Button
+              isLoading={isAddingUser || isUpdatingUser}
+              type="submit"
+              className="bg-[#1F2937] rounded-md p-2 text-white w-32"
+            >
+              Submit
+            </Button>
+          )}
         </Box>
       </FormComponent>
     </Box>

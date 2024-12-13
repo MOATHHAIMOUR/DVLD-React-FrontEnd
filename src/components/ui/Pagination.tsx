@@ -15,7 +15,13 @@ const Pagination = ({
 
   const [pagination, setPagination] = useState({
     offset: 0,
-    list: Array.from({ length: numberOfDisplayPages }, (_, index) => index + 1),
+    list: Array.from(
+      {
+        length:
+          totalPages < numberOfDisplayPages ? totalPages : numberOfDisplayPages,
+      },
+      (_, index) => index + 1
+    ),
   });
   const [selectedPage, setSelectedPage] = useState(1);
 
@@ -29,7 +35,7 @@ const Pagination = ({
         className={`px-4 py-2 border text-sm font-medium 
       ${
         selectedPage === pageNumber
-          ? "bg-[#374151] text-white scale-110"
+          ? "bg-primary text-text scale-110"
           : "bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-gray-300"
       }`}
       >
@@ -104,7 +110,7 @@ const Pagination = ({
           ${
             isStart
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-[#374151] text-white  hover:bg-slate-800 hover:text-white border-gray-300"
+              : "bg-primary text-text text-white  hover:bg-slate-800 hover:text-white border-gray-300"
           }`}
         >
           Previous
@@ -119,7 +125,7 @@ const Pagination = ({
           ${
             isEnd
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-[#374151] text-white  hover:bg-slate-800  hover:text-white border-gray-300"
+              : "bg-primary text-text  hover:bg-slate-800  hover:text-white border-gray-300"
           }`}
         >
           Next

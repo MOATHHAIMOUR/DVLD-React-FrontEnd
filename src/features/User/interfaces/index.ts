@@ -19,5 +19,5 @@ export interface IUserView {
   userId: number;
   personId: number;
   username: string;
-  isActive: "Yes" | "No";
+  isActive: boolean;
 }

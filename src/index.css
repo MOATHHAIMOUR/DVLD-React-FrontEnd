@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* --------------------------------------------------------------------------- */
+
+  --color-background-light: #ffffff;
+  --color-background-dark: #141d26;
+  --color-background: var(--color-background-light); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+
+  --color-primary-light: #1a1f24;
+  --color-primary-dark: #121212;
+
+  --color-primary: var(--color-primary-light); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+
+  --color-primaryHover-light: #333333;
+  --color-primaryHover-dark: #333333;
+
+  --color-primaryHover: var(
+    --color-primaryHover-light
+  ); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+  --color-dataSections-light: #f3f4f6;
+  --color-dataSections-dark: #121212;
+
+  --color-dataSections: var(
+    --color-dataSections-light
+  ); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+
+  --color-secondary-light: #d9e2ec;
+  --color-secondary-dark: #2c3e50;
+  --color-secondary: var(--color-secondary-light); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+
+  --color-accent-light: #ff7d63;
+  --color-accent-dark: #ff4d4d;
+  --color-accent: var(--color-accent-light); /* Default to light mode */
+
+  /* --------------------------------------------------------------------------- */
+
+  --color-text-light: #ffffff;
+  --color-text-dark: #ffffff;
+  --color-text: var(--color-text-light); /* Default to light mode */
+  /*  */
+  --color-border-light: #acc7e0;
+  --color-border-dark: #4a90e2;
+  --color-border: var(--color-border-light); /* Default to light mode */
+}
+
+.dark {
+  --color-primary: var(--color-primary-dark);
+  --color-secondary: var(--color-secondary-dark);
+  --color-dataSections: var(--color-dataSections-dark);
+  --color-accent: var(--color-accent-dark);
+  --color-text: var(--color-text-dark);
+  --color-background: var(--color-background-dark);
+  --color-border: var(--color-border-dark);
+}

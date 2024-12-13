@@ -1,91 +1,131 @@
-import { NavLink } from "react-router-dom";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { NavData } from "../data";
+import { INavbar } from "../interfaces";
+import Box from "./ui/Box";
+import { FiSun, FiMoon } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { toggleTheme } from "../store/ThemeSlice";
+import { useAppSelector } from "../store";
 
 const Sidebar = () => {
-  /* ────────────── state  ────────────── */
-  const [SubMenuIndexIsOpened, setSupMenIndexIsOpened] = useState<
-    number | null
-  >(null);
-  const submenuRef = useRef<HTMLUListElement | null>(null);
+  const [activeMenus, setActiveMenus] = useState<Record<string, string | null>>(
+    {}
+  );
+  const dispatch = useDispatch();
 
-  /* ────────────── Handlers  ────────────── */
-  function HandleMenuOpen(index: number) {
-    setSupMenIndexIsOpened((prev) => (prev === index ? null : index));
-  }
+  const toggleSubMenu = (key: string, parentKey: string) => {
+    setActiveMenus((prev) => ({
+      ...prev,
+      [parentKey]: prev[parentKey] === key ? null : key,
+    }));
+  };
 
-  /* ────────────── Render  ────────────── */
-  const renderLinks = NavData.map((link, index) => {
-    return (
-      <li key={index}>
-        <div className="flex items-center p-2  text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <span>
-            <link.Icon size={35} />
-          </span>
-          <span className="ms-3">{link.name}</span>
-          <span
-            className={`ml-auto cursor-pointer duration-300  ${
-              SubMenuIndexIsOpened === index ? "rotate-180 duration-300" : ""
-            }`}
-            onClick={() => HandleMenuOpen(index)}
-          >
-            <MdKeyboardArrowDown size={25} />
-          </span>
-        </div>
-        <ul
-          ref={submenuRef}
-          className={`transition-all duration-300 ease-out overflow-hidden ${
-            SubMenuIndexIsOpened === index ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            height:
-              submenuRef.current && SubMenuIndexIsOpened === index
-                ? `${submenuRef.current?.scrollHeight}px`
-                : "0px",
-          }}
-        >
-          {link.children !== undefined &&
-            link.children.map((link, index) => {
-              return (
-                <NavLink
-                  end
-                  key={index}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `flex items-center p-2 rounded-lg group ${
-                      isActive
-                        ? "text-blue-400 bg-gray-200 dark:bg-gray-800"
-                        : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                    }`
-                  }
-                >
-                  <span>
-                    <link.Icon />
-                  </span>
-                  <span className="ms-3">{link.name}</span>
-                </NavLink>
-              );
-            })}
-        </ul>
-      </li>
-    );
-  });
+  const theme = useAppSelector((state) => state.theme.selectedTheme);
 
+  const toggleThemeHandler = () => {
+    dispatch(toggleTheme());
+  };
+
+  const renderLinks = (
+    links: Array<INavbar>,
+    parentKey: string = "root",
+    depth: number = 0
+  ) => {
+    const leftPadding = depth * 16; // Adjust padding for nested menus
+
+    return links.map((link, index) => {
+      const key = `${parentKey}-${index}`;
+      const isOpen = activeMenus[parentKey] === key;
+
+      return (
+        <li key={key} className="relative">
+          {link.children ? (
+            <Box
+              className="flex items-center p-3 rounded-lg cursor-pointer group"
+              style={{ paddingLeft: `${leftPadding}px` }}
+              onClick={() => toggleSubMenu(key, parentKey)}
+            >
+              <span className="text-lg">
+                <link.Icon size={20} />
+              </span>
+              <span className="ml-4 text-sm font-semibold">{link.name}</span>
+              <span
+                className={`ml-auto transition-transform duration-300 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              >
+                <MdKeyboardArrowDown size={18} />
+              </span>
+            </Box>
+          ) : (
+            <NavLink
+              to={link.path || "#"}
+              className={({ isActive }) =>
+                `flex items-center p-3 rounded-lg cursor-pointer group ${
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-gray-700 text-gray-300"
+                }`
+              }
+              style={{ paddingLeft: `${leftPadding}px` }}
+            >
+              <span className="text-lg">
+                <link.Icon size={20} />
+              </span>
+              <span className="ml-4 text-sm font-semibold">{link.name}</span>
+            </NavLink>
+          )}
+
+          {link.children && (
+            <ul
+              className={`transition-all duration-500  ${
+                isOpen ? "opacity-100" : "opacity-0"
+              }`}
+              style={{
+                maxHeight: isOpen ? "500px" : "0px",
+                overflow: "hidden",
+              }}
+            >
+              {renderLinks(link.children, key, depth + 1)}
+            </ul>
+          )}
+        </li>
+      );
+    });
+  };
   return (
-    <>
-      <button
-        type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-      >
-        <span className="sr-only">Open sidebar</span>
-      </button>
-      <aside className="fixed top-0 left-0 z-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <ul className="space-y-2 font-medium">{renderLinks}</ul>
+    <aside className="fixed top-0 left-0 z-40 w-80 h-screen bg-primary text-white shadow-lg">
+      <div className="h-full overflow-y-scroll scrollbar-none px-4 py-6 flex flex-col justify-between">
+        {/* Title and Navigation */}
+        <div>
+          {/* Sidebar Header */}
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-xl font-bold tracking-wide">Dashboard</h1>
+            <button
+              onClick={toggleThemeHandler}
+              className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
+            >
+              {theme === "light" ? (
+                <FiSun size={18} className="text-yellow-300" />
+              ) : (
+                <FiMoon size={18} className="text-gray-300" />
+              )}
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <ul className="space-y-4">{renderLinks(NavData)}</ul>
         </div>
-      </aside>
-    </>
+        {/* Sidebar Footer */}
+        <div className="mt-2 flex-shrink-0">
+          <p className="text-sm text-gray-400 text-center">
+            &copy; {new Date().getFullYear()} DVLD
+          </p>
+        </div>
+      </div>
+    </aside>
   );
 };
 

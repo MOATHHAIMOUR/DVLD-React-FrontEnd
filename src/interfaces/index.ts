@@ -14,7 +14,7 @@ export interface IGenericField<T> {
     value: string;
   }>;
   name: keyof T;
-  type: "text" | "password" | "category" | "number";
+  type: "text" | "password" | "category" | "number" | "date";
   displayName: string;
   placeholder: string;
   Icon?: ElementType;
@@ -28,7 +28,7 @@ export interface IFilter {
 export interface IQuery {
   PageSize?: number;
   PageNumber?: number;
-  AdvanceFilters?: string;
+  AdvanceFilters?: Array<IFilter>;
   Filter?: IFilter;
   sort?: "ASC" | "DESC" | "NONE";
   sortBy?: string;
@@ -50,9 +50,13 @@ export interface IHeaderData {
 export interface IGenericContextMenuItem<T> {
   operation: T;
   Icon: ElementType;
+  isSubMenu?: boolean;
+  children?: Array<IGenericContextMenuItem<T>>;
+  isDisabled?: boolean;
+  disableMessage?: string;
 }
 
-export enum enumFormMode {
-  Add,
-  Edit,
+export interface ICountry {
+  id: number;
+  name: string;
 }

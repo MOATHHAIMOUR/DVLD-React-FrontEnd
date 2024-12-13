@@ -1,21 +1,25 @@
+import Box from "../../../components/ui/Box";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
 import { IQuery } from "../../../interfaces";
 import { useFindUserHandler } from "../hooks/useFindUserHandler";
 import FindUser from "./FindUser";
 import UserDetail from "./UserDetail";
 
 const LookupUserToDisplayInfo = () => {
-  const { user, isFetching, isLoading, onFindUserHandler } =
+  const { user, isFetching, isLoading, onFindUserHandler, error } =
     useFindUserHandler();
 
+  console.log("errror: " + error);
   const onFindUser = (query: IQuery) => {
     onFindUserHandler(query);
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <Box className="flex flex-col gap-8">
+      <ErrorHandler error={error} />
       <FindUser isLoading={isFetching || isLoading} onFindPerson={onFindUser} />
-      <UserDetail personDetail={user?.data} />
-    </div>
+      <UserDetail userDetail={user?.data} />
+    </Box>
   );
 };
 

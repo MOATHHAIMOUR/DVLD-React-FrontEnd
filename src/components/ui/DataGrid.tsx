@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 import { IGenericContextMenuItem, IHeaderData } from "../../interfaces";
+import Tippy from "@tippyjs/react";
 
 interface IProps<T extends string> {
   tableHeader: IHeaderData[];
   tableBody: object[];
-  contextMenuData: Array<IGenericContextMenuItem<T>>;
-  onMenuItemClick: (operation: T, obj: object) => void;
-  onSort: (selectedHeadCell: string, sort: "ASC" | "DESC" | "NONE") => void;
+  contextMenuData?: Array<IGenericContextMenuItem<T>>;
+  onMenuItemClick?: (operation: T, obj: object) => void;
+  OnContextMenuOpen?: (obj: object) => void;
+  onSort?: (selectedHeadCell: string, sort: "ASC" | "DESC" | "NONE") => void;
 }
 
 const DataGrid = <T extends string>({
@@ -15,6 +17,7 @@ const DataGrid = <T extends string>({
   tableHeader,
   contextMenuData,
   onMenuItemClick,
+  OnContextMenuOpen,
   onSort,
 }: IProps<T>) => {
   /* ────────────── STATE  ────────────── */
@@ -38,6 +41,10 @@ const DataGrid = <T extends string>({
   );
   const [sortType, setSortType] = useState<"NONE" | "ASC" | "DESC">();
 
+  const [subMenuPosition, setSubMenuPosition] = useState<"Left" | "Right">(
+    "Left"
+  );
+
   /* ────────────── HANDLERS  ────────────── */
   const handleRightClick = (
     event: React.MouseEvent<HTMLDivElement>,
@@ -47,13 +54,14 @@ const DataGrid = <T extends string>({
     event.preventDefault();
     const { x, y } = HandleContextMenuPosition(event);
     setMenuPosition({ x: x, y: y });
+    if (OnContextMenuOpen) OnContextMenuOpen(object);
     setShowMenu(true);
     setSelectedRow(index);
     setSelectedData(object);
   };
 
   function HandleContextMenuPosition(event: React.MouseEvent<HTMLDivElement>) {
-    const menuWidth = 250; // Approximate width of the context menu
+    const menuWidth = 200; // Approximate width of the context menu
     const menuHeight = 240; // Approximate height of the context menu
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -64,6 +72,9 @@ const DataGrid = <T extends string>({
     // Adjust position if the menu would overflow on the right side
     if (x + menuWidth > viewportWidth) {
       x = viewportWidth - menuWidth;
+      setSubMenuPosition("Right");
+    } else {
+      setSubMenuPosition("Left");
     }
     // Adjust position if the menu would overflow on the bottom
     if (y + menuHeight > viewportHeight) {
@@ -90,8 +101,7 @@ const DataGrid = <T extends string>({
   };
 
   function HandleClickMenuItem(operation: T) {
-    console.log("SelectedData: " + SelectedData);
-    onMenuItemClick(operation, SelectedData);
+    if (onMenuItemClick) onMenuItemClick(operation, SelectedData);
     setShowMenu(false);
   }
 
@@ -115,7 +125,7 @@ const DataGrid = <T extends string>({
     setSortType(newSortType);
 
     // Call onSort with the updated values
-    onSort(headerCell, newSortType);
+    if (onSort) onSort(headerCell, newSortType);
   }
 
   const renderSortIcon = () => {
@@ -143,32 +153,95 @@ const DataGrid = <T extends string>({
   }, []);
 
   /* ────────────── Render  ────────────── */
-  const contextMenuItems = contextMenuData.map((item, i) => {
-    return (
-      <li
-        onClick={() => HandleClickMenuItem(item.operation)}
-        key={i}
-        className="flex cursor-pointer items-center w-full hover:bg-gray-100 px-4 py-3"
-      >
-        <item.Icon size={20} />
-        <a className="block  px-4 text-gray-700">{item.operation}</a>
-      </li>
-    );
-  });
+  const contextMenuItems =
+    showMenu &&
+    contextMenuData?.map((item, i) => {
+      return (
+        <li
+          onClick={() => {
+            if (item.isDisabled || (item?.children?.length ?? 0) !== 0) return;
+
+            HandleClickMenuItem(item.operation);
+          }}
+          key={i}
+          className={`relative group flex items-center w-full ${
+            item.isDisabled
+              ? "cursor-not-allowed opacity-50"
+              : "cursor-pointer hover:bg-gray-100"
+          }
+          ${(item?.children?.length ?? 0) > 0 ? "cursor-default" : ""}
+          `}
+        >
+          <Tippy
+            content={
+              item.isDisabled ? (
+                <span className="text-red-600 text-sm p-1 rounded-md">
+                  {item.disableMessage}
+                </span>
+              ) : null
+            } // Tooltip with red error text
+            placement="right" // Position tooltip to the right
+            delay={[300, 100]} // Increased delay for appearance (500ms) and disappearance (300ms)
+            theme="custom-error" // Custom theme
+            arrow={true} // Include arrow pointing to the target
+            offset={[0, 8]} // Adjust tooltip position
+          >
+            <span className="w-full h-full flex px-4 py-3">
+              <item.Icon
+                className="text-[#1A1F24]  dark:text-white"
+                size={20}
+              />
+              <a className="block px-4 text-gray-700">{item.operation}</a>
+            </span>
+          </Tippy>
+
+          {item.isSubMenu && (
+            <ul
+              className={`absolute top-0 ${
+                subMenuPosition === "Left" ? "left-full" : "right-full"
+              } hidden group-hover:block bg-white shadow-lg rounded-lg w-48`}
+            >
+              {item.children?.map((subItem) => {
+                return (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!subItem.isDisabled)
+                        HandleClickMenuItem(subItem.operation);
+                    }}
+                    key={subItem.operation}
+                    disabled={subItem.isDisabled}
+                    className={`${
+                      subItem.isDisabled
+                        ? "cursor-not-allowed opacity-50"
+                        : "cursor-pointer hover:bg-gray-100"
+                    } relative group flex items-center w-full px-4 py-3`}
+                  >
+                    <a className="block px-4 text-gray-700">
+                      {subItem.operation}
+                    </a>
+                  </button>
+                );
+              })}
+            </ul>
+          )}
+        </li>
+      );
+    });
 
   const tableRowsRender = tableBody?.map((obj, i) => (
     <tr
       onClick={() => HandleSelectedRow(i, obj)}
       onContextMenu={(e) => handleRightClick(e, i, obj)}
       key={Object.entries(obj)[0][1]} // Use a unique key from the object
-      className={`border-b border-gray-200 ${
-        i === SelectedRow ? "bg-slate-800 text-white" : ""
+      className={`border-b border-gray-200 py-4 ${
+        i === SelectedRow ? "bg-[#1A1F24] text-white" : ""
       }`}
     >
       {Object.entries(obj).map(([, value], index) => (
         <th
           key={index} // Use index if the keys are dynamic
-          className="px-3 py-1 border border-gray-300 text-center"
+          className="px-3 py-2 border border-gray-300 text-center"
         >
           {value}
         </th>
@@ -190,12 +263,15 @@ const DataGrid = <T extends string>({
   ));
 
   return (
-    <div className="overflow-x-auto w-[100%]">
-      <table className=" w-[100%] border-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="overflow-x-auto w-[100%]  scrollbar-thin scrollbar-thumb-[#1A1F24]">
+      <table className="w-[100%] border-4 text-sm text-left rtl:text-right">
+        <thead className="text-xs uppercase bg-primary text-text">
           <tr>{renderTBHeader}</tr>
         </thead>
-        <tbody ref={tBodyRef} className="cursor-pointer">
+        <tbody
+          ref={tBodyRef}
+          className="cursor-pointer text-[#1A1F24] text-nowrap "
+        >
           {tableRowsRender}
         </tbody>
       </table>
@@ -203,7 +279,7 @@ const DataGrid = <T extends string>({
       {showMenu && (
         <div
           ref={menuRef}
-          className="fixed bg-white border rounded-md z-50"
+          className="fixed bg-white z-50 shadow-2xl rounded-sm"
           style={{ top: menuPosition.y, left: menuPosition.x }}
         >
           <ul>{contextMenuItems}</ul>

@@ -1,23 +1,25 @@
 import { toast } from "react-toastify";
 import { BuildSimpleQuery } from "../../../utils";
-import { IApiUser } from "../interfaces";
-import { useFetchUsersQuery } from "../store/UserApiSlice";
+import { IUserView } from "../interfaces";
+import { useFetchUserQuery } from "../store/UserApiSlice";
 
 interface IProps {
   userId?: number;
-  personDetail?: IApiUser;
+  userDetail?: IUserView;
 }
 
-const UserDetail = ({ userId, personDetail }: IProps) => {
+const UserDetail = ({ userId, userDetail }: IProps) => {
   const {
     data: response,
     isFetching,
     isLoading,
     isSuccess,
     isError,
-  } = useFetchUsersQuery(BuildSimpleQuery("personId", userId!), {
+  } = useFetchUserQuery(BuildSimpleQuery("UserId", userId!), {
     skip: userId === undefined,
   });
+
+  const userData: IUserView | null = (response?.data || userDetail) ?? null;
 
   if (isLoading || isFetching) return <p>Loading....</p>;
   if (isSuccess) toast.success("Person is Fetched");
@@ -26,26 +28,81 @@ const UserDetail = ({ userId, personDetail }: IProps) => {
 
   /* ────────────── Render  ────────────── */
 
-  const fieldsRender = Object.entries(personDetail || response?.data || {}).map(
-    ([key, value]) => (
-      <div key={key} className="flex flex-col">
-        <label className="text-sm font-medium text-gray-700 mb-1">
-          {key
-            .replace(/([A-Z])/g, " $1")
-            .replace(/^./, (str) => str.toUpperCase())}{" "}
-          {/* Format label */}
-        </label>
-        <div className="flex items-center bg-gray-100 rounded-lg p-2">
-          <i className="fas fa-id-card text-gray-400 mr-2"></i>
-          <span className="text-gray-600">{value || "N/A"}</span>
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-gray-100 p-6 gap-6 h-[100%] rounded-lg shadow-lg">
+      {/* User Information Section */}
+      <div className="grid grid-cols-2 gap-10 items-center">
+        {/* Person ID */}
+        <div>
+          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            Person ID
+          </label>
+          <div className="flex items-center bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+            <i className="fas fa-id-card text-blue-400 mr-3"></i>
+            <span className="text-gray-800 text-sm">
+              {userData?.personId || "N/A"}
+            </span>
+          </div>
+        </div>
+
+        {/* User ID */}
+        <div>
+          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            User ID
+          </label>
+          <div className="flex items-center bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+            <i className="fas fa-user text-green-400 mr-3"></i>
+            <span className="text-gray-800 text-sm">
+              {userData?.userId || "N/A"}
+            </span>
+          </div>
+        </div>
+
+        {/* Username */}
+        <div>
+          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            Username
+          </label>
+          <div className="flex items-center bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+            <i className="fas fa-user-circle text-purple-400 mr-3"></i>
+            <span className="text-gray-800 text-sm">
+              {userData?.username || "N/A"}
+            </span>
+          </div>
+        </div>
+
+        {/* Is Active */}
+        <div>
+          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            Active Status
+          </label>
+          <div className="flex items-center bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+            <i
+              className={`fas ${
+                userData?.isActive
+                  ? "fa-check-circle text-green-400"
+                  : "fa-times-circle text-red-400"
+              } mr-3`}
+            ></i>
+            <span className="text-gray-800 text-sm">
+              {userData?.isActive ? "Yes" : "No"}
+            </span>
+          </div>
         </div>
       </div>
-    )
-  );
 
-  return (
-    <div className="grid grid-cols-[1fr,auto] bg-gray-50 p-6 gap-10 h-[100%] rounded-lg shadow-md">
-      <div className="grid grid-cols-3 gap-6">{fieldsRender}</div>
+      {/* Profile Picture or Placeholder */}
+      {/* <div className="flex justify-center items-center bg-white rounded-lg shadow-md border border-gray-200">
+        {userData?.profilePicture ? (
+          <img
+            src={userData.profilePicture}
+            alt="User Profile"
+            className="h-32 w-32 rounded-full object-cover"
+          />
+        ) : (
+          <i className="fas fa-user-circle text-gray-300 text-6xl"></i>
+        )}
+      </div> */}
     </div>
   );
 };

@@ -11,7 +11,7 @@ import {
   FaCalendarAlt,
   FaAddressBook,
 } from "react-icons/fa";
-import { IPerson } from "../interfaces";
+import { IPostPerson } from "../interfaces";
 import {
   IFilterByComboBox,
   IGenericContextMenuItem,
@@ -201,6 +201,7 @@ export const peopleContextMenuItemData: Array<
   },
   {
     operation: "Edit Person",
+
     Icon: MdEdit,
   },
   {
@@ -212,12 +213,12 @@ export const peopleContextMenuItemData: Array<
 
 // generic input filed type
 
-export const PersonFieldsData: IGenericField<IPerson>[] = [
+export const PersonFieldsData: IGenericField<IPostPerson>[] = [
   {
     name: "nationalNo",
     type: "text",
     displayName: "National Number",
-    placeholder: "Enter National Number",
+    placeholder: "National Number",
     isMenu: false,
     Icon: FaIdCard,
   },
@@ -225,7 +226,7 @@ export const PersonFieldsData: IGenericField<IPerson>[] = [
     name: "firstName",
     type: "text",
     displayName: "First Name",
-    placeholder: "Enter First Name",
+    placeholder: "First Name",
     isMenu: false,
 
     Icon: FaUser,
@@ -234,7 +235,7 @@ export const PersonFieldsData: IGenericField<IPerson>[] = [
     name: "secondName",
     type: "text",
     displayName: "Second Name",
-    placeholder: "Enter Second Name",
+    placeholder: "Second Name",
     isMenu: false,
 
     Icon: FaUser,
@@ -243,7 +244,7 @@ export const PersonFieldsData: IGenericField<IPerson>[] = [
     name: "thirdName",
     type: "text",
     displayName: "Third Name",
-    placeholder: "Enter Third Name",
+    placeholder: "Third Name",
     isMenu: false,
 
     Icon: FaUser,
@@ -270,14 +271,14 @@ export const PersonFieldsData: IGenericField<IPerson>[] = [
     name: "address",
     type: "text",
     displayName: "Address",
-    placeholder: "Enter Address",
+    placeholder: "Address",
     isMenu: false,
 
     Icon: FaAddressBook,
   },
   {
     name: "phone",
-    type: "tel",
+    type: "text",
     displayName: "Phone",
     placeholder: "Enter Phone Number",
     isMenu: false,
@@ -286,7 +287,7 @@ export const PersonFieldsData: IGenericField<IPerson>[] = [
   },
   {
     name: "email",
-    type: "email",
+    type: "text",
     displayName: "Email",
     placeholder: "Enter Email Address",
     isMenu: false,

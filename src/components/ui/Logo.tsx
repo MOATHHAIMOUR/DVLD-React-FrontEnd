@@ -10,13 +10,15 @@ const Logo = ({ image, title, imageSize, direction }: IProps) => {
     <div
       className={`${
         direction === "ROW" ? "flex" : "flex flex-col"
-      } items-center gap-5 `}
+      } items-center gap-5   `}
     >
       <img
         className={` ${imageSize ? imageSize : "w-16 h-16"}  `}
         src={image}
       />
-      <p className="text-4xl font-semibold">{title}</p>
+      <p className="text-4xl text-[#1A1F24] dark:text-white font-semibold">
+        {title}
+      </p>
     </div>
   );
 };

@@ -7,11 +7,23 @@ import { sharedApiSlice } from "./store/SharedApiSlice";
 import { UserApiSlice } from "./features/User/store/UserApiSlice";
 
 import peopleSlice from "./features/People/store/PeopleSlice";
+import themeSlice from "./store/ThemeSlice";
+
 import { applicationApiSlice } from "./features/Applications/shared/store/ApplicationApiSlice";
+import { LocalDrivingLicenseApplicationApiSlice } from "./features/Applications/LocalDrivingApplication/Store/LocalDrivingLicenseApplicationApiSlice";
+import { TestApiSlice } from "./features/Tests/Store/TestApiSlice";
+import { InternationalLicenseApiSlice } from "./features/Applications/InternationalLicenseApplication/store";
+import errorMiddleware from "./middleware/globalErrorMiddleware";
 
 export const store = configureStore({
   reducer: {
+    theme: themeSlice,
     peopleSlice: peopleSlice,
+    [InternationalLicenseApiSlice.reducerPath]:
+      InternationalLicenseApiSlice.reducer,
+    [LocalDrivingLicenseApplicationApiSlice.reducerPath]:
+      LocalDrivingLicenseApplicationApiSlice.reducer,
+    [TestApiSlice.reducerPath]: TestApiSlice.reducer,
     [peopleApiSlice.reducerPath]: peopleApiSlice.reducer,
     [applicationApiSlice.reducerPath]: applicationApiSlice.reducer,
     [UserApiSlice.reducerPath]: UserApiSlice.reducer,
@@ -21,10 +33,14 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
+      errorMiddleware,
       peopleApiSlice.middleware,
       sharedApiSlice.middleware,
       UserApiSlice.middleware,
-      applicationApiSlice.middleware
+      applicationApiSlice.middleware,
+      LocalDrivingLicenseApplicationApiSlice.middleware,
+      TestApiSlice.middleware,
+      InternationalLicenseApiSlice.middleware
     ),
 });
 

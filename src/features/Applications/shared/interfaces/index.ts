@@ -1,5 +1,5 @@
 export interface IApplicationType {
-  applicationTypeID: number;
+  applicationTypeId: number;
   applicationTypeTitle: string;
   applicationFees: number;
 }

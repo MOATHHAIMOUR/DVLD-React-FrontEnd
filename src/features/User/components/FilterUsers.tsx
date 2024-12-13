@@ -143,8 +143,8 @@ const FilterUsers = ({ onChangeFilter }: IProps) => {
   };
 
   return (
-    <div className="flex gap-2 items-center">
-      <p className="text-[18px] font-semibold">Filter by:</p>
+    <div className="flex gap-4 items-center">
+      <p className="text-[18px] text-[#1A1F24] font-semibold">Filter by:</p>
       <div className="w-44">
         <SelectMenu onChange={(e) => handleOnChangeFilterBy(e.target.value)}>
           {renderFilterBys}

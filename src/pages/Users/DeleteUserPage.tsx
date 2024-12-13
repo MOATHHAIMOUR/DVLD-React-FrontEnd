@@ -7,7 +7,7 @@ const DeleteUserPage = () => {
       <Logo
         image="/src/assets/images/deletePerson.png"
         direction="ROW"
-        title="Delete Person"
+        title="Delete User"
       />
       <LookupUserToDelete />
     </div>
