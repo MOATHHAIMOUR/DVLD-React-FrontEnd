@@ -15,7 +15,7 @@ const testRoutes = (
       element={<ScheduleTestAppointmentPage />}
     />
     <Route path="tests/type-info" element={<TestTypeInfoPage />} />
-    <Route path="tests/take" element={<TakeTestPage />} />
+    <Route path="tests/take-test" element={<TakeTestPage />} />
   </>
 );
 

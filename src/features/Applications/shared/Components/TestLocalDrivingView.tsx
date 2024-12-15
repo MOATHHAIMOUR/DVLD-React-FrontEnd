@@ -1,20 +1,18 @@
 import { FaMoneyBillAlt, FaUserCircle } from "react-icons/fa";
 import { MdOutlineDriveEta } from "react-icons/md";
-import Box from "../../../components/ui/Box";
-import { EnumTestType } from "../Enums";
-import LoadingSpinner from "../../../components/ui/LoadingSpinner";
-import { useFetchTestLocalDrivingApplicationAppointmentViewQuery } from "../Store/TestApiSlice";
 import { AiFillIdcard, AiOutlineCalendar } from "react-icons/ai";
 import { BsCardList } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
-import ErrorHandler from "../../../components/ui/ErrorHandler";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import Box from "../../../../components/ui/Box";
+import ErrorHandler from "../../../../components/ui/ErrorHandler";
+import { useFetchTestLocalDrivingApplicationAppointmentViewQuery } from "../store/ApplicationApiSlice";
 
 interface IProps {
-  TestType: EnumTestType;
   localDrivingApplicationId: string;
 }
 
-const TestAppointmentView = ({ localDrivingApplicationId }: IProps) => {
+const TestLocalDrivingView = ({ localDrivingApplicationId }: IProps) => {
   //
   //
   //
@@ -78,7 +76,6 @@ const TestAppointmentView = ({ localDrivingApplicationId }: IProps) => {
               /3
             </span>
           </Box>
-          <button className="text-blue-500 underline">Show License Info</button>
         </Box>
       </Box>
 
@@ -161,7 +158,10 @@ const TestAppointmentView = ({ localDrivingApplicationId }: IProps) => {
           </Box>
         </Box>
         <Box className="mt-4">
-          <NavLink to={""} className="text-blue-500 underline">
+          <NavLink
+            to={`/people/person-details?personId=${TestLocalDrivingApplicationAppointmentViewResponse?.data.personId}`}
+            className="text-blue-500 underline"
+          >
             View Person Info
           </NavLink>
         </Box>
@@ -170,4 +170,4 @@ const TestAppointmentView = ({ localDrivingApplicationId }: IProps) => {
   );
 };
 
-export default TestAppointmentView;
+export default TestLocalDrivingView;

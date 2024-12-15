@@ -1,4 +1,4 @@
-import { EnumApplicationStatus } from "../../Applications/LocalDrivingApplication/Enums";
+import { EnumApplicationStatus } from "../../LocalDrivingApplication/Enums";
 
 export interface ITestLocalDrivingLicenseAppointmentView {
   localDrivingLicenseApplicationId: number;
@@ -13,6 +13,7 @@ export interface ITestLocalDrivingLicenseAppointmentView {
   applicationDate: string;
   lastStatusDate: string;
   username: string;
+  personId: string;
 }
 
 export interface ITestAppointmentsView {

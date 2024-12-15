@@ -1,10 +1,19 @@
 import {
+  MdAddCard,
+  MdDriveEta,
+  MdEditNote,
+  MdVisibility,
+} from "react-icons/md";
+import {
   IFilterByComboBox,
   IGenericContextMenuItem,
   IHeaderData,
 } from "../../../../interfaces";
 import { TLocalDrivingContextMenu } from "../types";
-import { BiSolidUserDetail } from "react-icons/bi";
+import { BiCalendarCheck, BiXCircle } from "react-icons/bi";
+import { EnumApplicationStatus } from "../Enums";
+import { FaAddressCard } from "react-icons/fa";
+import { AiOutlineFileText } from "react-icons/ai";
 
 export const localDrivingApplicationHeaderData: Array<IHeaderData> = [
   {
@@ -37,44 +46,148 @@ export const localDrivingApplicationHeaderData: Array<IHeaderData> = [
   },
 ];
 
-export const localDrivingApplicationContextMenuData: Array<
-  IGenericContextMenuItem<TLocalDrivingContextMenu>
-> = [
-  {
-    operation: "Show Application Detail",
-    Icon: BiSolidUserDetail,
-  },
-  {
+export function GetLocalDrivingApplicationContextMenuData(
+  numberOfPassedTests: number,
+  applicationStatus: EnumApplicationStatus
+): Array<IGenericContextMenuItem<TLocalDrivingContextMenu>> {
+  console.log("numberOfPassedTests: " + numberOfPassedTests);
+  switch (numberOfPassedTests) {
+    case 0:
+      return [
+        {
+          operation: "Show Application Details",
+          Icon: AiOutlineFileText, // Eye icon for viewing details
+        },
+
+        GenerateScheduleData(applicationStatus),
+
+        {
+          operation: "Issue License (First Time)",
+          isDisabled: true,
+          Icon: MdAddCard, // Calendar check for first license
+        },
+        {
+          operation: "Show License",
+          isDisabled: true,
+          Icon: FaAddressCard, // Eye icon for viewing license
+        },
+        {
+          operation: "Cancel Application",
+          isDisabled: applicationStatus === EnumApplicationStatus.Cancelled,
+          Icon: BiXCircle, // Cross-circle for cancellation
+        },
+      ];
+
+    case 1:
+      return [
+        {
+          operation: "Show Application Details",
+          Icon: AiOutlineFileText, // Eye icon for viewing details
+        },
+        GenerateScheduleData(applicationStatus),
+        {
+          operation: "Issue License (First Time)",
+          isDisabled: true,
+          Icon: MdAddCard, // Calendar check for first license
+        },
+        {
+          operation: "Show License",
+          isDisabled: true,
+          Icon: FaAddressCard, // Eye icon for viewing license
+        },
+        {
+          operation: "Cancel Application",
+          isDisabled: applicationStatus === EnumApplicationStatus.Cancelled,
+          Icon: BiXCircle, // Cross-circle for cancellation
+        },
+      ];
+
+    case 2:
+      return [
+        {
+          operation: "Show Application Details",
+          Icon: AiOutlineFileText, // Eye icon for viewing details
+        },
+
+        GenerateScheduleData(applicationStatus),
+        {
+          operation: "Issue License (First Time)",
+          isDisabled: true,
+          Icon: MdAddCard, // Calendar check for first license
+        },
+        {
+          operation: "Show License",
+          isDisabled: true,
+          Icon: FaAddressCard, // Eye icon for viewing license
+        },
+        {
+          operation: "Cancel Application",
+          isDisabled: applicationStatus === EnumApplicationStatus.Cancelled,
+          Icon: BiXCircle, // Cross-circle for cancellation
+        },
+      ];
+
+    case 3:
+      return [
+        {
+          operation: "Show Application Details",
+          Icon: AiOutlineFileText, // Eye icon for viewing details
+        },
+
+        GenerateScheduleData(applicationStatus),
+        {
+          operation: "Issue License (First Time)",
+          isDisabled:
+            applicationStatus === EnumApplicationStatus.Cancelled ||
+            applicationStatus === EnumApplicationStatus.Completed,
+          Icon: MdAddCard, // Calendar check for first license
+        },
+        {
+          operation: "Show License",
+          isDisabled:
+            applicationStatus === EnumApplicationStatus.Cancelled ||
+            applicationStatus === EnumApplicationStatus.New,
+          Icon: FaAddressCard, // Eye icon for viewing license
+        },
+        {
+          operation: "Cancel Application",
+          isDisabled: applicationStatus === EnumApplicationStatus.Cancelled,
+          Icon: BiXCircle, // Cross-circle for cancellation
+        },
+      ];
+  }
+  return [];
+}
+
+function GenerateScheduleData(
+  applicationStatus: EnumApplicationStatus
+): IGenericContextMenuItem<TLocalDrivingContextMenu> {
+  return {
     operation: "Schedule Test",
-    Icon: BiSolidUserDetail,
+    Icon: BiCalendarCheck, // Calendar check for scheduling tests
     isSubMenu: true,
+    isDisabled:
+      applicationStatus === EnumApplicationStatus.Cancelled ||
+      applicationStatus === EnumApplicationStatus.Completed,
     children: [
       {
         operation: "Vision Test",
-        Icon: BiSolidUserDetail,
+        Icon: MdVisibility, // Test tube icon for vision testing
         isDisabled: false,
       },
       {
         operation: "Written Test",
+        Icon: MdEditNote, // Notebook for written test
         isDisabled: true,
-        Icon: BiSolidUserDetail,
       },
       {
         operation: "Practical Test",
+        Icon: MdDriveEta, // Car icon for practical driving test
         isDisabled: true,
-        Icon: BiSolidUserDetail,
       },
     ],
-  },
-  {
-    operation: "Cancel Application",
-    Icon: BiSolidUserDetail,
-  },
-  {
-    operation: "Delete Application",
-    Icon: BiSolidUserDetail,
-  },
-];
+  };
+}
 
 export const filterByLocalDrivingLicenseData: Array<IFilterByComboBox> = [
   {
@@ -99,7 +212,7 @@ export const filterByLocalDrivingLicenseData: Array<IFilterByComboBox> = [
     },
   },
   {
-    type: "number",
+    type: "string",
     value: {
       name: "NationalNo",
       displayName: "National No",

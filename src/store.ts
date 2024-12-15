@@ -11,9 +11,9 @@ import themeSlice from "./store/ThemeSlice";
 
 import { applicationApiSlice } from "./features/Applications/shared/store/ApplicationApiSlice";
 import { LocalDrivingLicenseApplicationApiSlice } from "./features/Applications/LocalDrivingApplication/Store/LocalDrivingLicenseApplicationApiSlice";
-import { TestApiSlice } from "./features/Tests/Store/TestApiSlice";
 import { InternationalLicenseApiSlice } from "./features/Applications/InternationalLicenseApplication/store";
 import errorMiddleware from "./middleware/globalErrorMiddleware";
+import { TestApiSlice } from "./features/Applications/Tests/Store/TestApiSlice";
 
 export const store = configureStore({
   reducer: {

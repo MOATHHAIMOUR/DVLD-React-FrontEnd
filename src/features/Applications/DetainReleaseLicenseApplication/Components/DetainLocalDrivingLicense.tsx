@@ -45,20 +45,18 @@ const DetainLocalDrivingLicense = () => {
 
   return (
     <Box className="flex flex-col gap-8">
-      <Box className="flex items-center space-x-2">
-        <label htmlFor="licenseId" className="font-semibold text-[20px]">
+      <Box className="w-fit flex items-center gap-8">
+        <label
+          htmlFor="licenseId"
+          className="font-semibold text-nowrap text-[20px]"
+        >
           License ID:
         </label>
-        <Input
-          ref={licenseIdRef}
-          className="w-[200px]"
-          id="licenseId"
-          type="text"
-        />
+        <Input ref={licenseIdRef} id="licenseId" type="text" />
         <Button
           isLoading={isLoading || isFetching}
           onClick={onFindLicense}
-          className="bg-[#1F2937] font-semibold p-1 rounded-md shadow-xl text-white w-24"
+          className="bg-primary hover:bg-primaryHover font-semibold p-1 rounded-md shadow-xl text-white w-60"
         >
           Find
         </Button>
@@ -124,12 +122,15 @@ const DetainLocalDrivingLicense = () => {
 
       {/* Footer Buttons */}
       <Box className="flex justify-between mt-4">
-        <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
-          Show Licenses History
-        </Button>
-        <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
-          Show Licenses Info
-        </Button>
+        <Box className="flex items-center gap-4">
+          <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
+            Show Licenses History
+          </Button>
+          <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
+            Show Licenses Info
+          </Button>
+        </Box>
+
         <Box className="flex space-x-4">
           <Button
             className="bg-[#1F2937] text-white px-4 py-2 rounded shadow hover:bg-red-600"

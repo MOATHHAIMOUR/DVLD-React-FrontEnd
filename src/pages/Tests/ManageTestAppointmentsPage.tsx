@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import Box from "../../components/ui/Box";
 import Logo from "../../components/ui/Logo";
-import ManageTestAppointment from "../../features/Tests/Components/ManageTestAppointment";
-import { EnumTestType } from "../../features/Tests/Enums";
+import { EnumTestType } from "../../features/Applications/Tests/Enums";
+import ManageTestAppointment from "../../features/Applications/Tests/Components/ManageTestAppointment";
 
 // Define a mapping of testType to logo paths
 const testTypeLogos: Record<EnumTestType, string> = {

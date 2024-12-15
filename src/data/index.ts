@@ -163,32 +163,30 @@ export const NavData: Array<INavbar> = [
           },
         ],
       },
-    ],
-  },
-  // Types
-  {
-    name: "Applications Sittings",
-    path: "types",
-    Icon: FaFileAlt,
-    children: [
       {
-        name: "Application Types",
-        path: "/types/application-types",
-        Icon: FaFileAlt,
-      },
-    ],
-  },
-
-  // Test Management
-  {
-    name: "Renew Licenses Applications",
-    Icon: AiOutlineSchedule,
-    path: "",
-    children: [
-      {
-        name: "Renew Local Licenses",
-        path: "/renew/renew-local-licenses",
+        name: "Renew Licenses Applications",
         Icon: AiOutlineSchedule,
+        path: "",
+        children: [
+          {
+            name: "Renew Local Licenses",
+            path: "/renew/renew-local-licenses",
+            Icon: AiOutlineSchedule,
+          },
+        ],
+      },
+      // Types
+      {
+        name: "Applications Sittings",
+        path: "types",
+        Icon: FaFileAlt,
+        children: [
+          {
+            name: "Application Types",
+            path: "/types/application-types",
+            Icon: FaFileAlt,
+          },
+        ],
       },
     ],
   },

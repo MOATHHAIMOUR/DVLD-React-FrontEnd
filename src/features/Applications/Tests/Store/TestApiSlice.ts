@@ -4,9 +4,8 @@ import {
   IAddTestResult,
   IScheduleTestView,
   ITestAppointmentsView,
-  ITestLocalDrivingLicenseAppointmentView,
 } from "../interfaces";
-import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
+import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
 
 // Define the API slice
 export const TestApiSlice = createApi({
@@ -16,24 +15,6 @@ export const TestApiSlice = createApi({
     baseUrl: "http://localhost:5121/Api/v1/Test",
   }),
   endpoints: (builder) => ({
-    fetchTestLocalDrivingApplicationAppointmentView: builder.query<
-      IGenericApiResponse<ITestLocalDrivingLicenseAppointmentView>,
-      string
-    >({
-      query: (localDrivingApplicationId) => ({
-        url: `/GetTestLocalDrivingLicenseDetail/${localDrivingApplicationId}`, // Append the query to the endpoint
-      }),
-      transformErrorResponse: (response: {
-        status: number;
-        data: IGenericApiResponse<Array<string>>;
-      }) => {
-        return {
-          status: response.data.statusCode,
-          message: response.data.errors[0],
-        };
-      },
-    }),
-
     fetchScheduleTestInfoView: builder.query<
       IGenericApiResponse<IScheduleTestView>,
       string
@@ -68,6 +49,7 @@ export const TestApiSlice = createApi({
           message: response.data.errors[0],
         };
       },
+      providesTags: [{ type: "Test", id: "TestAppointmentList" }],
     }),
 
     addTestResult: builder.mutation<
@@ -108,6 +90,7 @@ export const TestApiSlice = createApi({
           message: response.data.errors[0],
         };
       },
+      invalidatesTags: [{ type: "Test", id: "TestAppointmentList" }],
     }),
   }),
 });
@@ -119,5 +102,4 @@ export const {
   useLazyFetchScheduleTestInfoViewQuery,
   useFetchScheduleTestInfoViewQuery,
   useFetchTestAppointmentsQuery,
-  useFetchTestLocalDrivingApplicationAppointmentViewQuery,
 } = TestApiSlice;

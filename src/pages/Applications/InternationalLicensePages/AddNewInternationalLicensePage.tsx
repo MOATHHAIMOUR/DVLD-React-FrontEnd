@@ -3,7 +3,7 @@ import AddNewInternationalLicenseApplication from "../../../features/Application
 
 const AddNewInternationalDrivingApplicationPage = () => {
   return (
-    <div className="mx-auto bg-white p-8 rounded flex flex-col shadow h-[100%]">
+    <div className="mx-auto bg-white rounded flex flex-col  h-[100%]">
       <Logo
         direction="ROW"
         title="Add New International License"

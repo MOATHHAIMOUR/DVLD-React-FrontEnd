@@ -1,21 +1,22 @@
-import { AiFillIdcard, AiOutlineCalendar } from "react-icons/ai";
-import Box from "../../../components/ui/Box";
-import { MdOutlineDriveEta } from "react-icons/md";
-import { FaMoneyBillAlt, FaSave, FaUserCircle } from "react-icons/fa";
-import { BsCardList } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { useFetchApplicationTypesQuery } from "../../shared/store/ApplicationApiSlice";
+import { EnumApplicationType } from "../../LocalDrivingApplication/Enums";
+import { BuildQuery } from "../../../../utils";
+import { useScheduleTest } from "../hooks/useAddScheduleTest";
 import { useRef, useState } from "react";
 import DatePickerComponent, {
   DatePickerRef,
-} from "../../../components/ui/DatePickerComponent";
+} from "../../../../components/ui/DatePickerComponent";
+import Box from "../../../../components/ui/Box";
+import ErrorHandler from "../../../../components/ui/ErrorHandler";
+import { AiFillIdcard, AiOutlineCalendar } from "react-icons/ai";
+import { MdOutlineDriveEta } from "react-icons/md";
+import { FaMoneyBillAlt, FaSave, FaUserCircle } from "react-icons/fa";
+import { BsCardList } from "react-icons/bs";
+import ErrorMsg from "../../../../components/ui/ErrorMsg";
+import Button from "../../../../components/ui/Button";
 import { useFetchScheduleTestInfoViewQuery } from "../Store/TestApiSlice";
 import { EnumTestType } from "../Enums";
-import { BuildQuery } from "../../../utils";
-import Button from "../../../components/ui/Button";
-import { useFetchApplicationTypesQuery } from "../../Applications/shared/store/ApplicationApiSlice";
-import { EnumApplicationType } from "../../Applications/LocalDrivingApplication/Enums";
-import ErrorMsg from "../../../components/ui/ErrorMsg";
-import { useScheduleTest } from "../hooks/useAddScheduleTest";
-import ErrorHandler from "../../../components/ui/ErrorHandler";
 
 interface IProps {
   localDrivingApplicationId: string;
@@ -35,10 +36,13 @@ const ScheduleTestAppointment = ({
   const { data: ApplicationTypes } = useFetchApplicationTypesQuery(null, {
     skip: !isRetake,
   });
+
+  const navigate = useNavigate();
   // extract retake test info
   const Retake = ApplicationTypes?.data.find(
     (a) => a.applicationTypeId === EnumApplicationType.RetakeTest
   );
+
   const { data: ScheduleTestInfoView } = useFetchScheduleTestInfoViewQuery(
     BuildQuery({
       AdvanceFilters: [
@@ -75,11 +79,17 @@ const ScheduleTestAppointment = ({
       return;
     }
 
-    await handleScheduleTest({
-      createdByUserId: 496,
-      localDrivingLicenseApplicationId: Number(localDrivingApplicationId),
-      testTypeId: TestTypeId,
-    });
+    if (ScheduleTestInfoView) {
+      await handleScheduleTest({
+        createdByUserId: 439,
+        localDrivingLicenseApplicationId: Number(localDrivingApplicationId),
+        testTypeId: TestTypeId,
+      });
+
+      navigate(
+        `/tests/manage-appointment?test-type=${TestTypeId}&local-driving-application-id=${localDrivingApplicationId}`
+      );
+    }
   }
   return (
     <Box className="mt-8 p-6 flex flex-col gap-4 bg-gray-100 ">

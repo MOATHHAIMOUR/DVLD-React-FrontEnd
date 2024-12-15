@@ -9,6 +9,8 @@ import FilterLocalDrivingLicense from "./FilterLocalDrivingLicense";
 import LocalDrivingLicenseViewList from "./LocalDrivingLicenseViewList";
 import Pagination from "../../../../components/ui/Pagination";
 import Box from "../../../../components/ui/Box";
+import Modal from "../../../../components/ui/Modal";
+import ConfirmCancelLocalDrivingApplication from "./ConfirmCancelLocalDrivingApplication";
 
 const defaultFilterValue: IQuery = {
   AdvanceFilters: [],
@@ -36,7 +38,6 @@ const ManageLocalDrivingLicenseApplication = () => {
     BuildQuery(filters)
   );
 
-  console.log("response: " + response?.data[0].applicationDate);
   /* ────────────── HANDLER  ────────────── */
 
   function handleCloseModal() {
@@ -57,7 +58,15 @@ const ManageLocalDrivingLicenseApplication = () => {
   }
 
   function onFilterChange(filter: IFilter) {
-    setFilters((prevFilters) => ({ ...prevFilters, Filter: filter }));
+    console.log("filter.FilterValue: " + filter.FilterValue);
+    if (filter.FilterValue === "") {
+      setFilters(defaultFilterValue);
+      return;
+    }
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      Filter: { ...filter },
+    }));
   }
 
   function onPageChange(Page: number) {
@@ -82,16 +91,16 @@ const ManageLocalDrivingLicenseApplication = () => {
         />
       )}
 
-      {/* <Modal
+      <Modal
         onClose={handleCloseModal}
         isOpen={confirmDeleteModal}
-        title="Confirm Deletion"
+        title="Confirm Cancellation"
       >
-        <ConfirmDeleteUser
-          user={selectedLocalApplication!}
+        <ConfirmCancelLocalDrivingApplication
+          localDrivingApplication={selectedLocalApplication!}
           CloseModal={handleCloseModal}
         />
-      </Modal> */}
+      </Modal>
     </Box>
   );
 };

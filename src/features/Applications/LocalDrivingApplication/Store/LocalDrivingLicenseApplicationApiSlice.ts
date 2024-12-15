@@ -36,6 +36,27 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
         return "An unexpected error occurred";
       },
     }),
+    cancelLocalDrivingApplication: builder.mutation({
+      query: (localDrivingApplicationId) => ({
+        url: `CancelLocalDivingApplication?LocalDrivingApplication=${localDrivingApplicationId}`,
+        method: "PUT",
+        headers: {
+          accept: "text/plain",
+        },
+        invalidatesTags: [
+          { type: "LocalDrivingApplication", id: "LocalDrivingLicenseList" },
+        ],
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
+    }),
 
     addNewLocalDrivingLicense: builder.mutation<
       IGenericApiResponse<string>,
@@ -88,6 +109,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
 export const {
   useFetchLicenseDetailsViewQuery,
   useLazyFetchLicenseDetailsViewQuery,
+  useCancelLocalDrivingApplicationMutation,
   useAddNewLocalDrivingLicenseMutation,
   useFetchLocalDrivingApplicationsViewQuery,
 } = LocalDrivingLicenseApplicationApiSlice;

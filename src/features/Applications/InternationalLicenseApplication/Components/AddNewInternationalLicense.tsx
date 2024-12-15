@@ -15,7 +15,10 @@ import {
   EnumLicenseClass,
 } from "../../LocalDrivingApplication/Enums";
 import { useFetchApplicationTypesQuery } from "../../shared/store/ApplicationApiSlice";
-import DatePicker from "react-datepicker";
+import DatePickerComponent, {
+  DatePickerRef,
+} from "../../../../components/ui/DatePickerComponent";
+import { AiOutlineCalendar } from "react-icons/ai";
 
 const stringToEnumNumberMap: { [key: string]: EnumLicenseClass } = {
   OrdinaryDrivingLicense: EnumLicenseClass.OrdinaryDrivingLicense,
@@ -36,12 +39,13 @@ const AddNewInternationalLicenseApplication = () => {
     isLoading: isLoadingInternationalLicense,
   } = useAddNewInternationalLicenseHandler();
 
-  console.log("object:  " + response?.data?.applicationId);
   const { data: applicationTypes } = useFetchApplicationTypesQuery(null);
 
   const internationalApplication = applicationTypes?.data.find(
     (i) => i.applicationTypeId === EnumApplicationType.NewInternationalLicense
   );
+
+  const datePickerRef = useRef<DatePickerRef>(null);
 
   /* ────────────── Derived Values  ────────────── */
   const isLicenseOrdinaryLicense =
@@ -71,20 +75,20 @@ const AddNewInternationalLicenseApplication = () => {
       return;
     }
 
-    // if (License?.data.isDetain) {
-    //   toast.error("license is detain can't create international license");
-    //   return;
-    // }
-    // if (
-    //   new Date(License.data.expirationDate).getTime() < new Date().getTime()
-    // ) {
-    //   toast.error("license is expired can't create international license");
-    //   return;
-    // }
-    // if (!License?.data.isActive) {
-    //   toast.error("license is not active can't create international license");
-    //   return;
-    // }
+    if (License?.data.isDetain) {
+      toast.error("license is detain can't create international license");
+      return;
+    }
+    if (
+      new Date(License.data.expirationDate).getTime() < new Date().getTime()
+    ) {
+      toast.error("license is expired can't create international license");
+      return;
+    }
+    if (!License?.data.isActive) {
+      toast.error("license is not active can't create international license");
+      return;
+    }
 
     const InternationalLicenseData: IAddNewInternationalLicense = {
       driverId: License.data.driverId,
@@ -96,6 +100,12 @@ const AddNewInternationalLicenseApplication = () => {
     };
 
     await handleAddNewInternationalLicense(InternationalLicenseData);
+  }
+
+  function onChangeDate(date: Date) {
+    if (date === null) {
+      setError("must enter date");
+    }
   }
 
   return (
@@ -137,7 +147,7 @@ const AddNewInternationalLicenseApplication = () => {
       <LicenseView licenseData={License?.data} applicationId={null} />
 
       {/* Application Info Section */}
-      <Box className="border rounded-lg p-4 mb-6">
+      <Box className="bg-gray-100 border rounded-lg p-4 mb-6">
         <h2 className="font-bold text-lg mb-4">Application Info</h2>
         <Box className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Box>
@@ -165,10 +175,15 @@ const AddNewInternationalLicenseApplication = () => {
             <span>Local License ID:</span> <FaIdCard className="inline ml-2" />{" "}
             <span>{License?.data.licenseId || "[???]"}</span>
           </Box>
-          <Box>
-            <span>Expiration Date:</span>{" "}
-            <FaCalendarAlt className="inline ml-2" />
-            <DatePicker />
+          <Box className="flex items-center space-x-2">
+            <AiOutlineCalendar className="text-gray-500" />
+            <span className="font-medium">Date:</span>
+            <DatePickerComponent
+              onChange={onChangeDate}
+              ref={datePickerRef}
+              className="w-full"
+            />
+            {error && <ErrorMsg message={error} />}
           </Box>
           <Box>
             <span>Created By:</span> <span>not Implemented</span>
@@ -178,12 +193,15 @@ const AddNewInternationalLicenseApplication = () => {
 
       {/* Footer Buttons */}
       <Box className="flex justify-between mt-4">
-        <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
-          Show Licenses History
-        </Button>
-        <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
-          Show Licenses Info
-        </Button>
+        <Box className="flex items-center gap-4">
+          <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
+            Show Licenses History
+          </Button>
+          <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">
+            Show Licenses Info
+          </Button>
+        </Box>
+
         <Box className="flex space-x-4">
           <Button
             disabled={!isLicenseOrdinaryLicense}

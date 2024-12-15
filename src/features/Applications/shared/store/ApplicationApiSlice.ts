@@ -2,19 +2,37 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IApplicationType } from "../interfaces";
 import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
 import { ILicenseClass } from "../../LocalDrivingApplication/interfaces";
+import { ITestLocalDrivingLicenseAppointmentView } from "../../Tests/interfaces";
 
 // Create the shared API slice
 export const applicationApiSlice = createApi({
   reducerPath: "applicationApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1/Shared" }), // Adjust the base URL as needed
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1" }), // Adjust the base URL as needed
   endpoints: (builder) => ({
-    // Fetch all application types
+    fetchTestLocalDrivingApplicationAppointmentView: builder.query<
+      IGenericApiResponse<ITestLocalDrivingLicenseAppointmentView>,
+      string
+    >({
+      query: (localDrivingApplicationId) => ({
+        url: `/Test/GetTestLocalDrivingLicenseDetail/${localDrivingApplicationId}`, // Append the query to the endpoint
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
+    }),
+
     fetchApplicationTypes: builder.query<
       IGenericApiResponse<Array<IApplicationType>>,
       null
     >({
       query: () => ({
-        url: `/GetAllApplicationTypes`,
+        url: `/Shared/GetAllApplicationTypes`,
       }),
     }),
 
@@ -23,7 +41,7 @@ export const applicationApiSlice = createApi({
       string
     >({
       query: () => ({
-        url: `/GetLicenseClasses`,
+        url: `/Shared/GetLicenseClasses`,
       }),
     }),
 
@@ -33,7 +51,7 @@ export const applicationApiSlice = createApi({
       IApplicationType
     >({
       query: (updatedApplicationType) => ({
-        url: `/UpdateApplicationType`,
+        url: `/Shared/UpdateApplicationType`,
         method: "PUT", // Assuming the endpoint uses HTTP PUT
         body: updatedApplicationType,
         headers: {
@@ -49,4 +67,5 @@ export const {
   useFetchLicensesClassesQuery,
   useFetchApplicationTypesQuery,
   useUpdateApplicationTypeMutation,
+  useFetchTestLocalDrivingApplicationAppointmentViewQuery,
 } = applicationApiSlice;

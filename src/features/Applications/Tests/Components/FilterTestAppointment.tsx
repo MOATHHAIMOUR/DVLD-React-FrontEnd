@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
-import SelectMenu from "../../../components/ui/SelectMenu";
-import Input from "../../../components/ui/Input";
-import { isNumber } from "../../../utils/index";
-import ErrorMsg from "../../../components/ui/ErrorMsg";
-import { IFilter, IFilterByComboBox } from "../../../interfaces";
+
 import { FilterByTestAppointment } from "../data";
+import { IFilter, IFilterByComboBox } from "../../../../interfaces";
+import { isNumber } from "../../../../utils";
+import Input from "../../../../components/ui/Input";
+import ErrorMsg from "../../../../components/ui/ErrorMsg";
+import SelectMenu from "../../../../components/ui/SelectMenu";
 
 interface IProps {
   onChangeFilter: (filter: IFilter) => void;

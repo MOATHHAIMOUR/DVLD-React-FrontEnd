@@ -1,13 +1,14 @@
 import { FaIdCard, FaRedoAlt, FaUser } from "react-icons/fa";
 import { MdOutlineDriveEta } from "react-icons/md";
-import Box from "../../../components/ui/Box";
-import Button from "../../../components/ui/Button";
 import { useTestResultHandler } from "../hooks/useAddTestResult";
 import { useLazyFetchScheduleTestInfoViewQuery } from "../Store/TestApiSlice";
-import { BuildQuery } from "../../../utils";
-import ErrorHandler from "../../../components/ui/ErrorHandler";
 import { useEffect, useRef, useState } from "react";
-import ErrorMsg from "../../../components/ui/ErrorMsg";
+import { useNavigate } from "react-router-dom";
+import { BuildQuery } from "../../../../utils";
+import Box from "../../../../components/ui/Box";
+import ErrorHandler from "../../../../components/ui/ErrorHandler";
+import ErrorMsg from "../../../../components/ui/ErrorMsg";
+import Button from "../../../../components/ui/Button";
 
 interface IProps {
   localDrivingApplicationId: string;
@@ -15,6 +16,11 @@ interface IProps {
 }
 
 const TakeTestForm = ({ localDrivingApplicationId, testType }: IProps) => {
+  //
+  //
+  //
+
+  /* ────────────── REDUX API  ────────────── */
   const {
     onSaveTestResultHandler,
     isLoading,
@@ -24,9 +30,17 @@ const TakeTestForm = ({ localDrivingApplicationId, testType }: IProps) => {
   const [triggerFetch, { data: ScheduleTestView, error: FetchError }] =
     useLazyFetchScheduleTestInfoViewQuery();
 
+  /* ────────────── STATE & REF  ────────────── */
+
   const selectedTestResultRef = useRef<boolean | null>(null);
+
   const TestNotesRef = useRef<HTMLTextAreaElement>(null!);
 
+  const navigate = useNavigate();
+
+  const [error, setError] = useState<string | null>(null);
+
+  /* ────────────── EFFECTS  ────────────── */
   useEffect(() => {
     // Trigger fetch on mount
     triggerFetch(
@@ -45,14 +59,14 @@ const TakeTestForm = ({ localDrivingApplicationId, testType }: IProps) => {
     );
   }, [localDrivingApplicationId, testType, triggerFetch]);
 
-  const [error, setError] = useState<string | null>(null);
-
+  /* ────────────── HANDLERS  ────────────── */
   const handleRadioChange = (value: string) => {
     if (value === "Pass") {
       selectedTestResultRef.current = true;
     } else {
       selectedTestResultRef.current = false;
     }
+    setError(null);
   };
 
   async function onTakeTestHandler(e: React.FormEvent<HTMLFormElement>) {
@@ -61,13 +75,21 @@ const TakeTestForm = ({ localDrivingApplicationId, testType }: IProps) => {
       setError("Please choose Test Result First");
       return;
     }
-    if (ScheduleTestView?.data)
+    if (ScheduleTestView?.data) {
+      console.log(
+        "ScheduleTestView?.data.testAppointmentId: " +
+          ScheduleTestView?.data.testAppointmentId
+      );
       await onSaveTestResultHandler({
         createdByUserId: 439,
         notes: TestNotesRef.current.value,
         testAppointmentId: ScheduleTestView?.data.testAppointmentId,
         testResult: selectedTestResultRef.current,
       });
+      navigate(
+        `/tests/manage-appointment?test-type=${testType}&local-driving-application-id=${localDrivingApplicationId}`
+      );
+    }
   }
 
   return (

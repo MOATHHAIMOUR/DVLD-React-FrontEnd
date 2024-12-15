@@ -195,7 +195,7 @@ const DataGrid = <T extends string>({
             </span>
           </Tippy>
 
-          {item.isSubMenu && (
+          {!item.isDisabled && item.isSubMenu && (
             <ul
               className={`absolute top-0 ${
                 subMenuPosition === "Left" ? "left-full" : "right-full"
@@ -217,9 +217,15 @@ const DataGrid = <T extends string>({
                         : "cursor-pointer hover:bg-gray-100"
                     } relative group flex items-center w-full px-4 py-3`}
                   >
-                    <a className="block px-4 text-gray-700">
-                      {subItem.operation}
-                    </a>
+                    <span className=" flex ">
+                      <subItem.Icon
+                        className="text-[#1A1F24]  dark:text-white"
+                        size={20}
+                      />
+                      <a className="block px-4 text-gray-700">
+                        {subItem.operation}
+                      </a>
+                    </span>
                   </button>
                 );
               })}

@@ -63,14 +63,6 @@ const FindLicense = ({
         }
         setError(null);
         break;
-      case "string":
-        if (isNumber(value)) {
-          setError("Value Should be a text");
-          return;
-        }
-        setError(null);
-
-        break;
       default:
         break;
     }
@@ -166,7 +158,7 @@ const FindLicense = ({
           isLoading={isLoading}
           error={error !== null || selectedFilterBy.value.name === "None"}
           onClick={HandleOnFindPerson}
-          className="w-28 p-1 bg-[#374151] hover:bg-[#3d434d] text-white rounded-md"
+          className="w-28 p-1 bg-primary hover:bg-primaryHover text-white rounded-md"
         >
           Find
         </Button>

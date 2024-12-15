@@ -1,8 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import Logo from "../../components/ui/Logo";
-import { EnumTestType } from "../../features/Tests/Enums";
-import ScheduleTestAppointment from "../../features/Tests/Components/ScheduleTestAppointment";
-
+import { EnumTestType } from "../../features/Applications/Tests/Enums";
+import ScheduleTestAppointment from "../../features/Applications/Tests/Components/ScheduleTestAppointment";
 // Define a mapping of testType to logo paths
 const testTypeLogos: Record<EnumTestType, string> = {
   [EnumTestType.VisionTest]: "/src/assets/images/eyetest.png",
@@ -42,7 +41,11 @@ const ScheduleTestAppointmentPage = () => {
 
   return (
     <>
-      <Logo direction="ROW" image={logoPath} title={`${title}`} />
+      <Logo
+        direction="ROW"
+        image={logoPath}
+        title={`${isRetake ? "Retake: " : ""}${title}`}
+      />
       <ScheduleTestAppointment
         TestTypeId={Number(testType) as EnumTestType}
         localDrivingApplicationId={localDrivingApplicationId!}

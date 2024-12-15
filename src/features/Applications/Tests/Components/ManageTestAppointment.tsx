@@ -1,12 +1,12 @@
-import Box from "../../../components/ui/Box";
-import Button from "../../../components/ui/Button";
-import ErrorHandler from "../../../components/ui/ErrorHandler";
+import { useNavigate } from "react-router-dom";
 import { EnumTestType } from "../Enums";
 import { useFetchTestAppointmentsQuery } from "../Store/TestApiSlice";
-import TestAppointmentPerLocalIdPerTestTypeList from "./TestAppointmentPerLocalIdPerTestTypeList";
-import TestAppointmentView from "./TestAppointmentView";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import Box from "../../../../components/ui/Box";
+import ErrorHandler from "../../../../components/ui/ErrorHandler";
+import TestLocalDrivingView from "../../shared/Components/TestLocalDrivingView";
+import Button from "../../../../components/ui/Button";
+import TestAppointmentPerLocalIdPerTestTypeList from "./TestAppointmentPerLocalIdPerTestTypeList";
 
 interface IProps {
   TestType: EnumTestType;
@@ -55,6 +55,7 @@ const ManageTestAppointment = ({
       TestAppointmentsResponse?.data.some((t) => t.testResult === false) ??
       false;
 
+    console.log("localDrivingApplicationId: " + localDrivingApplicationId);
     // applicant is allowed to get new appointment
     navigate(
       `/tests/schedule-test?local-driving-application-id=${localDrivingApplicationId}&test-type=${TestType}&is-retake=${isRetakeTest}`
@@ -68,8 +69,7 @@ const ManageTestAppointment = ({
   return (
     <Box className="mt-8 p-6 bg-gray-100 rounded-md">
       <ErrorHandler error={TestAppointmentsError} />
-      <TestAppointmentView
-        TestType={TestType}
+      <TestLocalDrivingView
         localDrivingApplicationId={localDrivingApplicationId}
       />
 

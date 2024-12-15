@@ -1,7 +1,24 @@
 export enum EnumApplicationStatus {
-  New = "New",
-  Cancelled = "Cancelled",
-  Completed = "Completed",
+  New = 1,
+  Cancelled = 2,
+  Completed = 3,
+}
+
+export function ConvertEnumApplicationStatusToString(
+  applicationStatus: EnumApplicationStatus
+): string {
+  if (applicationStatus === EnumApplicationStatus.New) return "New";
+  else if (applicationStatus === EnumApplicationStatus.Cancelled)
+    return "Cancelled";
+  else return "Completed";
+}
+export function ConvertStringEnumApplicationStatusToEnum(
+  applicationStatus: string
+): EnumApplicationStatus {
+  if (applicationStatus === "New") return EnumApplicationStatus.New;
+  else if (applicationStatus === "Cancelled")
+    return EnumApplicationStatus.Cancelled;
+  else return EnumApplicationStatus.Completed;
 }
 
 export enum EnumApplicationType {

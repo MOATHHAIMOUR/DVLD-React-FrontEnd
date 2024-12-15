@@ -1,9 +1,9 @@
 import AllTypes from "./ApplicationsRoutes/AllTypes";
 import DetainReleaseRoutes from "./ApplicationsRoutes/DetainReleaseRoutes";
 import InternationalLicenseRoutes from "./ApplicationsRoutes/InternationalLicenseRoutes";
-import LicenseRoutes from "./ApplicationsRoutes/LicenseRoutes";
 import localDrivingRoutes from "./ApplicationsRoutes/localLicenseRoutes";
 import RenewLicense from "./ApplicationsRoutes/RenewLicense";
+import SharedApplicationRoutes from "./ApplicationsRoutes/SharedApplicationRoutes";
 
 const applicationRoutes = (
   <>
@@ -11,7 +11,7 @@ const applicationRoutes = (
     {AllTypes}
     {DetainReleaseRoutes}
     {InternationalLicenseRoutes}
-    {LicenseRoutes}
+    {SharedApplicationRoutes}
     {localDrivingRoutes}
   </>
 );

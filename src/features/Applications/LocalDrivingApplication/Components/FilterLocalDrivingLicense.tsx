@@ -32,12 +32,10 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
     // Prioritize `textQuery` if both are available
     const filterValue = textQuery || selectQuery;
 
-    if (filterValue) {
-      onChangeFilter({
-        FilterBy: selectedFilterBy.value.name,
-        FilterValue: filterValue,
-      });
-    }
+    onChangeFilter({
+      FilterBy: selectedFilterBy.value.name,
+      FilterValue: filterValue ?? "",
+    });
   }
 
   function handleOnChangeFilterBy(FilterByName: string) {
@@ -61,26 +59,22 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
       case "number":
         if (value !== "" && !isNumber(value)) {
           setError("Value Should be a number");
-          if (refTextQuery.current) {
-            refTextQuery.current.value = refTextQuery.current.value.slice(
-              0,
-              -1
-            );
-          }
+          return;
+        }
+        if (value === "") {
+          FireQuery();
           return;
         }
         setError(null);
         FireQuery();
         break;
       case "string":
-        if (isNumber(value)) {
+        if (value !== "" && isNumber(value)) {
           setError("Value Should be a text");
-          if (refTextQuery.current) {
-            refTextQuery.current.value = refTextQuery.current.value.slice(
-              0,
-              -1
-            );
-          }
+          return;
+        }
+        if (value === "") {
+          FireQuery();
           return;
         }
         setError(null);
@@ -89,11 +83,6 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
       default:
         break;
     }
-  }
-
-  function HandleChangeIsActive() {
-    const value = refSelectQuery.current?.value;
-    if (refSelectQuery.current?.value && value !== "None") FireQuery();
   }
 
   /* ────────────── Render  ────────────── */
@@ -122,30 +111,16 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
             {error && <ErrorMsg message={error} />}
           </div>
         );
-      case "category":
-        switch (selectedFilterBy.value.name) {
-          case "IsActive":
-            return (
-              <SelectMenu onChange={HandleChangeIsActive} ref={refSelectQuery}>
-                <>
-                  <option value={"None"}>None</option>
-                  <option value={"true"}>Yes</option>
-                  <option value={"false"}>No</option>
-                </>
-              </SelectMenu>
-            );
-          default:
-            return <p>No Option is Selected</p>;
-        }
+
       default:
-        return <p>No Option is Selected</p>;
+        return <p className="ml-2 font-semibold">No Option is Selected</p>;
     }
   };
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-4 items-center">
       <p className="text-[18px] font-semibold">Filter by:</p>
-      <div className="w-44">
+      <div className="max-w-72">
         <SelectMenu onChange={(e) => handleOnChangeFilterBy(e.target.value)}>
           {renderFilterBys}
         </SelectMenu>
