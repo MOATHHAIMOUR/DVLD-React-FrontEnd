@@ -9,130 +9,114 @@ import {
 } from "react-icons/fa";
 import Box from "../../../../components/ui/Box";
 import { ILicenseDetailsView } from "../interfaces";
-import { IQuery } from "../../../../interfaces";
-import { useFindLicenseHandler } from "../hooks/useFindLicenseHandler";
 
 interface IProps {
   licenseData?: ILicenseDetailsView;
-  applicationId: IQuery | null;
 }
 
-const LicenseView = ({ licenseData, applicationId }: IProps) => {
-  const { license } = useFindLicenseHandler(applicationId);
-
-  const resolvedLicenseData: ILicenseDetailsView | null =
-    licenseData || license?.data || null;
-
+const LicenseView = ({ licenseData }: IProps) => {
   return (
     <>
-      <Box className="border rounded-lg p-4 flex items-start shadow-md bg-dataSections">
+      <Box className=" border text-nowrap rounded-lg p-4 flex items-start shadow-md  ">
         {/* License Info Section */}
-        <Box className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4">
+        <Box className="flex-1 grid grid-cols-2 md:grid-cols-2 gap-6">
           <Box className="flex items-center">
-            <FaCar className="mr-2 text-[#1F2937]" />
+            <FaCar className="mr-2 " />
             <span>Class:</span>{" "}
             <span className="text-red-500 ml-2">
-              {resolvedLicenseData?.className || "[Not Provided]"}
+              {licenseData?.className || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaUser className="mr-2 text-[#1F2937]" />
+            <FaUser className="mr-2 " />
             <span>Name:</span>{" "}
             <span className="text-red-500 ml-2">
-              {resolvedLicenseData?.fullName || "[Not Provided]"}
+              {licenseData?.fullName || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaIdCard className="mr-2 text-[#1F2937]" />
+            <FaIdCard className="mr-2 " />
             <span>License ID:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.licenseId || "[Not Provided]"}
+              {licenseData?.licenseId || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaIdCard className="mr-2 text-[#1F2937]" />
+            <FaIdCard className="mr-2 " />
             <span>National No:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.nationalNo || "[Not Provided]"}
+              {licenseData?.nationalNo || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaGenderless className="mr-2 text-[#1F2937]" />
+            <FaGenderless className="mr-2 " />
             <span>Gender:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.gender || "[Not Provided]"}
+              {licenseData?.gender || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaCalendarAlt className="mr-2 text-[#1F2937]" />
+            <FaCalendarAlt className="mr-2 " />
             <span>Issue Date:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.issueDate
-                ? new Date(resolvedLicenseData.issueDate).toLocaleDateString()
+              {licenseData?.issueDate
+                ? new Date(licenseData.issueDate).toLocaleDateString()
                 : "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaQuestionCircle className="mr-2 text-[#1F2937]" />
+            <FaQuestionCircle className="mr-2 " />
             <span>Issue Reason:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.issueReason || "[Not Provided]"}
+              {licenseData?.issueReason || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaStickyNote className="mr-2 text-[#1F2937]" />
+            <FaStickyNote className="mr-2 " />
             <span>Notes:</span>{" "}
-            <span className="ml-2">
-              {resolvedLicenseData?.notes || "No Notes"}
-            </span>
+            <span className="ml-2">{licenseData?.notes || "No Notes"}</span>
           </Box>
           <Box className="flex items-center">
-            <FaQuestionCircle className="mr-2 text-[#1F2937]" />
+            <FaQuestionCircle className="mr-2 " />
             <span>Is Active?</span>{" "}
-            <span className="ml-2">
-              {resolvedLicenseData?.isActive ? "Yes" : "No"}
-            </span>
+            <span className="ml-2">{licenseData?.isActive ? "Yes" : "No"}</span>
           </Box>
           <Box className="flex items-center">
-            <FaCalendarAlt className="mr-2 text-[#1F2937]" />
+            <FaCalendarAlt className="mr-2 " />
             <span>Date of Birth:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.dateOfBirth
-                ? new Date(resolvedLicenseData.dateOfBirth).toLocaleDateString()
+              {licenseData?.dateOfBirth
+                ? new Date(licenseData.dateOfBirth).toLocaleDateString()
                 : "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaIdCard className="mr-2 text-[#1F2937]" />
+            <FaIdCard className="mr-2 " />
             <span>Driver ID:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.driverId || "[Not Provided]"}
+              {licenseData?.driverId || "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaCalendarAlt className="mr-2 text-[#1F2937]" />
+            <FaCalendarAlt className="mr-2 " />
             <span>Expiration Date:</span>{" "}
             <span className="ml-2">
-              {resolvedLicenseData?.expirationDate
-                ? new Date(
-                    resolvedLicenseData.expirationDate
-                  ).toLocaleDateString()
+              {licenseData?.expirationDate
+                ? new Date(licenseData.expirationDate).toLocaleDateString()
                 : "[Not Provided]"}
             </span>
           </Box>
           <Box className="flex items-center">
-            <FaQuestionCircle className="mr-2 text-[#1F2937]" />
+            <FaQuestionCircle className="mr-2 " />
             <span>Is Detained?</span>{" "}
-            <span className="ml-2">
-              {resolvedLicenseData?.isDetain ? "Yes" : "No"}
-            </span>
+            <span className="ml-2">{licenseData?.isDetain ? "Yes" : "No"}</span>
           </Box>
         </Box>
 
         {/* Personal Image */}
         <Box className="flex-shrink-0 ml-6">
           <img
-            src={"https://via.placeholder.com/150"}
+            src={licenseData?.imagePath}
             alt="Personal"
             className="rounded-full w-40 h-40 object-cover shadow-md"
           />

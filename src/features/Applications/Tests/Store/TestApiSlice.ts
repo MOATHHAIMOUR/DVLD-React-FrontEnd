@@ -6,11 +6,12 @@ import {
   ITestAppointmentsView,
 } from "../interfaces";
 import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
+import { LocalDrivingLicenseApplicationApiSlice } from "../../LocalDrivingApplication/Store/LocalDrivingLicenseApplicationApiSlice";
 
 // Define the API slice
 export const TestApiSlice = createApi({
   reducerPath: "Test",
-  tagTypes: ["Test"],
+  tagTypes: ["Test", "LocalDrivingApplication"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5121/Api/v1/Test",
   }),
@@ -61,6 +62,25 @@ export const TestApiSlice = createApi({
         method: "POST",
         body: testResult,
       }),
+      invalidatesTags: [
+        { type: "LocalDrivingApplication", id: "LIST" },
+        { type: "Test", id: "TestAppointmentList" },
+      ],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          // Wait for the mutation to fulfill
+          await queryFulfilled;
+
+          // Manually invalidate tags in LocalDrivingLicenseApplicationApiSlice
+          dispatch(
+            LocalDrivingLicenseApplicationApiSlice.util.invalidateTags([
+              { type: "LocalDrivingApplication", id: "LIST" },
+            ])
+          );
+        } catch (error) {
+          console.error("Error invalidating tags:", error);
+        }
+      },
       transformErrorResponse: (response: {
         status: number;
         data: IGenericApiResponse<Array<string>>;
@@ -70,8 +90,8 @@ export const TestApiSlice = createApi({
           message: response.data.errors[0],
         };
       },
-      invalidatesTags: [{ type: "Test", id: "TestAppointmentList" }],
     }),
+
     AddScheduleTest: builder.mutation<
       IGenericApiResponse<string>,
       IAddScheduleTest

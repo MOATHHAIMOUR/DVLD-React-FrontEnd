@@ -15,11 +15,11 @@ const localDrivingRoutes = (
       element={<AddNewLocalDrivingApplicationPage />}
     />
     <Route
-      path="local-driving/lookup-local-driving-licenses"
+      path="local-driving/lookup-local-driving-licenses/:localDrivingId?"
       element={<LockupLocalDrivingLicensePage />}
     />
     <Route
-      path="local-driving/add-new-local-license/{local-driving-id}"
+      path="local-driving/add-new-local-license/:localDrivingId"
       element={<AddNewLocalLicensePage />}
     />
   </>

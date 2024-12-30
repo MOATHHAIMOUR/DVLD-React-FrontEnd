@@ -19,7 +19,10 @@ import { EnumTestType } from "../../Tests/Enums";
 
 interface IProps {
   LocalLicenseData: Array<ILocalDrivingApplication>;
-  handleOpenModal: (localDrivingApplication: ILocalDrivingApplication) => void;
+  handleOpenModal: (
+    localDrivingApplication: ILocalDrivingApplication,
+    operationType: TLocalDrivingContextMenu
+  ) => void;
   onSortChange: (SelectedHeader: string, sortType: TSort) => void;
 }
 const LocalDrivingLicenseViewList = ({
@@ -60,6 +63,7 @@ const LocalDrivingLicenseViewList = ({
     const localDrivingApplication: ILocalDrivingApplication =
       obj as ILocalDrivingApplication;
 
+    console.log("operation: " + operation);
     switch (operation) {
       case "Issue License (First Time)":
         navigate(
@@ -67,10 +71,12 @@ const LocalDrivingLicenseViewList = ({
         );
         break;
       case "Show License":
-        handleOpenModal(localDrivingApplication);
+        navigate(
+          `/local-driving/lookup-local-driving-licenses/${localDrivingApplication.localDrivingLicenseApplicationId}`
+        );
         break;
       case "Cancel Application":
-        handleOpenModal(localDrivingApplication);
+        handleOpenModal(localDrivingApplication, "Cancel Application");
         break;
       case "Vision Test":
         navigate(

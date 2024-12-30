@@ -269,8 +269,8 @@ const DataGrid = <T extends string>({
   ));
 
   return (
-    <div className="overflow-x-auto w-[100%]  scrollbar-thin scrollbar-thumb-[#1A1F24]">
-      <table className="w-[100%] border-4 text-sm text-left rtl:text-right">
+    <div className="overflow-x-auto w-[100%]  scrollbar-thin scrollbar-thumb-[#1A1F24] text-white">
+      <table className="w-[100%] text-sm text-left rtl:text-right">
         <thead className="text-xs uppercase bg-primary text-text">
           <tr>{renderTBHeader}</tr>
         </thead>

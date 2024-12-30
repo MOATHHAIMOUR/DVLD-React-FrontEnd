@@ -81,7 +81,7 @@ const TakeTestForm = ({ localDrivingApplicationId, testType }: IProps) => {
           ScheduleTestView?.data.testAppointmentId
       );
       await onSaveTestResultHandler({
-        createdByUserId: 439,
+        createdByUserId: 10,
         notes: TestNotesRef.current.value,
         testAppointmentId: ScheduleTestView?.data.testAppointmentId,
         testResult: selectedTestResultRef.current,

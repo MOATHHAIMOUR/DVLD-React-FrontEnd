@@ -7,6 +7,7 @@ import ErrorHandler from "../../../../components/ui/ErrorHandler";
 import TestLocalDrivingView from "../../shared/Components/TestLocalDrivingView";
 import Button from "../../../../components/ui/Button";
 import TestAppointmentPerLocalIdPerTestTypeList from "./TestAppointmentPerLocalIdPerTestTypeList";
+import { useFetchTestLocalDrivingApplicationAppointmentViewQuery } from "../../shared/store/ApplicationApiSlice";
 
 interface IProps {
   TestType: EnumTestType;
@@ -22,6 +23,15 @@ const ManageTestAppointment = ({
       localDrivingApplication: +localDrivingApplicationId,
       testTypeId: TestType,
     });
+
+  // Fetch the driving application view
+  const {
+    data: applicationData,
+    isLoading: FetchingLoading,
+    error: ErrorFetchingData,
+  } = useFetchTestLocalDrivingApplicationAppointmentViewQuery(
+    localDrivingApplicationId
+  );
 
   const navigate = useNavigate();
 
@@ -67,15 +77,17 @@ const ManageTestAppointment = ({
       TestAppointmentsResponse?.data[0]?.appointmentDate
   );
   return (
-    <Box className="mt-8 p-6 bg-gray-100 rounded-md">
+    <Box className="mt-8 p-6  rounded-md">
       <ErrorHandler error={TestAppointmentsError} />
       <TestLocalDrivingView
-        localDrivingApplicationId={localDrivingApplicationId}
+        response={applicationData}
+        isLoading={FetchingLoading}
+        error={ErrorFetchingData}
       />
 
       <Button
         onClick={RegisterAppointmentHandler}
-        className="my-6 bg-primary hover:bg-primaryHover p-2 rounded-md text-[15px] ml-auto text-white"
+        className="my-6 bg-primary hover:bg-primaryHover p-2 rounded-md text-[15px] ml-auto "
       >
         Schedule Appointment
       </Button>

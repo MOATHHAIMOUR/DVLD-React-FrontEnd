@@ -14,6 +14,7 @@ import { LocalDrivingLicenseApplicationApiSlice } from "./features/Applications/
 import { InternationalLicenseApiSlice } from "./features/Applications/InternationalLicenseApplication/store";
 import errorMiddleware from "./middleware/globalErrorMiddleware";
 import { TestApiSlice } from "./features/Applications/Tests/Store/TestApiSlice";
+import { DetainLicenseApiSlice } from "./features/Applications/DetainReleaseLicenseApplication/Store/DetainLicenseApiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     [applicationApiSlice.reducerPath]: applicationApiSlice.reducer,
     [UserApiSlice.reducerPath]: UserApiSlice.reducer,
     [sharedApiSlice.reducerPath]: sharedApiSlice.reducer,
+    [DetainLicenseApiSlice.reducerPath]: DetainLicenseApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -40,7 +42,8 @@ export const store = configureStore({
       applicationApiSlice.middleware,
       LocalDrivingLicenseApplicationApiSlice.middleware,
       TestApiSlice.middleware,
-      InternationalLicenseApiSlice.middleware
+      InternationalLicenseApiSlice.middleware,
+      DetainLicenseApiSlice.middleware
     ),
 });
 

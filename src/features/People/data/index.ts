@@ -121,7 +121,7 @@ export const FilterByPersonData: Array<IFilterByComboBox> = [
     },
   },
   {
-    type: "string",
+    type: "number",
     value: {
       name: "Phone",
       displayName: "Phone",
@@ -278,7 +278,7 @@ export const PersonFieldsData: IGenericField<IPostPerson>[] = [
   },
   {
     name: "phone",
-    type: "text",
+    type: "number",
     displayName: "Phone",
     placeholder: "Enter Phone Number",
     isMenu: false,

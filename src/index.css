@@ -2,66 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* --------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* Default_BG */
+    /* **************************************************** */
+    --default-bg-900: 250, 250, 250; /* #f0f0f0 */
+    --default-bg-800: 250, 250, 250; /* #dcdcdc */
+    --default-bg-black: 250, 250, 250; /* #ffffff */
+    /* **************************************************** */
 
-  --color-background-light: #ffffff;
-  --color-background-dark: #141d26;
-  --color-background: var(--color-background-light); /* Default to light mode */
+    /* PRIMARY */
+    /* **************************************************** */
+    /* Background Colors */
+    --primary-color: 23, 23, 23;
+    --primary-hover-color: 25, 130, 35;
 
-  /* --------------------------------------------------------------------------- */
+    /* Text Colors */
+    --primary-foreground: 255, 255, 255;
+    --primary-hover-foreground: 255, 255, 255;
+    /* **************************************************** */
 
-  --color-primary-light: #1a1f24;
-  --color-primary-dark: #121212;
+    /* NAV_LINK */
+    /* **************************************************** */
+    --selected-nav-link-bg: 30, 160, 40;
+    --selected-nav-link-text: 241, 245, 249;
+    /* **************************************************** */
+  }
 
-  --color-primary: var(--color-primary-light); /* Default to light mode */
+  .dark {
+    /* Default_BG */
+    /* **************************************************** */
+    --default-bg-900: 47, 47, 47; /* #111111 */
+    --default-bg-800: 54, 54, 54; /* #222222 */
+    --default-bg-black: 46, 46, 46; /* #101010 */
+    /* **************************************************** */
 
-  /* --------------------------------------------------------------------------- */
+    /* PRIMARY */
+    /* **************************************************** */
+    /* Background Colors */
+    --primary-color: 23, 23, 23;
+    --primary-hover-color: 25, 130, 35;
 
-  --color-primaryHover-light: #333333;
-  --color-primaryHover-dark: #333333;
+    /* Text Colors */
+    --primary-foreground: 241, 245, 249;
+    --primary-hover-foreground: 255, 255, 255;
+    /* **************************************************** */
 
-  --color-primaryHover: var(
-    --color-primaryHover-light
-  ); /* Default to light mode */
-
-  /* --------------------------------------------------------------------------- */
-  --color-dataSections-light: #f3f4f6;
-  --color-dataSections-dark: #121212;
-
-  --color-dataSections: var(
-    --color-dataSections-light
-  ); /* Default to light mode */
-
-  /* --------------------------------------------------------------------------- */
-
-  --color-secondary-light: #d9e2ec;
-  --color-secondary-dark: #2c3e50;
-  --color-secondary: var(--color-secondary-light); /* Default to light mode */
-
-  /* --------------------------------------------------------------------------- */
-
-  --color-accent-light: #ff7d63;
-  --color-accent-dark: #ff4d4d;
-  --color-accent: var(--color-accent-light); /* Default to light mode */
-
-  /* --------------------------------------------------------------------------- */
-
-  --color-text-light: #ffffff;
-  --color-text-dark: #ffffff;
-  --color-text: var(--color-text-light); /* Default to light mode */
-  /*  */
-  --color-border-light: #acc7e0;
-  --color-border-dark: #4a90e2;
-  --color-border: var(--color-border-light); /* Default to light mode */
-}
-
-.dark {
-  --color-primary: var(--color-primary-dark);
-  --color-secondary: var(--color-secondary-dark);
-  --color-dataSections: var(--color-dataSections-dark);
-  --color-accent: var(--color-accent-dark);
-  --color-text: var(--color-text-dark);
-  --color-background: var(--color-background-dark);
-  --color-border: var(--color-border-dark);
+    /* NAV_LINK */
+    /* **************************************************** */
+    --selected-nav-link-bg: 30, 160, 40;
+    --selected-nav-link-text: 241, 245, 249;
+    /* **************************************************** */
+  }
 }

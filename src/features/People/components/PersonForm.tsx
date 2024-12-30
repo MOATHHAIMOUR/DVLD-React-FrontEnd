@@ -186,6 +186,7 @@ const PersonForm = ({
             </Box>
             <Box className="ml-auto">
               <Button
+                variant={"outline"}
                 type="submit"
                 isLoading={isAdding || isUpdating}
                 className="px-4 py-2  bg-primary text-white rounded-md shadow hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-blue-500"

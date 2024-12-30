@@ -10,7 +10,6 @@ export const useReleaseLicenseHandler = () => {
       await releaseLicense(formData).unwrap();
       toast.success("License released successfully!");
     } catch (error) {
-      toast.error("Failed to release the license. Please try again.");
       console.error("Release License Error:", error);
     }
   };

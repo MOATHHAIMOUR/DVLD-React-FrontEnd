@@ -97,7 +97,7 @@ const Pagination = ({
   }
 
   return (
-    <div className="flex justify-center items-center py-4">
+    <div className="text-white flex justify-center items-center py-4">
       <nav
         className="inline-flex items-center space-x-1"
         aria-label="Pagination"

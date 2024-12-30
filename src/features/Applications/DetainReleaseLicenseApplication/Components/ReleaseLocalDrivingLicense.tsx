@@ -5,11 +5,16 @@ import { useLazyFindLicenseHandler } from "../../LocalDrivingApplication/hooks/u
 import Button from "../../../../components/ui/Button";
 import LicenseView from "../../LocalDrivingApplication/Components/LicenseView";
 import { useReleaseLicenseHandler } from "../hooks/useReleaseLicenseHandler";
+import ErrorMsg from "../../../../components/ui/ErrorMsg";
+import { useFetchApplicationTypesQuery } from "../../shared/store/ApplicationApiSlice";
+import { EnumApplicationType } from "../../LocalDrivingApplication/Enums";
 
 const DetainLocalDrivingLicense = () => {
   /* ────────────── State  ────────────── */
   const { onFindLicenseHandler, License, isLoading, isFetching } =
     useLazyFindLicenseHandler();
+
+  const isLicenseDetain = License?.data.isDetain ?? null;
   const licenseIdRef = useRef<HTMLInputElement>(null!);
 
   /* ────────────── Custom Hooks  ────────────── */
@@ -17,6 +22,12 @@ const DetainLocalDrivingLicense = () => {
   const { handleReleaseLicense, isLoading: isReleaseLoading } =
     useReleaseLicenseHandler();
 
+  const { data: applicationTypes } = useFetchApplicationTypesQuery(null);
+
+  const ReleaseApplicationTypeInfo = applicationTypes?.data.find(
+    (r) =>
+      r.applicationTypeId === EnumApplicationType.ReleaseDetainedDrivingLicense
+  );
   /* ────────────── Handlers  ────────────── */
   async function onFindLicense() {
     if (licenseIdRef.current?.value)
@@ -32,7 +43,7 @@ const DetainLocalDrivingLicense = () => {
     const licenseData = {
       licenseId: License.data.licenseId,
       releasedDate: new Date().toISOString(),
-      releasedByUserId: 1, // Replace with the actual user ID
+      releasedByUserId: 10, // Replace with the actual user ID
     };
 
     try {
@@ -45,6 +56,9 @@ const DetainLocalDrivingLicense = () => {
 
   return (
     <Box className="flex flex-col gap-8">
+      {isLicenseDetain !== null && !isLicenseDetain && (
+        <ErrorMsg message="Can't release licenses, current one is not detain" />
+      )}
       <Box className="w-fit flex items-center gap-8">
         <label
           htmlFor="licenseId"
@@ -62,59 +76,37 @@ const DetainLocalDrivingLicense = () => {
         </Button>
       </Box>
 
-      <LicenseView licenseData={License?.data} applicationId={null} />
+      <LicenseView licenseData={License?.data} />
 
       <Box className="p-4 border rounded-lg shadow-md bg-gray-100">
-        <h2 className="text-lg font-bold mb-4">Application New License Info</h2>
+        <h2 className="text-lg font-bold mb-4">Application Release Info</h2>
 
-        <Box className="grid grid-cols-2 gap-4">
+        <Box className="grid grid-cols-1 gap-4">
           <Box>
             <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">R.L Application ID:</span>
-              <span>[???]</span>
-            </Box>
-            <Box className="flex items-center mb-2">
               <span className="font-semibold w-48">Application Date:</span>
-              <span>10/Oct/2023</span>
+              <span>{new Date().toDateString()}</span>
             </Box>
+
             <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Issue Date:</span>
-              <span>10/Oct/2023</span>
+              <span className="font-semibold w-48">Fine Fees:</span>
+              <span>${License?.data.fineFees}</span>
             </Box>
             <Box className="flex items-center mb-2">
               <span className="font-semibold w-48">Application Fees:</span>
-              <span>7</span>
+              <span>${ReleaseApplicationTypeInfo?.applicationFees}</span>
             </Box>
             <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">License Fees:</span>
-              <span>[$$$]</span>
+              <span className="font-semibold w-48">Total Fees:</span>
+              <span>
+                $
+                {(ReleaseApplicationTypeInfo?.applicationFees ?? 0) +
+                  (License?.data.fineFees ?? 0)}
+              </span>
             </Box>
             <Box className="flex items-center">
               <span className="font-semibold w-48">Notes:</span>
               <textarea className="border border-gray-300 rounded w-full p-2"></textarea>
-            </Box>
-          </Box>
-
-          <Box>
-            <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Renewed License ID:</span>
-              <span>[???]</span>
-            </Box>
-            <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Old License ID:</span>
-              <span>[???]</span>
-            </Box>
-            <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Expiration Date:</span>
-              <span>???</span>
-            </Box>
-            <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Created By:</span>
-              <span>Msqaer77</span>
-            </Box>
-            <Box className="flex items-center mb-2">
-              <span className="font-semibold w-48">Total Fees:</span>
-              <span>[$$$]</span>
             </Box>
           </Box>
         </Box>
@@ -133,6 +125,7 @@ const DetainLocalDrivingLicense = () => {
 
         <Box className="flex space-x-4">
           <Button
+            disabled={!isLicenseDetain}
             className="bg-[#1F2937] text-white px-4 py-2 rounded shadow hover:bg-green-600"
             onClick={onReleaseLicense}
             isLoading={isReleaseLoading}

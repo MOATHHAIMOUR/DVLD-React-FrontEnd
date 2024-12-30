@@ -41,6 +41,7 @@ const LookupUserToDelete = () => {
       />
       <UserDetail userDetail={user?.data} />
       <Button
+        isLoading={isLoadingDeletePerson}
         disabled={isLoadingDeletePerson || userId === 0}
         className="p-2 w-40 bg-red-700 ml-auto rounded-md text-white"
         onClick={HandleDeletePerson}

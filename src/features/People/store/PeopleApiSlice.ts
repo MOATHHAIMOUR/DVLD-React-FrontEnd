@@ -5,6 +5,7 @@ import { IPersonTableData, IFetchPerson } from "../interfaces";
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",
   tagTypes: ["People"],
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5121/Api/v1/Person",
   }),

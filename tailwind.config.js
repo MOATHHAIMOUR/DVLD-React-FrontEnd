@@ -5,14 +5,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "var(--color-primary)",
-        primaryHover: "var(--color-primaryHover)",
-        dataSections: "var(--color-dataSections)",
-        secondary: "var(--color-secondary)",
-        accent: "var(--color-accent)",
-        text: "var(--color-text)",
-        background: "var(--color-background)",
-        border: "var(--color-border)",
+        bgDefault: {
+          800: "rgb(var(--default-bg-900))",
+          900: "rgb(var(--default-bg-800))",
+          black: "rgb(var(--default-bg-black))",
+        },
+        primary: {
+          DEFAULT: "rgb(var(--primary-color))", // Base background color
+          hover: "rgb(var(--primary-hover-color))", // Background color for hover
+          foreground: "rgb(var(--primary-foreground))", // Text color
+          "hover-foreground": "rgb(var(--primary-hover-foreground))", // Text color for hover
+        },
+        selectedNavLink: {
+          DEFAULT: "rgb(var(--selected-nav-link-bg))", // Background color
+          text: "rgb(var(--selected-nav-link-text))", // Text color
+        },
       },
     },
   },

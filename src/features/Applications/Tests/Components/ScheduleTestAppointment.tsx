@@ -81,7 +81,7 @@ const ScheduleTestAppointment = ({
 
     if (ScheduleTestInfoView) {
       await handleScheduleTest({
-        createdByUserId: 439,
+        createdByUserId: 10,
         localDrivingLicenseApplicationId: Number(localDrivingApplicationId),
         testTypeId: TestTypeId,
       });
@@ -92,10 +92,10 @@ const ScheduleTestAppointment = ({
     }
   }
   return (
-    <Box className="mt-8 p-6 flex flex-col gap-4 bg-gray-100 ">
+    <Box className="mt-8 p-6 flex flex-col gap-4  ">
       <ErrorHandler error={ScheduleTestError} />
       {/* Driving License Application Info */}
-      <Box className="bg-white rounded-lg shadow-md p-4 mb-6">
+      <Box className=" rounded-lg shadow-md p-4 mb-6">
         <h2 className="text-lg font-bold mb-4">
           Driving License Application Info
         </h2>
@@ -145,7 +145,7 @@ const ScheduleTestAppointment = ({
       </Box>
 
       {/* Retake Test Info */}
-      <Box disabled={!isRetake} className="bg-white rounded-lg shadow-md p-4">
+      <Box disabled={!isRetake} className=" rounded-lg shadow-md p-4">
         <h2 className="text-lg font-bold mb-4">Retake Test Info</h2>
         <Box className="grid grid-cols-2 gap-4">
           <Box className="flex items-center space-x-2">

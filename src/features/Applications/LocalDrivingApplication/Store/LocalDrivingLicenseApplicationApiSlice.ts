@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
 import {
   AddNewLocalDrivingLicenseDTO,
-  ILicenseClass,
+  IAddLocalLicense,
   ILicenseDetailsView,
   ILocalDrivingApplication,
 } from "../interfaces";
@@ -21,9 +21,6 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
       query: (query) => ({
         url: `/GetLocalDrivingApplicationsView${query}`,
       }),
-      providesTags: [
-        { type: "LocalDrivingApplication", id: "LocalDrivingLicenseList" },
-      ],
 
       transformErrorResponse: (response: {
         status: number;
@@ -35,7 +32,26 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
         }
         return "An unexpected error occurred";
       },
+      providesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
     }),
+    addNewLocalLicense: builder.mutation<void, IAddLocalLicense>({
+      query: (body) => ({
+        url: "/AddNewLocalLicense",
+        method: "POST",
+        body,
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
+      invalidatesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
+    }),
+
     cancelLocalDrivingApplication: builder.mutation({
       query: (localDrivingApplicationId) => ({
         url: `CancelLocalDivingApplication?LocalDrivingApplication=${localDrivingApplicationId}`,
@@ -43,9 +59,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
         headers: {
           accept: "text/plain",
         },
-        invalidatesTags: [
-          { type: "LocalDrivingApplication", id: "LocalDrivingLicenseList" },
-        ],
+        invalidatesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
       }),
       transformErrorResponse: (response: {
         status: number;
@@ -58,14 +72,14 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
       },
     }),
 
-    addNewLocalDrivingLicense: builder.mutation<
+    addNewLocalDrivingLicenseApplication: builder.mutation<
       IGenericApiResponse<string>,
       AddNewLocalDrivingLicenseDTO
     >({
-      query: (newLicenseData) => ({
-        url: "/AddNewLocalDrivingLicenseApplication", // Replace with your API endpoint
+      query: (localDrivingApplicationData) => ({
+        url: "/AddNewLocalDrivingLicenseApplication",
         method: "POST",
-        body: newLicenseData,
+        body: localDrivingApplicationData,
       }),
 
       transformErrorResponse: (response: {
@@ -78,9 +92,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
         };
       },
 
-      invalidatesTags: [
-        { type: "LocalDrivingApplication", id: "LocalDrivingLicenseList" },
-      ],
+      invalidatesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
     }),
 
     fetchLicenseDetailsView: builder.query<
@@ -90,17 +102,16 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
       query: (query) => ({
         url: `/GetLicenseView${query}`,
       }),
-      providesTags: [
-        { type: "LocalDrivingApplication", id: "LicenseClassesList" },
-      ],
+      providesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
+
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<Array<ILicenseClass>>;
-      }): string => {
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
   }),
@@ -110,6 +121,7 @@ export const {
   useFetchLicenseDetailsViewQuery,
   useLazyFetchLicenseDetailsViewQuery,
   useCancelLocalDrivingApplicationMutation,
-  useAddNewLocalDrivingLicenseMutation,
   useFetchLocalDrivingApplicationsViewQuery,
+  useAddNewLocalDrivingLicenseApplicationMutation,
+  useAddNewLocalLicenseMutation,
 } = LocalDrivingLicenseApplicationApiSlice;

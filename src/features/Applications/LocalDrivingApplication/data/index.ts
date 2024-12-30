@@ -59,7 +59,7 @@ export function GetLocalDrivingApplicationContextMenuData(
           Icon: AiOutlineFileText, // Eye icon for viewing details
         },
 
-        GenerateScheduleData(applicationStatus),
+        GenerateScheduleData(applicationStatus, 0),
 
         {
           operation: "Issue License (First Time)",
@@ -84,7 +84,7 @@ export function GetLocalDrivingApplicationContextMenuData(
           operation: "Show Application Details",
           Icon: AiOutlineFileText, // Eye icon for viewing details
         },
-        GenerateScheduleData(applicationStatus),
+        GenerateScheduleData(applicationStatus, 1),
         {
           operation: "Issue License (First Time)",
           isDisabled: true,
@@ -109,7 +109,7 @@ export function GetLocalDrivingApplicationContextMenuData(
           Icon: AiOutlineFileText, // Eye icon for viewing details
         },
 
-        GenerateScheduleData(applicationStatus),
+        GenerateScheduleData(applicationStatus, 2),
         {
           operation: "Issue License (First Time)",
           isDisabled: true,
@@ -134,7 +134,7 @@ export function GetLocalDrivingApplicationContextMenuData(
           Icon: AiOutlineFileText, // Eye icon for viewing details
         },
 
-        GenerateScheduleData(applicationStatus),
+        GenerateScheduleData(applicationStatus, 3),
         {
           operation: "Issue License (First Time)",
           isDisabled:
@@ -151,7 +151,9 @@ export function GetLocalDrivingApplicationContextMenuData(
         },
         {
           operation: "Cancel Application",
-          isDisabled: applicationStatus === EnumApplicationStatus.Cancelled,
+          isDisabled:
+            applicationStatus === EnumApplicationStatus.Cancelled ||
+            applicationStatus === EnumApplicationStatus.Completed,
           Icon: BiXCircle, // Cross-circle for cancellation
         },
       ];
@@ -160,30 +162,33 @@ export function GetLocalDrivingApplicationContextMenuData(
 }
 
 function GenerateScheduleData(
-  applicationStatus: EnumApplicationStatus
+  applicationStatus: EnumApplicationStatus,
+  passedTests: number
 ): IGenericContextMenuItem<TLocalDrivingContextMenu> {
+  console.log("passedTests: " + passedTests);
   return {
     operation: "Schedule Test",
     Icon: BiCalendarCheck, // Calendar check for scheduling tests
     isSubMenu: true,
     isDisabled:
       applicationStatus === EnumApplicationStatus.Cancelled ||
-      applicationStatus === EnumApplicationStatus.Completed,
+      applicationStatus === EnumApplicationStatus.Completed ||
+      passedTests === 3,
     children: [
       {
         operation: "Vision Test",
         Icon: MdVisibility, // Test tube icon for vision testing
-        isDisabled: false,
+        isDisabled: passedTests !== 0,
       },
       {
         operation: "Written Test",
         Icon: MdEditNote, // Notebook for written test
-        isDisabled: true,
+        isDisabled: passedTests !== 1,
       },
       {
         operation: "Practical Test",
         Icon: MdDriveEta, // Car icon for practical driving test
-        isDisabled: true,
+        isDisabled: passedTests !== 2,
       },
     ],
   };

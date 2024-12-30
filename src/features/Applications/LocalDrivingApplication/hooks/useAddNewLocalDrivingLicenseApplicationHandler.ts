@@ -1,11 +1,13 @@
 import { toast } from "react-toastify";
 import { AddNewLocalDrivingLicenseDTO } from "../interfaces";
-import { useAddNewLocalDrivingLicenseMutation } from "../Store/LocalDrivingLicenseApplicationApiSlice";
+import { useNavigate } from "react-router-dom";
+import { useAddNewLocalDrivingLicenseApplicationMutation } from "../Store/LocalDrivingLicenseApplicationApiSlice";
 
-export const useAddNewLocalDrivingLicense = () => {
+export const useAddNewLocalDrivingLicenseApplicationHandler = () => {
   const [addNewLocalDrivingLicense, { isLoading, error }] =
-    useAddNewLocalDrivingLicenseMutation();
+    useAddNewLocalDrivingLicenseApplicationMutation();
 
+  const navigate = useNavigate();
   const handleAddNewLocalDrivingLicense = async (
     formData: AddNewLocalDrivingLicenseDTO
   ) => {
@@ -14,6 +16,7 @@ export const useAddNewLocalDrivingLicense = () => {
       toast.success("Driving license added successfully!", {
         position: "top-right",
       });
+      navigate("/local-driving-license/manage-local-driving-licenses");
     } catch {
       /* empty */
     }

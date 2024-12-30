@@ -44,4 +44,13 @@ export interface ILicenseDetailsView {
   driverId: number;
   expirationDate: Date;
   isDetain: boolean;
+  imagePath: string;
+  fineFees: number;
+}
+
+export interface IAddLocalLicense {
+  applicationId: number;
+  licenseClassId: number;
+  notes: string;
+  createdByUserId: number;
 }

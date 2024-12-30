@@ -8,6 +8,7 @@ export const UserApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5121/Api/v1/User",
   }),
+  refetchOnReconnect: true,
   endpoints: (builder) => ({
     fetchUsers: builder.query<IGenericApiResponse<Array<IUserView>>, string>({
       query: (query) => ({
@@ -16,13 +17,12 @@ export const UserApiSlice = createApi({
       providesTags: [{ type: "Users", id: "LIST" }],
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<Array<IApiUser>>;
-      }): string => {
-        // Check if the response contains errors
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
     fetchUser: builder.query<IGenericApiResponse<IUserView>, string>({
@@ -70,13 +70,12 @@ export const UserApiSlice = createApi({
       invalidatesTags: [{ type: "Users", id: "LIST" }],
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<null>;
-      }): string => {
-        // Check if the response contains errors
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
     }),
     UpdateUser: builder.mutation<IGenericApiResponse<string>, IApiUser>({

@@ -5,7 +5,7 @@ import Box from "./components/ui/Box";
 
 function App() {
   return (
-    <Box className="bg-background  border-border">
+    <Box className="">
       <Router />
       <ToastContainer />
     </Box>

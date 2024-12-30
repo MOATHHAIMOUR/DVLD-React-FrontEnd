@@ -11,6 +11,7 @@ import UsersList from "./UsersList";
 import { useFetchUsersQuery } from "../store/UserApiSlice";
 import FilterUsers from "./FilterUsers";
 import ConfirmDeleteUser from "./ConfirmDeleteUser";
+import DataGridSkeleton from "../../../components/ui/DataGridSkeleton";
 
 const defaultFilterValue: IQuery = {
   AdvanceFilters: [],
@@ -28,7 +29,7 @@ const ManageUsers = () => {
   /* ────────────── STATE  ────────────── */
   const [filters, setFilters] = useState<IQuery>(defaultFilterValue);
 
-  const { data: response } = useFetchUsersQuery(BuildQuery(filters));
+  const { data: response, isLoading } = useFetchUsersQuery(BuildQuery(filters));
 
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
@@ -72,13 +73,18 @@ const ManageUsers = () => {
           </Button>
         </Row>
       </Row>
-      <UsersList
-        usersData={response?.data ?? []}
-        handleOpenModal={handleOpenModal}
-        onSort={(selectedHeader, sortType) =>
-          onSortChange(selectedHeader, sortType)
-        }
-      />
+      {isLoading ? (
+        <DataGridSkeleton numberOfCols={4} numberOfRows={4} />
+      ) : (
+        <UsersList
+          usersData={response?.data ?? []}
+          handleOpenModal={handleOpenModal}
+          onSort={(selectedHeader, sortType) =>
+            onSortChange(selectedHeader, sortType)
+          }
+        />
+      )}
+
       {response?.meta.totalPages && (
         <Pagination
           onPageChange={onPageChange}

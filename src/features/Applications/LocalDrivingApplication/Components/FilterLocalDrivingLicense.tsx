@@ -17,7 +17,7 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
 
   const refTextQuery = useRef<HTMLInputElement | null>(null);
 
-  const refSelectQuery = useRef<HTMLSelectElement | null>(null);
+  const refSelectApplicationStatus = useRef<HTMLSelectElement | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -28,13 +28,17 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
       return; // Exit early if no filter is selected
     }
     const textQuery = refTextQuery.current?.value;
-    const selectQuery = refSelectQuery.current?.value;
+    const selectApplicationStatus = refSelectApplicationStatus.current?.value;
     // Prioritize `textQuery` if both are available
-    const filterValue = textQuery || selectQuery;
+    let filterValue = null;
+    if (textQuery) filterValue = textQuery;
+    if (Number(selectApplicationStatus) > 0)
+      filterValue = Number(selectApplicationStatus);
 
+    console.log("filterValue: " + filterValue);
     onChangeFilter({
       FilterBy: selectedFilterBy.value.name,
-      FilterValue: filterValue ?? "",
+      FilterValue: filterValue,
     });
   }
 
@@ -54,6 +58,9 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
     FilterType: IFilterByComboBox["type"],
     value: string
   ) {
+    console.log("FilterType: " + FilterType);
+    console.log("value: " + value);
+
     switch (FilterType) {
       // accept the value only if it's a number otherwise less
       case "number":
@@ -61,26 +68,16 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
           setError("Value Should be a number");
           return;
         }
-        if (value === "") {
-          FireQuery();
-          return;
-        }
         setError(null);
         FireQuery();
         break;
       case "string":
-        if (value !== "" && isNumber(value)) {
-          setError("Value Should be a text");
-          return;
-        }
-        if (value === "") {
-          FireQuery();
-          return;
-        }
         setError(null);
         FireQuery();
         break;
       default:
+        setError(null);
+        FireQuery();
         break;
     }
   }
@@ -112,6 +109,31 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
           </div>
         );
 
+      case "category":
+        if (selectedFilterBy.value.name === "ApplicationStatus") {
+          return (
+            <SelectMenu
+              onChange={(e) =>
+                handleChangeQuery(selectedFilterBy.type, e.target.value)
+              }
+              ref={refSelectApplicationStatus}
+            >
+              <option key={0} value={0}>
+                None
+              </option>
+              <option key={1} value={1}>
+                New
+              </option>
+              <option key={2} value={2}>
+                Cancelled
+              </option>
+              <option key={3} value={3}>
+                Completed
+              </option>
+            </SelectMenu>
+          );
+        }
+        break;
       default:
         return <p className="ml-2 font-semibold">No Option is Selected</p>;
     }
@@ -119,7 +141,7 @@ const FilterLocalDrivingLicense = ({ onChangeFilter }: IProps) => {
 
   return (
     <div className="flex gap-4 items-center">
-      <p className="text-[18px] font-semibold">Filter by:</p>
+      <p className="text-[18px] font-semibold text-black">Filter by:</p>
       <div className="max-w-72">
         <SelectMenu onChange={(e) => handleOnChangeFilterBy(e.target.value)}>
           {renderFilterBys}

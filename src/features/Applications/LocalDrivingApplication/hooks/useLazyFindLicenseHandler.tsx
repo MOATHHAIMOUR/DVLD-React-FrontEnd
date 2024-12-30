@@ -3,7 +3,7 @@ import { useLazyFetchLicenseDetailsViewQuery } from "../Store/LocalDrivingLicens
 import { BuildSimpleQuery } from "../../../../utils";
 
 export const useLazyFindLicenseHandler = () => {
-  const [triggerFetchPerson, { isFetching, isLoading, data: License }] =
+  const [triggerFetchPerson, { isFetching, isLoading, data: License, error }] =
     useLazyFetchLicenseDetailsViewQuery();
 
   const onFindLicenseHandler = async (key: string, value: string) => {
@@ -30,5 +30,6 @@ export const useLazyFindLicenseHandler = () => {
     License,
     isFetching,
     isLoading,
+    error,
   };
 };

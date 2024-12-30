@@ -3,7 +3,7 @@ import NewLocalDrivingApplicationForm from "../../../features/Applications/Local
 
 const AddNewLocalDrivingApplicationPage = () => {
   return (
-    <div className="mx-auto bg-white p-8 rounded flex flex-col shadow h-[100%]">
+    <div className="mx-auto  p-8 rounded flex flex-col shadow h-[100%]">
       <Logo
         direction="ROW"
         title="Add New Local Driving License Application"

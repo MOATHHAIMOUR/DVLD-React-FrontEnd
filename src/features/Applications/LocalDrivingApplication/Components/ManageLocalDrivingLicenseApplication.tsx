@@ -59,7 +59,7 @@ const ManageLocalDrivingLicenseApplication = () => {
 
   function onFilterChange(filter: IFilter) {
     console.log("filter.FilterValue: " + filter.FilterValue);
-    if (filter.FilterValue === "") {
+    if (filter.FilterValue === null) {
       setFilters(defaultFilterValue);
       return;
     }

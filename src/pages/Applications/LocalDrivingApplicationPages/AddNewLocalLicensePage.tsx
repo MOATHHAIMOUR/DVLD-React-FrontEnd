@@ -9,9 +9,8 @@ const AddNewLocalLicensePage = () => {
     <Box className="flex flex-col gap-6 h-full">
       <Logo
         image="/src/assets/images/license.png"
-        direction="COL"
-        title="Manage Local Driving Applications"
-        imageSize="w-40 h-40"
+        direction="ROW"
+        title="Add New Local Driving License"
       />
       <Box className="h-[100%]">
         <AddNewLocalLicense localDrivingApplicationId={localDrivingId!} />

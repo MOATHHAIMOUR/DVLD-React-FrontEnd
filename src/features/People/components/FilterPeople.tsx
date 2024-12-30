@@ -77,11 +77,7 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
   /* ────────────── Render  ────────────── */
 
   const renderFilterBys = FilterByPersonData.map((filterBy, index) => (
-    <option
-      className="hover:bg-primaryHover"
-      key={index}
-      value={filterBy.value.name}
-    >
+    <option key={index} value={filterBy.value.name}>
       {filterBy.value.displayName}
     </option>
   ));
@@ -116,21 +112,15 @@ const FilterPeople = ({ onChangeFilter }: IProps) => {
               </SelectMenu>
             );
           default:
-            return (
-              <p className="text-[#1A1F24] font-semibold">
-                No Option is Selected
-              </p>
-            );
+            return <p className=" font-semibold">No Option is Selected</p>;
         }
       default:
-        return (
-          <p className="text-[#1A1F24] font-semibold">No Option is Selected</p>
-        );
+        return <p className=" font-semibold">No Option is Selected</p>;
     }
   };
 
   return (
-    <div className="text-[#1A1F24] flex  gap-4 items-center">
+    <div className=" flex  gap-4 items-center">
       <p className="text-[18px] font-semibold">Filter by:</p>
       <div className="w-44">
         <SelectMenu onChange={(e) => handleOnChangeFilterBy(e.target.value)}>

@@ -14,7 +14,7 @@ export const sharedApiSlice = createApi({
   endpoints: (builder) => ({
     fetchCountries: builder.query<IGenericApiResponse<Array<ICountry>>, void>({
       query: () => ({
-        url: "/GetAllCountries", // Adjust endpoint as needed
+        url: "/Shared/GetAllCountries", // Adjust endpoint as needed
       }),
       transformResponse: (response: IGenericApiResponse<Array<ICountry>>) => {
         return response;

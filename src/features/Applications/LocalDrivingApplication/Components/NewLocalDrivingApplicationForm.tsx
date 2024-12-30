@@ -5,10 +5,10 @@ import LookupPersonToDisplayInfo from "../../../People/components/LookupPersonTo
 import Button from "../../../../components/ui/Button";
 import { useAppSelector } from "../../../../store";
 import SelectMenu from "../../../../components/ui/SelectMenu";
-import { useAddNewLocalDrivingLicense } from "../hooks/useAddNewLocalDrivingLicenseApplication";
 import { EnumApplicationType, EnumLicenseClass } from "../Enums";
 import { useFetchLicensesClassesQuery } from "../../shared/store/ApplicationApiSlice";
 import ErrorHandler from "../../../../components/ui/ErrorHandler";
+import { useAddNewLocalDrivingLicenseApplicationHandler } from "../hooks/useAddNewLocalDrivingLicenseApplicationHandler";
 
 const NewLocalDrivingApplicationForm = () => {
   //
@@ -17,7 +17,7 @@ const NewLocalDrivingApplicationForm = () => {
 
   /* ────────────── Redux Api  ────────────── */
   const { handleAddNewLocalDrivingLicense, isLoading, error } =
-    useAddNewLocalDrivingLicense();
+    useAddNewLocalDrivingLicenseApplicationHandler();
 
   const { data: response } = useFetchLicensesClassesQuery("");
 
@@ -49,19 +49,23 @@ const NewLocalDrivingApplicationForm = () => {
       : null;
     if (selectedPersonId === null || selectedLicenseClass === null) return;
 
-    const localDrivingLicenseData = {
+    const localDrivingLicenseApplicationData = {
       applicantPersonId: selectedPersonId,
       applicationTypeId: EnumApplicationType.NewLocalDrivingLicenseService,
-      createdByUserId: 439,
+      createdByUserId: 10,
       licenseClassId: selectedLicenseClass,
     };
 
-    await handleAddNewLocalDrivingLicense(localDrivingLicenseData);
+    await handleAddNewLocalDrivingLicense(localDrivingLicenseApplicationData);
   }
 
   /* ────────────── RENDER  ────────────── */
-  const renderLicenseClassesOptions = response?.data.map((l) => {
-    return <option value={l.licenseClassId}>{l.className}</option>;
+  const renderLicenseClassesOptions = response?.data.map((l, i) => {
+    return (
+      <option key={i} value={l.licenseClassId}>
+        {l.className}
+      </option>
+    );
   });
 
   return (
@@ -103,7 +107,7 @@ const NewLocalDrivingApplicationForm = () => {
       <Box
         className={`${
           currentStep === 0 ? "hidden" : "flex-grow   "
-        } flex flex-col justify-center  gap-4 font-semibold text-[22px] bg-gray-50 p-4 border border-gray-200 rounded shadow`}
+        } flex flex-col justify-center  gap-4 font-semibold text-[22px]  rounded shadow`}
       >
         <Box className="flex items-center mb-4">
           <p className="font-semibold text-gray-700 mr-2 w-1/3">

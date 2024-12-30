@@ -44,7 +44,7 @@ const ScheduleTestAppointmentPage = () => {
       <Logo
         direction="ROW"
         image={logoPath}
-        title={`${isRetake ? "Retake: " : ""}${title}`}
+        title={`${isRetake === "true" ? "Retake: " : ""}${title}`}
       />
       <ScheduleTestAppointment
         TestTypeId={Number(testType) as EnumTestType}

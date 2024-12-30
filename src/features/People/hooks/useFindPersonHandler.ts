@@ -15,28 +15,32 @@ export const useFetchPersonHandler = () => {
   const isPersonSelected = personId !== 0;
 
   const onFindPersonHandler = async (filters: IQuery) => {
-    const result = await triggerFetchPerson(
-      BuildSimpleQuery(
-        filters.Filter?.FilterBy ?? "",
-        filters.Filter?.FilterValue ?? ""
-      )
-    ).unwrap();
+    try {
+      const result = await triggerFetchPerson(
+        BuildSimpleQuery(
+          filters.Filter?.FilterBy ?? "",
+          filters.Filter?.FilterValue ?? ""
+        )
+      ).unwrap();
 
-    if (result) {
-      console.log("Address: " + result.data?.address);
+      if (result) {
+        console.log("Address: " + result.data?.address);
 
-      toast.success("person is fetched successfully", {
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
-      setPersonId(result.data.personId!);
-      dispatch(
-        setSelectedPerson({
-          PersonId: result.data.personId,
-          NationalNo: result.data.nationalNo,
-          IsUser: result.data.isUser,
-        })
-      );
+        toast.success("person is fetched successfully", {
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+        setPersonId(result.data.personId!);
+        dispatch(
+          setSelectedPerson({
+            PersonId: result.data.personId,
+            NationalNo: result.data.nationalNo,
+            IsUser: result.data.isUser,
+          })
+        );
+      }
+    } catch {
+      //
     }
   };
 

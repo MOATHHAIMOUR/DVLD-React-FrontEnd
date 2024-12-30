@@ -20,10 +20,6 @@ import DatePickerComponent, {
 } from "../../../../components/ui/DatePickerComponent";
 import { AiOutlineCalendar } from "react-icons/ai";
 
-const stringToEnumNumberMap: { [key: string]: EnumLicenseClass } = {
-  OrdinaryDrivingLicense: EnumLicenseClass.OrdinaryDrivingLicense,
-};
-
 const AddNewInternationalLicenseApplication = () => {
   /* ────────────── STATE  ────────────── */
   const [error, setError] = useState<string | null>(null);
@@ -48,10 +44,11 @@ const AddNewInternationalLicenseApplication = () => {
   const datePickerRef = useRef<DatePickerRef>(null);
 
   /* ────────────── Derived Values  ────────────── */
+
+  console.log("License?.data.licenseClassId: " + License?.data.licenseClassId);
   const isLicenseOrdinaryLicense =
     License?.data &&
-    stringToEnumNumberMap[License?.data.licenseClassId] ===
-      EnumLicenseClass.OrdinaryDrivingLicense;
+    License?.data.licenseClassId === EnumLicenseClass.OrdinaryDrivingLicense;
 
   /* ────────────── Handlers  ────────────── */
   function FindLicenseHandler() {
@@ -144,7 +141,7 @@ const AddNewInternationalLicenseApplication = () => {
       {License?.data && !isLicenseOrdinaryLicense && (
         <ErrorMsg message="current license type is not ordinary cant create international one" />
       )}
-      <LicenseView licenseData={License?.data} applicationId={null} />
+      <LicenseView licenseData={License?.data} />
 
       {/* Application Info Section */}
       <Box className="bg-gray-100 border rounded-lg p-4 mb-6">

@@ -41,6 +41,37 @@ export enum EnumLicenseClass {
   TruckAndHeavyVehicle = 7,
 }
 
+export function ConvertStringClassNameToEnumLicenseClass(
+  className: string
+): EnumLicenseClass | null {
+  // Normalize input by removing spaces and converting to lowercase
+  const normalizedClassName = className
+    .replace(/\s+/g, "")
+    .toLowerCase()
+    .split("-")[1];
+
+  console.log("normalizedClassName: " + normalizedClassName);
+  // Map normalized string values to enum keys
+  switch (normalizedClassName) {
+    case "smallmotorcycle":
+      return EnumLicenseClass.SmallMotorcycle;
+    case "heavymotorcyclelicense":
+      return EnumLicenseClass.HeavyMotorcycleLicense;
+    case "ordinarydrivinglicense":
+      return EnumLicenseClass.OrdinaryDrivingLicense;
+    case "commercial":
+      return EnumLicenseClass.Commercial;
+    case "agricultural":
+      return EnumLicenseClass.Agricultural;
+    case "smallandmediumbus":
+      return EnumLicenseClass.SmallAndMediumBus;
+    case "truckandheavyvehicle":
+      return EnumLicenseClass.TruckAndHeavyVehicle;
+    default:
+      return null; // Return null for unmatched class names
+  }
+}
+
 export const stringToEnumNumberMap: { [key: string]: EnumLicenseClass } = {
   SmallMotorcycle: EnumLicenseClass.SmallMotorcycle,
   HeavyMotorcycleLicense: EnumLicenseClass.HeavyMotorcycleLicense,

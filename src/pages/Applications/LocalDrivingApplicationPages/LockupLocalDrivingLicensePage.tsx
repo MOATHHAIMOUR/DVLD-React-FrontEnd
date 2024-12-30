@@ -10,7 +10,7 @@ const LockupLocalDrivingLicensePage = () => {
         direction="ROW"
         image="/src/assets/images/license.png"
       />
-      <Box>
+      <Box className="">
         <LookupLocalDrivingLicenseView />
       </Box>
     </Box>

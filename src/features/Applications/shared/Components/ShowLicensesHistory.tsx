@@ -3,7 +3,6 @@ import Box from "../../../../components/ui/Box";
 import LookupPersonToDisplayInfo from "../../../People/components/LookupPersonToDisplayInfo";
 import InternationalLicenseList from "../../InternationalLicenseApplication/Components/InternationalLicenseList";
 import { TShowLicenseHistoryListType } from "../types";
-import LocalDrivingLicenseViewList from "../../LocalDrivingApplication/Components/LocalDrivingLicenseViewList";
 
 const ShowLicensesHistory = () => {
   const [listType, setListType] =
@@ -40,11 +39,6 @@ const ShowLicensesHistory = () => {
 
         {/* Tab Content */}
         <div className="mt-4">
-          {listType === "localLicenseList" && (
-            <Box>
-              <LocalDrivingLicenseViewList />
-            </Box>
-          )}
           {listType === "InternationalList" && <InternationalLicenseList />}
         </div>
       </Box>

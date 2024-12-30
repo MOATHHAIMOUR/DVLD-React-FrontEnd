@@ -3,7 +3,6 @@ import { useState } from "react";
 import Button from "../../../components/ui/Button";
 import LookupPersonToDisplayInfo from "../../People/components/LookupPersonToDisplayInfo";
 import Box from "../../../components/ui/Box";
-import { useNavigate } from "react-router-dom";
 import { userFields } from "../data";
 import SelectMenu from "../../../components/ui/SelectMenu";
 import Input from "../../../components/ui/Input";
@@ -28,8 +27,6 @@ interface IProps {
 const UserForm = ({ mode, isDisabled, userData }: IProps) => {
   /* ────────────── STATE  ────────────── */
   const [currentStep, setCurrentStep] = useState(0);
-
-  const navigate = useNavigate();
 
   const {
     register,
@@ -56,10 +53,6 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
   const personSlice = useAppSelector((state) => state.peopleSlice);
 
   /* ────────────── HANDLERS  ────────────── */
-
-  function HandleAddPerson() {
-    navigate("/people/add-person");
-  }
 
   const handleNext = () => {
     if (personSlice.IsUser) {
@@ -134,7 +127,6 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
     return null; // Handle unexpected field types gracefully
   });
 
-  console.log("peopleAlice: " + personSlice.IsUser);
   return (
     <Box disabled={isDisabled} className="flex flex-col ">
       <ErrorHandler error={addUserError || updateUserError} />
@@ -172,14 +164,6 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
         {personSlice.IsUser && (
           <ErrorMsg message="This person is already a user please chose another one" />
         )}
-        {currentStep === 0 && mode === enumFormMode.Add && (
-          <Button
-            className="bg-[#1F2937] rounded-md p-2 text-white  ml-auto"
-            onClick={HandleAddPerson}
-          >
-            Add New Person
-          </Button>
-        )}
 
         {mode === enumFormMode.Add && (
           <Box
@@ -189,7 +173,7 @@ const UserForm = ({ mode, isDisabled, userData }: IProps) => {
           </Box>
         )}
 
-        {currentStep === 1 && (
+        {(currentStep === 1 || enumFormMode.Edit === mode) && (
           <Box className="w-1/2 flex flex-col gap-5">{renderUserFields}</Box>
         )}
 

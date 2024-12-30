@@ -1,11 +1,8 @@
-import {
-  IFilterByComboBox,
-  IGenericContextMenuItem,
-  IHeaderData,
-} from "../../../interfaces";
+
 import { TTestAppointmentContextMenu } from "../types";
 import { MdCancel, MdEdit } from "react-icons/md";
 import { BiClipboard } from "react-icons/bi";
+import { IFilterByComboBox, IGenericContextMenuItem, IHeaderData } from "../../../../interfaces";
 
 export const testAppointmentHeaderTableData: Array<IHeaderData> = [
   {

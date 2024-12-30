@@ -22,7 +22,7 @@ export interface IGenericField<T> {
 
 export interface IFilter {
   FilterBy: string;
-  FilterValue: string;
+  FilterValue: string | number | null;
 }
 
 export interface IQuery {

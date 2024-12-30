@@ -17,20 +17,24 @@ export const useUserFormHandler = () => {
     mode: enumFormMode,
     user: IApiUser
   ): Promise<void> => {
-    let response: IGenericApiResponse<string>;
+    try {
+      let response: IGenericApiResponse<string>;
 
-    if (mode === enumFormMode.Add) {
-      response = await addUser(user).unwrap();
-      toast.success(response.data || "User added successfully!", {
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
-    } else {
-      response = await updateUser(user).unwrap();
-      toast.success(response.message || "User updated successfully!", {
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
+      if (mode === enumFormMode.Add) {
+        response = await addUser(user).unwrap();
+        toast.success(response.data || "User added successfully!", {
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      } else {
+        response = await updateUser(user).unwrap();
+        toast.success(response.message || "User updated successfully!", {
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      }
+    } catch {
+      console.log("ERROR");
     }
   };
 

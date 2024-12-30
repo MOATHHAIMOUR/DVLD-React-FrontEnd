@@ -19,6 +19,15 @@ export const DetainLicenseApiSlice = createApi({
         method: "POST",
         body: DetainLicense,
       }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
     }),
     // Endpoint for ReleaseLicense
     releaseLicense: builder.mutation<
@@ -30,6 +39,15 @@ export const DetainLicenseApiSlice = createApi({
         method: "POST",
         body: ReleaseLicense,
       }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
     }),
   }),
 });

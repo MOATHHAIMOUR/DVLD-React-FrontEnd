@@ -1,7 +1,9 @@
 import Box from "../../../components/ui/Box";
 import Button from "../../../components/ui/Button";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
 import { enumFormMode } from "../../../Enums";
 import { useFindUserHandler } from "../hooks/useFindUserHandler";
+import { IApiUser } from "../interfaces";
 import FindUser from "./FindUser";
 import UserForm from "./UserForm";
 
@@ -14,6 +16,7 @@ const LookupUserToEdit = () => {
     user,
     userId,
     setUserId,
+    error,
   } = useFindUserHandler();
 
   function HandleResetForm() {
@@ -22,6 +25,7 @@ const LookupUserToEdit = () => {
 
   return (
     <Box className="flex flex-col h-[100%] gap-4 ">
+      <ErrorHandler error={error} />
       <Box className="flex justify-between border b-2 rounded-md shadow-lg mb-4 p-3">
         <FindUser
           isDisabled={isUserSelected}
@@ -42,7 +46,7 @@ const LookupUserToEdit = () => {
         key={userId}
         isDisabled={!isUserSelected}
         mode={enumFormMode.Edit}
-        userData={isUserSelected ? user?.data : undefined}
+        userData={isUserSelected ? (user?.data as IApiUser) : undefined}
       />
     </Box>
   );

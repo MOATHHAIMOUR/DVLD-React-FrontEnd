@@ -1,4 +1,10 @@
+import clsx, { ClassValue } from "clsx";
 import { IQuery } from "../interfaces";
+import { twMerge } from "tailwind-merge";
+
+export function tailwindCMerge(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function isNumber(value: string): boolean {
   const regex = /^[+-]?\d+(\.\d+)?$/;

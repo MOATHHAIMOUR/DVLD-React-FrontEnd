@@ -14,6 +14,8 @@ import { IPersonTableData } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import ErrorHandler from "../../../components/ui/ErrorHandler";
 import Box from "../../../components/ui/Box";
+import DataGridSkeleton from "../../../components/ui/DataGridSkeleton";
+import { PeopleTableHeaderData } from "../data";
 
 const defaultFilterValue: IQuery = {
   AdvanceFilters: [],
@@ -31,7 +33,11 @@ const ManagePeople = () => {
   /* ────────────── STATE  ────────────── */
   const [filters, setFilters] = useState<IQuery>(defaultFilterValue);
 
-  const { data: response, error } = useFetchPeopleQuery(BuildQuery(filters));
+  const {
+    data: response,
+    error,
+    isLoading,
+  } = useFetchPeopleQuery(BuildQuery(filters));
 
   const navigate = useNavigate();
 
@@ -92,13 +98,22 @@ const ManagePeople = () => {
           </Button>
         </Row>
       </Row>
-      <PeopleList
-        peopleData={response?.data ?? []}
-        handleOpenModal={handleOpenModal}
-        onSort={(selectedHeader, sortType) =>
-          onSortChange(selectedHeader, sortType)
-        }
-      />
+
+      {isLoading ? (
+        <DataGridSkeleton
+          numberOfRows={5}
+          numberOfCols={PeopleTableHeaderData.length}
+        />
+      ) : (
+        <PeopleList
+          peopleData={response?.data ?? []}
+          handleOpenModal={handleOpenModal}
+          onSort={(selectedHeader, sortType) =>
+            onSortChange(selectedHeader, sortType)
+          }
+        />
+      )}
+
       {response?.meta.totalPages && (
         <Pagination
           onPageChange={onPageChange}

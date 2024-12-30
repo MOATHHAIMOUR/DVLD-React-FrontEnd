@@ -1,6 +1,33 @@
 import { HTMLAttributes, ReactNode } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { tailwindCMerge } from "../../utils";
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+const buttonVariants = cva(
+  "inline-flex items-center rounded-md font-semibold",
+  {
+    variants: {
+      variant: {
+        primary: "bg-white dark:bg-black",
+        outline: "",
+      },
+      size: {
+        base: "px-4 text-base",
+        xs: "px-2 text-xs",
+      },
+      fullWidth: {
+        true: "w-full justify-center",
+      },
+    },
+
+    defaultVariants: {
+      variant: "outline",
+    },
+  }
+);
+
+interface ButtonProps
+  extends HTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   children: ReactNode;
   isLoading?: boolean;
   error?: boolean;
@@ -14,7 +41,10 @@ const Button = ({
   children,
   type,
   error,
+  size,
+  fullWidth,
   disabled,
+  variant,
   ...props
 }: ButtonProps) => {
   return (
@@ -22,7 +52,13 @@ const Button = ({
       type={type}
       className={`${className} ${
         error || isLoading || disabled ? "cursor-not-allowed" : ""
-      }  flex items-center justify-center`}
+      }  flex items-center justify-center ${tailwindCMerge(
+        buttonVariants({
+          variant,
+          size,
+          fullWidth,
+        })
+      )}`}
       {...props}
       disabled={isLoading || error || disabled}
     >
