@@ -7,14 +7,14 @@ import { ITestLocalDrivingLicenseAppointmentView } from "../../Tests/interfaces"
 // Create the shared API slice
 export const applicationApiSlice = createApi({
   reducerPath: "applicationApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api/v1" }), // Adjust the base URL as needed
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5121/Api" }), // Adjust the base URL as needed
   endpoints: (builder) => ({
     fetchTestLocalDrivingApplicationAppointmentView: builder.query<
       IGenericApiResponse<ITestLocalDrivingLicenseAppointmentView>,
       string
     >({
       query: (localDrivingApplicationId) => ({
-        url: `/Test/GetTestLocalDrivingLicenseDetail/${localDrivingApplicationId}`, // Append the query to the endpoint
+        url: `/v1/Test/GetTestLocalDrivingLicenseDetail/${localDrivingApplicationId}`, // Append the query to the endpoint
       }),
       transformErrorResponse: (response: {
         status: number;
@@ -32,7 +32,7 @@ export const applicationApiSlice = createApi({
       null
     >({
       query: () => ({
-        url: `/Shared/GetAllApplicationTypes`,
+        url: `/v1//Shared/GetAllApplicationTypes`,
       }),
     }),
 
@@ -41,7 +41,7 @@ export const applicationApiSlice = createApi({
       string
     >({
       query: () => ({
-        url: `/Shared/GetLicenseClasses`,
+        url: `/v1/Shared/GetLicenseClasses`,
       }),
     }),
 
@@ -51,7 +51,7 @@ export const applicationApiSlice = createApi({
       IApplicationType
     >({
       query: (updatedApplicationType) => ({
-        url: `/Shared/UpdateApplicationType`,
+        url: `/v1/Shared/UpdateApplicationType`,
         method: "PUT", // Assuming the endpoint uses HTTP PUT
         body: updatedApplicationType,
         headers: {

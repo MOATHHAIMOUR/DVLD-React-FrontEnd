@@ -1,4 +1,6 @@
 import { Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../store"; // Update the path based on your store setup
 import RootLayout from "../layouts/RootLayout";
 import peopleRoutes from "./peopleRoutes";
 import userRoutes from "./userRoutes";
@@ -10,15 +12,25 @@ import LoginPage from "../pages/Auth/LoginPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const Router = () => {
-  const jwt = localStorage.getItem("token");
+  // Access the JWT token from the Redux store
+  const jwtToken = useSelector((state: RootState) => state.auth.token);
 
+  console.log("jwtToken: " + jwtToken);
+  console.log("jwtToken: " + jwtToken !== null);
   return (
     <Routes>
-      <Route path="/auth/login" element={<LoginPage />} />
+      <Route
+        path="/auth/login"
+        element={
+          <ProtectedRoute isAllowed={jwtToken === null}>
+            <LoginPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         element={
-          <ProtectedRoute isAuthenticated={jwt !== null}>
+          <ProtectedRoute isAllowed={jwtToken !== null}>
             <RootLayout />
           </ProtectedRoute>
         }
@@ -33,4 +45,5 @@ const Router = () => {
     </Routes>
   );
 };
+
 export default Router;

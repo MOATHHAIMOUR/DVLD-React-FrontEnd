@@ -11,15 +11,16 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
   reducerPath: "LocalDrivingLicenseApplicationApi",
   tagTypes: ["LocalDrivingApplication"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/LocalDrivingApplication",
+    baseUrl: "http://localhost:5121/Api",
   }),
+
   endpoints: (builder) => ({
     fetchLocalDrivingApplicationsView: builder.query<
       IGenericApiResponse<Array<ILocalDrivingApplication>>,
       string
     >({
       query: (query) => ({
-        url: `/GetLocalDrivingApplicationsView${query}`,
+        url: `/v1/LocalDrivingApplication/GetLocalDrivingApplicationsView${query}`,
       }),
 
       transformErrorResponse: (response: {
@@ -35,7 +36,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
     }),
     addNewLocalLicense: builder.mutation<void, IAddLocalLicense>({
       query: (body) => ({
-        url: "/AddNewLocalLicense",
+        url: "/v1/LocalDrivingApplication/AddNewLocalLicense",
         method: "POST",
         body,
       }),
@@ -53,7 +54,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
 
     cancelLocalDrivingApplication: builder.mutation({
       query: (localDrivingApplicationId) => ({
-        url: `CancelLocalDivingApplication?LocalDrivingApplication=${localDrivingApplicationId}`,
+        url: `/v1/LocalDrivingApplication/CancelLocalDivingApplication?LocalDrivingApplication=${localDrivingApplicationId}`,
         method: "PUT",
         headers: {
           accept: "text/plain",
@@ -76,7 +77,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
       AddNewLocalDrivingLicenseDTO
     >({
       query: (localDrivingApplicationData) => ({
-        url: "/AddNewLocalDrivingLicenseApplication",
+        url: "/v1/LocalDrivingApplication/AddNewLocalDrivingLicenseApplication",
         method: "POST",
         body: localDrivingApplicationData,
       }),
@@ -99,7 +100,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
       string
     >({
       query: (query) => ({
-        url: `/GetLicenseView${query}`,
+        url: `/v1/LocalDrivingApplication/GetLicenseView${query}`,
       }),
       providesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
 
@@ -116,7 +117,7 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
 
     renewLocalDrivingLicense: builder.mutation({
       query: ({ LicenseId, CreatedByUserId, ExpirationDate }) => ({
-        url: "RenewLocalDrivingLicense",
+        url: "/v1/LocalDrivingApplication/RenewLocalDrivingLicense",
         method: "POST",
         params: { LicenseId, CreatedByUserId, ExpirationDate },
       }),

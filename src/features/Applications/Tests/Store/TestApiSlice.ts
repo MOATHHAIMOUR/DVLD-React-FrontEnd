@@ -13,7 +13,7 @@ export const TestApiSlice = createApi({
   reducerPath: "Test",
   tagTypes: ["Test", "LocalDrivingApplication"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/Test",
+    baseUrl: "http://localhost:5121/Api",
   }),
   endpoints: (builder) => ({
     fetchScheduleTestInfoView: builder.query<
@@ -21,7 +21,7 @@ export const TestApiSlice = createApi({
       string
     >({
       query: (query) => ({
-        url: `/GetScheduleTestInfoView${query}`, // Append the query to the endpoint
+        url: `/v1/Test/GetScheduleTestInfoView${query}`, // Append the query to the endpoint
       }),
       transformErrorResponse: (response: {
         status: number;
@@ -58,7 +58,7 @@ export const TestApiSlice = createApi({
       IAddTestResult
     >({
       query: (testResult) => ({
-        url: "/AddTestResult",
+        url: "/v1/Test/AddTestResult",
         method: "POST",
         body: testResult,
       }),
@@ -97,7 +97,7 @@ export const TestApiSlice = createApi({
       IAddScheduleTest
     >({
       query: (data) => ({
-        url: "/AddTestAppointment", // API endpoint for the POST request
+        url: "/v1/Test/AddTestAppointment", // API endpoint for the POST request
         method: "POST",
         body: data,
       }),

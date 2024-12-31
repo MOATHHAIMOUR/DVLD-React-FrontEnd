@@ -9,7 +9,7 @@ import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
 export const replaceLicenseApi = createApi({
   reducerPath: "replaceLicenseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/ReplaceLostDamageController",
+    baseUrl: "http://localhost:5121/Api",
   }),
   endpoints: (builder) => ({
     replaceLostLicense: builder.mutation<
@@ -17,7 +17,7 @@ export const replaceLicenseApi = createApi({
       ReplaceLicenseRequest
     >({
       query: (body) => ({
-        url: "/ReplaceLostLicense",
+        url: "/v1/ReplaceLostDamageController/ReplaceLostLicense",
         method: "POST",
         body,
       }),
@@ -36,7 +36,7 @@ export const replaceLicenseApi = createApi({
       ReplaceLicenseRequest
     >({
       query: (body) => ({
-        url: "/ReplaceDamageLicense",
+        url: "/v1/ReplaceLostDamageController/ReplaceDamageLicense",
         method: "POST",
         body,
       }),

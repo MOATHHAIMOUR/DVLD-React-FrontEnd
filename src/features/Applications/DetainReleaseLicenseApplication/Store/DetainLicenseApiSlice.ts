@@ -1,13 +1,13 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { IAddDetainLicense, IReleaseLicense } from "../interfaces";
 import { IGenericApiResponse } from "../../../../interfaces/IApiResponse";
+import { baseQueryWithReauth } from "../../../../baseQueryWithReauth";
 // Define the API slice
 export const DetainLicenseApiSlice = createApi({
   reducerPath: "DetainLicenseApi",
   tagTypes: ["DetainLicense"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/DetainLicense",
-  }),
+  baseQuery: baseQueryWithReauth("http://localhost:5121/Api"),
+
   endpoints: (builder) => ({
     // Endpoint for DetainLicense
     detainLicense: builder.mutation<
@@ -15,7 +15,7 @@ export const DetainLicenseApiSlice = createApi({
       IAddDetainLicense
     >({
       query: (DetainLicense) => ({
-        url: "/DetainLicense",
+        url: "/v1/DetainLicense/AddDetainLicense",
         method: "POST",
         body: DetainLicense,
       }),
@@ -35,7 +35,7 @@ export const DetainLicenseApiSlice = createApi({
       IReleaseLicense
     >({
       query: (ReleaseLicense) => ({
-        url: "/ReleaseLicense",
+        url: "/v1/DetainLicense/ReleaseLicense",
         method: "POST",
         body: ReleaseLicense,
       }),

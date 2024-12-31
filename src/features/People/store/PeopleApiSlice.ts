@@ -1,14 +1,14 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
 import { IPersonTableData, IFetchPerson } from "../interfaces";
+import { baseQueryWithReauth } from "../../../baseQueryWithReauth";
 
 export const peopleApiSlice = createApi({
   reducerPath: "peopleApi",
   tagTypes: ["People"],
   refetchOnReconnect: true,
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/Person",
-  }),
+  baseQuery: baseQueryWithReauth("http://localhost:5121/Api"),
+
   endpoints: (builder) => ({
     fetchPeople: builder.query<
       IGenericApiResponse<Array<IPersonTableData>>,
@@ -16,7 +16,7 @@ export const peopleApiSlice = createApi({
     >({
       query: (query) => {
         return {
-          url: `/GetPeople${query}`,
+          url: `/v1/Person/GetPeople${query}`,
         };
       },
       transformResponse: (
@@ -35,7 +35,7 @@ export const peopleApiSlice = createApi({
     }),
     AddPerson: builder.mutation<IGenericApiResponse<string>, FormData>({
       query: (newPerson) => ({
-        url: "/AddPerson",
+        url: "/v1/Person/AddPerson",
         method: "POST",
         body: newPerson,
       }),
@@ -54,7 +54,7 @@ export const peopleApiSlice = createApi({
     }),
     UpdatePerson: builder.mutation<IGenericApiResponse<string>, FormData>({
       query: (Person) => ({
-        url: "/UpdatePerson",
+        url: "/v1/Person/UpdatePerson",
         method: "PUT",
         body: Person,
       }),
@@ -69,7 +69,7 @@ export const peopleApiSlice = createApi({
     }),
     deletePerson: builder.mutation<void, number>({
       query: (id) => ({
-        url: `/DeletePerson/${id}`,
+        url: `/v1/Person/DeletePerson/${id}`,
         method: "DELETE",
       }),
       transformErrorResponse: (response: {
@@ -89,7 +89,7 @@ export const peopleApiSlice = createApi({
       string | null // Query parameter
     >({
       query: (query) => ({
-        url: `/GetPerson${query}`,
+        url: `/v1/Person/GetPerson${query}`,
         keepUnusedDataFor: 0, // Construct the API URL
       }),
       transformResponse: (

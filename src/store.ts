@@ -8,6 +8,7 @@ import { UserApiSlice } from "./features/User/store/UserApiSlice";
 
 import peopleSlice from "./features/People/store/PeopleSlice";
 import themeSlice from "./store/ThemeSlice";
+import AuthSlice from "./features/Auth/store/AuthSlice";
 
 import { applicationApiSlice } from "./features/Applications/shared/store/ApplicationApiSlice";
 import { LocalDrivingLicenseApplicationApiSlice } from "./features/Applications/LocalDrivingApplication/Store/LocalDrivingLicenseApplicationApiSlice";
@@ -15,10 +16,12 @@ import { InternationalLicenseApiSlice } from "./features/Applications/Internatio
 import errorMiddleware from "./middleware/globalErrorMiddleware";
 import { TestApiSlice } from "./features/Applications/Tests/Store/TestApiSlice";
 import { DetainLicenseApiSlice } from "./features/Applications/DetainReleaseLicenseApplication/Store/DetainLicenseApiSlice";
-import authMiddleware from "./middleware/AuthMiddleware";
+
+import { AuthApiSlice } from "./features/Auth/store/AuthApiSlice";
 
 export const store = configureStore({
   reducer: {
+    auth: AuthSlice,
     theme: themeSlice,
     peopleSlice: peopleSlice,
     [InternationalLicenseApiSlice.reducerPath]:
@@ -31,13 +34,13 @@ export const store = configureStore({
     [UserApiSlice.reducerPath]: UserApiSlice.reducer,
     [sharedApiSlice.reducerPath]: sharedApiSlice.reducer,
     [DetainLicenseApiSlice.reducerPath]: DetainLicenseApiSlice.reducer,
+    [AuthApiSlice.reducerPath]: AuthApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
       errorMiddleware,
-      authMiddleware,
       peopleApiSlice.middleware,
       sharedApiSlice.middleware,
       UserApiSlice.middleware,
@@ -45,7 +48,8 @@ export const store = configureStore({
       LocalDrivingLicenseApplicationApiSlice.middleware,
       TestApiSlice.middleware,
       InternationalLicenseApiSlice.middleware,
-      DetainLicenseApiSlice.middleware
+      DetainLicenseApiSlice.middleware,
+      AuthApiSlice.middleware
     ),
 });
 

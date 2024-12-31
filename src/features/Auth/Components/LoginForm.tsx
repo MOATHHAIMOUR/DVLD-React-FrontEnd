@@ -5,10 +5,15 @@ import { loginSchema } from "../validation";
 import { useForm } from "react-hook-form";
 import ErrorMsg from "../../../components/ui/ErrorMsg";
 import Input from "../../../components/ui/Input";
-import { MdEmail } from "react-icons/md";
 import { TbPasswordUser } from "react-icons/tb";
+import { useLoginHandler } from "../hooks/useLoginHandler";
+import ErrorHandler from "../../../components/ui/ErrorHandler";
+import { BiUser } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const { login, isLoading, error } = useLoginHandler(); // Use the custom hook
   const {
     register,
     handleSubmit,
@@ -18,29 +23,32 @@ const LoginForm = () => {
   });
 
   // Submit handler
-  const onSubmit = (data: ILogin) => {
-    console.log("Form Data:", data);
-    // Handle login logic here
+  const onSubmit = async (data: ILogin) => {
+    await login(data);
+    navigate("/people/people-management", { replace: true }); // Programmatically navigate
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <ErrorHandler error={error} />
       <Box>
         <label
-          htmlFor="email"
+          htmlFor="username"
           className="block text-sm font-medium text-gray-700"
         >
           Email Address
         </label>
         <Input
           className="p-2"
-          type="email"
-          PrefixIcon={MdEmail}
-          id="email"
-          {...register("email")}
-          placeholder="you@example.com"
+          type="text"
+          PrefixIcon={BiUser}
+          id="username"
+          {...register("username")}
+          placeholder="Enter your username"
         />
-        {errors.email?.message && <ErrorMsg message={errors.email.message} />}
+        {errors.username?.message && (
+          <ErrorMsg message={errors.username.message} />
+        )}
       </Box>
       <Box>
         <label
@@ -77,8 +85,9 @@ const LoginForm = () => {
       <button
         type="submit"
         className="w-full py-3 bg-primary text-white font-bold text-lg rounded-lg shadow-md hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50"
+        disabled={isLoading} // Disable the button while loading
       >
-        Login
+        {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
   );

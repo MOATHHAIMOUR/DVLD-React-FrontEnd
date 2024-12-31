@@ -1,13 +1,13 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { IGenericApiResponse } from "../../../interfaces/IApiResponse";
 import { IApiUser, IUserView } from "../interfaces";
+import { baseQueryWithReauth } from "../../../baseQueryWithReauth";
 
 export const UserApiSlice = createApi({
   reducerPath: "UserApi",
   tagTypes: ["Users"],
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5121/Api/v1/User",
-  }),
+  baseQuery: baseQueryWithReauth("http://localhost:5121/Api"),
+
   refetchOnReconnect: true,
   endpoints: (builder) => ({
     fetchUsers: builder.query<IGenericApiResponse<Array<IUserView>>, string>({
@@ -27,7 +27,7 @@ export const UserApiSlice = createApi({
     }),
     fetchUser: builder.query<IGenericApiResponse<IUserView>, string>({
       query: (query) => ({
-        url: `/GetUser${query}`,
+        url: `/v1/User/GetUser${query}`,
       }),
       transformResponse: (response: IGenericApiResponse<IUserView>) => {
         return response;
@@ -44,7 +44,7 @@ export const UserApiSlice = createApi({
     }),
     deleteUser: builder.mutation<IGenericApiResponse<null>, number>({
       query: (userId) => ({
-        url: `/DeleteUser/${userId}`,
+        url: `/v1/User/DeleteUser/${userId}`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: "Users", id: "LIST" }],
@@ -63,7 +63,7 @@ export const UserApiSlice = createApi({
     }),
     addUser: builder.mutation<IGenericApiResponse<string>, IApiUser>({
       query: (newUser) => ({
-        url: `/AddUser`,
+        url: `/v1/User/AddUser`,
         method: "POST",
         body: newUser,
       }),
@@ -80,7 +80,7 @@ export const UserApiSlice = createApi({
     }),
     UpdateUser: builder.mutation<IGenericApiResponse<string>, IApiUser>({
       query: (updatedUser) => ({
-        url: `/UpdateUser`,
+        url: `/v1/User/UpdateUser`,
         method: "PUT",
         body: updatedUser,
       }),
