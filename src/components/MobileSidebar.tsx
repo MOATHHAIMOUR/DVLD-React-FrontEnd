@@ -3,7 +3,7 @@ import Button from "./ui/Button";
 import Box from "./ui/Box";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { BsArrowLeftCircleFill } from "react-icons/bs";
-import { MdMenu } from "react-icons/md";
+import { MdDashboard, MdMenu } from "react-icons/md";
 
 interface IProps {
   children: ReactNode;
@@ -26,9 +26,10 @@ const MobileSidebar = ({ children }: IProps) => {
         }`}
       >
         <Box className="flex items-center justify-between mt-10 px-4">
-          <h1 className="text-xl font-bold text-primary-foreground">
-            Dashboard
-          </h1>
+          <Box className="flex items-center gap-4  mt-10 px-4">
+            <MdDashboard size={30} />
+            <h1 className="text-xl font-bold">Dashboard</h1>
+          </Box>
           <Box className="flex gap-4 items-center">
             <DarkModeToggle />
             <Button onClick={() => setIsOpen(!isOpen)}>

@@ -16,13 +16,13 @@ const Input = forwardRef(
   ) => {
     if (PrefixIcon) {
       return (
-        <div className=" flex items-center border-[1px] border-gray-300 shadow-lg focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600 rounded-lg bg-transparent">
-          <span className="pl-3 text-gray-500">
-            <PrefixIcon />
+        <div className="flex items-center border border-gray-300 shadow-lg focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600 rounded-lg bg-transparent">
+          <span className="pl-3 text-gray-500 flex items-center mt-1">
+            <PrefixIcon size={20} className={"text-primary"} />
           </span>
           <input
             ref={ref}
-            className={`text-black flex-1 px-3 py-2 text-md w-full bg-transparent focus:outline-none ${className}`}
+            className={`text-black flex-1 text-md w-full bg-transparent py-2 focus:outline-none ${className}`}
             {...rest}
           />
         </div>
@@ -31,7 +31,7 @@ const Input = forwardRef(
       return (
         <input
           ref={ref}
-          className={`text-black px-3 py-[3px] text-md w-full bg-transparent border-[1px] border-gray-300 shadow-lg rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 ${className}`}
+          className={`text-black  text-md w-full bg-transparent border-[1px] border-gray-300 shadow-lg rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 ${className}`}
           {...rest}
         />
       );

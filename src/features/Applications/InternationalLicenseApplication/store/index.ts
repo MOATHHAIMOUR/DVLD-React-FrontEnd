@@ -22,6 +22,15 @@ export const InternationalLicenseApiSlice = createApi({
         method: "POST",
         body: internationalLicenseData,
       }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
       invalidatesTags: [
         { type: "InternationalLicense", id: "InternationalLicenseList" },
       ],
@@ -34,6 +43,15 @@ export const InternationalLicenseApiSlice = createApi({
         url: "/GetAllInternationalLicense", // Replace with your API endpoint
         method: "GET",
       }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
     }),
   }),
 });

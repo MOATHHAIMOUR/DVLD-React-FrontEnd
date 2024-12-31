@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 import RenewLocalLicensesApplicationPage from "../../pages/Applications/LocalDrivingApplicationPages/RenewLocalLicensesApplicationPage";
 
-const RenewLicense = (
+const RenewLicenseRoutes = (
   <>
     <Route
       path="renew/renew-local-licenses"
@@ -10,4 +10,4 @@ const RenewLicense = (
   </>
 );
 
-export default RenewLicense;
+export default RenewLicenseRoutes;

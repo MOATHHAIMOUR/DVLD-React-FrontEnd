@@ -16,8 +16,10 @@ export function BuildQuery(query: IQuery): string {
 
   if (query?.AdvanceFilters?.length ?? 0 > 0) {
     query?.AdvanceFilters?.forEach(
-      (filter: { FilterBy: string; FilterValue: string }) => {
-        arrQuery.push(`${filter.FilterBy}=${filter.FilterValue}`);
+      (filter: { FilterBy: string; FilterValue: string | number | null }) => {
+        if (filter.FilterValue != null) {
+          arrQuery.push(`${filter.FilterBy}=${filter.FilterValue}`);
+        }
       }
     );
   }
@@ -42,7 +44,12 @@ export function BuildQuery(query: IQuery): string {
   return arrQuery.length > 0 ? `?${arrQuery.join("&")}` : "";
 }
 
-export function BuildSimpleQuery(key: string, value: string | number): string {
+export function BuildSimpleQuery(
+  key: string,
+  value: string | number | null
+): string {
+  if (value == null) return "";
+
   return `?${key}=${value}`;
 }
 

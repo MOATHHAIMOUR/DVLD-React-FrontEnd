@@ -15,6 +15,7 @@ import { InternationalLicenseApiSlice } from "./features/Applications/Internatio
 import errorMiddleware from "./middleware/globalErrorMiddleware";
 import { TestApiSlice } from "./features/Applications/Tests/Store/TestApiSlice";
 import { DetainLicenseApiSlice } from "./features/Applications/DetainReleaseLicenseApplication/Store/DetainLicenseApiSlice";
+import authMiddleware from "./middleware/AuthMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat(
       errorMiddleware,
+      authMiddleware,
       peopleApiSlice.middleware,
       sharedApiSlice.middleware,
       UserApiSlice.middleware,

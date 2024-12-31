@@ -3,7 +3,7 @@ import { IAddNewInternationalLicense } from "../interfaces";
 import { useAddNewInternationalLicenseMutation } from "../store";
 
 export const useAddNewInternationalLicenseHandler = () => {
-  const [addNewInternationalLicense, { isLoading, data }] =
+  const [addNewInternationalLicense, { isLoading, data, error }] =
     useAddNewInternationalLicenseMutation();
 
   const handleAddNewInternationalLicense = async (
@@ -17,9 +17,9 @@ export const useAddNewInternationalLicenseHandler = () => {
       });
       return response; // Return the response to the caller
     } catch {
-      toast.error("An error occur", {});
+      //
     }
   };
 
-  return { handleAddNewInternationalLicense, isLoading, data };
+  return { handleAddNewInternationalLicense, isLoading, data, error };
 };

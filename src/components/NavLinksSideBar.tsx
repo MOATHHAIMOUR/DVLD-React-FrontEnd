@@ -39,7 +39,7 @@ const NavLinksSideBar = () => {
               <span className="text-lg">
                 <link.Icon size={20} />
               </span>
-              <span className="ml-4 text-sm font-semibold">{link.name}</span>
+              <span className="ml-4 text-md font-semibold">{link.name}</span>
               <span
                 className={`ml-auto transition-transform duration-300 ${
                   isOpen ? "rotate-180" : ""
@@ -49,21 +49,10 @@ const NavLinksSideBar = () => {
               </span>
             </Box>
           ) : (
-            // primary: {
-            //   DEFAULT: "rgb(var(--primary-color))", // Base background color
-            //   hover: "rgb(var(--primary-hover-color))", // Background color for hover
-            //   foreground: "rgb(var(--primary-foreground))", // Text color
-            //   "hover-foreground": "rgb(var(--primary-hover-foreground))", // Text color for hover
-            // },
-
-            // selectedNavLink: {
-            //   DEFAULT: "rgb(var(--selected-nav-link-bg))", // Background color
-            //   text: "rgb(var(--selected-nav-link-text))", // Text color
-            // },
             <NavLink
               to={link.path || "#"}
               className={({ isActive }) =>
-                `hover:bg-primary-hover hover:text-primary-hover-foreground  flex items-center p-3 rounded-lg cursor-pointer group   ${
+                `mb-2 hover:bg-primary-hover hover:text-primary-hover-foreground  flex items-center p-3 rounded-lg cursor-pointer group   ${
                   isActive ? "bg-selectedNavLink text-selectedNavLink-text" : ""
                 }`
               }
@@ -78,7 +67,7 @@ const NavLinksSideBar = () => {
 
           {link.children && (
             <ul
-              className={`transition-all duration-500  ${
+              className={`transition-all duration-500 my-1  ${
                 isOpen ? "opacity-100" : "opacity-0"
               }`}
               style={{

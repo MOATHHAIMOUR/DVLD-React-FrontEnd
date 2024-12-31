@@ -1,11 +1,9 @@
 import { Route } from "react-router-dom";
+import LoginPage from "../pages/Auth/LoginPage";
 
 const authRoutes = (
   <>
-    <Route
-      path="/auth/login"
-      element={<p className="text-black text-6xl">Login</p>}
-    />
+    <Route path="/auth/login" element={<LoginPage />} />
   </>
 );
 

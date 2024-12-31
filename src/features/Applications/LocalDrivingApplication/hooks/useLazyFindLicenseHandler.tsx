@@ -6,7 +6,10 @@ export const useLazyFindLicenseHandler = () => {
   const [triggerFetchPerson, { isFetching, isLoading, data: License, error }] =
     useLazyFetchLicenseDetailsViewQuery();
 
-  const onFindLicenseHandler = async (key: string, value: string) => {
+  const onFindLicenseHandler = async (
+    key: string,
+    value: string | number | null
+  ) => {
     try {
       const result = await triggerFetchPerson(
         BuildSimpleQuery(key, value)

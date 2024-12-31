@@ -6,7 +6,11 @@ import {
   MdHistory,
   MdPersonAdd,
   MdSupervisorAccount,
+  MdOutlineHelpOutline,
 } from "react-icons/md";
+import { RiFileDamageLine } from "react-icons/ri";
+import { TbReplaceFilled } from "react-icons/tb";
+
 import { RiTeamFill, RiUser2Fill } from "react-icons/ri";
 import { FaCarSide, FaCarCrash, FaPassport, FaFileAlt } from "react-icons/fa";
 import { HiDocumentText, HiOutlineDocumentAdd } from "react-icons/hi";
@@ -131,6 +135,25 @@ export const NavData: Array<INavbar> = [
         ],
       },
 
+      // Replacement
+      {
+        name: "Replace Damage & Lost License ",
+        path: "",
+        Icon: TbReplaceFilled,
+        children: [
+          {
+            name: "Replace Damage License",
+            path: "/replace/replace-damage-local-license",
+            Icon: RiFileDamageLine,
+          },
+          {
+            name: "Replace Lost License",
+            path: "/replace/replace-lost-local-license",
+            Icon: MdOutlineHelpOutline,
+          },
+        ],
+      },
+
       // International Licenses
       {
         name: "International Licenses",
@@ -150,9 +173,8 @@ export const NavData: Array<INavbar> = [
         ],
       },
 
-      // Shared Licenses
       {
-        name: "Shared Licenses",
+        name: "Licenses History",
         path: "licenses",
         Icon: MdHistory,
         children: [

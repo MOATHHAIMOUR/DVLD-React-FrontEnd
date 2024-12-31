@@ -1,6 +1,6 @@
 import Box from "../../../components/ui/Box";
 import Logo from "../../../components/ui/Logo";
-import RenewLocalDrivingLicense from "../../../features/Applications/RenewLicenseApplication/Components/RenewLocalDrivingLicense";
+import RenewLocalDrivingLicense from "../../../features/Applications/LocalDrivingApplication/Components/RenewLocalDrivingLicense";
 
 const RenewLocalLicensesApplicationPage = () => {
   return (

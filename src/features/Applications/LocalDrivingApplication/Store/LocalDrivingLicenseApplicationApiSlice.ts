@@ -24,13 +24,12 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
 
       transformErrorResponse: (response: {
         status: number;
-        data: IGenericApiResponse<Array<ILocalDrivingApplication>>;
-      }): string => {
-        // Check if the response contains errors
-        if (response.data.errors && Array.isArray(response.data.errors)) {
-          return response.data.errors[0]; // Return the first error
-        }
-        return "An unexpected error occurred";
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
       },
       providesTags: [{ type: "LocalDrivingApplication", id: "LIST" }],
     }),
@@ -114,6 +113,23 @@ export const LocalDrivingLicenseApplicationApiSlice = createApi({
         };
       },
     }),
+
+    renewLocalDrivingLicense: builder.mutation({
+      query: ({ LicenseId, CreatedByUserId, ExpirationDate }) => ({
+        url: "RenewLocalDrivingLicense",
+        method: "POST",
+        params: { LicenseId, CreatedByUserId, ExpirationDate },
+      }),
+      transformErrorResponse: (response: {
+        status: number;
+        data: IGenericApiResponse<Array<string>>;
+      }) => {
+        return {
+          status: response.data.statusCode,
+          message: response.data.errors[0],
+        };
+      },
+    }),
   }),
 });
 
@@ -124,4 +140,5 @@ export const {
   useFetchLocalDrivingApplicationsViewQuery,
   useAddNewLocalDrivingLicenseApplicationMutation,
   useAddNewLocalLicenseMutation,
+  useRenewLocalDrivingLicenseMutation,
 } = LocalDrivingLicenseApplicationApiSlice;

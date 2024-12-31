@@ -19,6 +19,7 @@ import DatePickerComponent, {
   DatePickerRef,
 } from "../../../../components/ui/DatePickerComponent";
 import { AiOutlineCalendar } from "react-icons/ai";
+import ErrorHandler from "../../../../components/ui/ErrorHandler";
 
 const AddNewInternationalLicenseApplication = () => {
   /* ────────────── STATE  ────────────── */
@@ -33,6 +34,7 @@ const AddNewInternationalLicenseApplication = () => {
     handleAddNewInternationalLicense,
     data: response,
     isLoading: isLoadingInternationalLicense,
+    error: AddInternationalError,
   } = useAddNewInternationalLicenseHandler();
 
   const { data: applicationTypes } = useFetchApplicationTypesQuery(null);
@@ -90,10 +92,10 @@ const AddNewInternationalLicenseApplication = () => {
     const InternationalLicenseData: IAddNewInternationalLicense = {
       driverId: License.data.driverId,
       expirationDate: new Date(),
-      createdByUserId: 396,
+      createdByUserId: 10,
       isActive: true,
       issueDate: new Date(),
-      issuedUsingLocalLicenseId: 14,
+      issuedUsingLocalLicenseId: License.data.licenseId,
     };
 
     await handleAddNewInternationalLicense(InternationalLicenseData);
@@ -107,6 +109,7 @@ const AddNewInternationalLicenseApplication = () => {
 
   return (
     <Box className="bg-white p-6 flex flex-col gap-5">
+      <ErrorHandler error={AddInternationalError} />
       <Box className="flex">
         <Box className="flex gap-3 items-center">
           <FaIdCard className="text-[#1F2937] text-2xl ml-3" />
