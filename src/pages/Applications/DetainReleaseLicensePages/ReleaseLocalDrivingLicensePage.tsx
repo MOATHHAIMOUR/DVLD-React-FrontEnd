@@ -4,7 +4,7 @@ import ReleaseLocalDrivingLicense from "../../../features/Applications/DetainRel
 
 const ReleaseLocalDrivingLicensePage = () => {
   return (
-    <Box className="flex flex-col  gap-8">
+    <Box className="p-8 flex flex-col  gap-8">
       <Logo
         direction="ROW"
         title="Release Local Driving License"

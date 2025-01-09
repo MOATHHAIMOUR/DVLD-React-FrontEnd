@@ -1,9 +1,8 @@
 import { ReactNode, useState } from "react";
 import Button from "./ui/Button";
 import Box from "./ui/Box";
-import { DarkModeToggle } from "./DarkModeToggle";
-import { BsArrowLeftCircleFill } from "react-icons/bs";
-import { MdDashboard, MdMenu } from "react-icons/md";
+import { MdMenu } from "react-icons/md";
+import { BiXCircle } from "react-icons/bi";
 
 interface IProps {
   children: ReactNode;
@@ -13,31 +12,33 @@ const MobileSidebar = ({ children }: IProps) => {
 
   return (
     <>
+      {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="absolute cursor-pointer z-30 blur-md inset-0  bg-black opacity-40"
+        ></div>
+      )}
       <Button
-        className="xl:hidden p-8 absolute"
+        className="xl:hidden  pt-5 pl-4 absolute "
         onClick={() => setIsOpen(!isOpen)}
       >
         <MdMenu size={40} />
       </Button>
 
       <Box
-        className={`fixed top-0 left-0 h-screen w-[360px] bg-primary  transform transition-all duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`z-40  fixed top-0 ltr:left-0 rtl:right-0 h-screen w-full sm:w-[360px] bg-primary  transform transition-all duration-300 ${
+          isOpen
+            ? "translate-x-0"
+            : "ltr:-translate-x-full rtl:translate-x-full"
         }`}
       >
-        <Box className="flex items-center justify-between mt-10 px-4">
-          <Box className="flex items-center gap-4  mt-10 px-4">
-            <MdDashboard size={30} />
-            <h1 className="text-xl font-bold">Dashboard</h1>
-          </Box>
-          <Box className="flex gap-4 items-center">
-            <DarkModeToggle />
-            <Button onClick={() => setIsOpen(!isOpen)}>
-              <BsArrowLeftCircleFill size={30} />
-            </Button>
-          </Box>
-        </Box>
-
+        <div className="flex justify-center w-full mt-4">
+          <BiXCircle
+            onClick={() => setIsOpen(false)}
+            size={44}
+            className="text-white ml-auto mr-3 cursor-pointer "
+          />
+        </div>
         {children}
       </Box>
     </>

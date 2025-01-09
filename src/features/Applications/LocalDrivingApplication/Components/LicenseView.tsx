@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import Box from "../../../../components/ui/Box";
 import { ILicenseDetailsView } from "../interfaces";
+import { BiUser } from "react-icons/bi";
 
 interface IProps {
   licenseData?: ILicenseDetailsView;
@@ -115,11 +116,17 @@ const LicenseView = ({ licenseData }: IProps) => {
 
         {/* Personal Image */}
         <Box className="flex-shrink-0 ml-6">
-          <img
-            src={licenseData?.imagePath}
-            alt="Personal"
-            className="rounded-full w-40 h-40 object-cover shadow-md"
-          />
+          {licenseData?.imagePath === undefined ? (
+            <div className="bg-slate-50 shadow-lg rounded-full p-4 ">
+              <BiUser size={140} />
+            </div>
+          ) : (
+            <img
+              src={licenseData?.imagePath}
+              alt="Personal"
+              className="rounded-full w-40 h-40 object-cover shadow-md"
+            />
+          )}
         </Box>
       </Box>
     </>

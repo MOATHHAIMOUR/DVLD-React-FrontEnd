@@ -16,6 +16,7 @@ import ErrorHandler from "../../../components/ui/ErrorHandler";
 import Box from "../../../components/ui/Box";
 import DataGridSkeleton from "../../../components/ui/DataGridSkeleton";
 import { PeopleTableHeaderData } from "../data";
+import { useTranslation } from "react-i18next";
 
 const defaultFilterValue: IQuery = {
   AdvanceFilters: [],
@@ -33,6 +34,7 @@ const ManagePeople = () => {
   /* ────────────── STATE  ────────────── */
   const [filters, setFilters] = useState<IQuery>(defaultFilterValue);
 
+  const { t } = useTranslation();
   const {
     data: response,
     error,
@@ -92,9 +94,9 @@ const ManagePeople = () => {
         <Row className="gap-3">
           <Button
             onClick={OnNavigateHandler}
-            className="px-4 bg-primary text-text p-1 rounded-md hover:bg-primaryHover"
+            className="px-4 bg-primary text-text p-1 rounded-md hover:bg-primaryHover text-primary-foreground hover:bg-primary-hover"
           >
-            Add Person
+            {t("People.add_person")}
           </Button>
         </Row>
       </Row>
@@ -125,7 +127,7 @@ const ManagePeople = () => {
       <Modal
         onClose={handleCloseModal}
         isOpen={confirmDeleteModal}
-        title="Confirm Deletion"
+        title={t("confirmDelete")}
       >
         <ConfirmDeletePerson
           person={selectedPerson!}

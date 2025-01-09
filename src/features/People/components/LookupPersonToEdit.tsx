@@ -50,7 +50,7 @@ const LookupPersonToEdit = () => {
       <ErrorHandler error={error} />
 
       <Box className="flex flex-col h-[100%] gap-4 ">
-        <Box className="flex justify-between border b-2 rounded-md shadow-lg mb-4 p-3">
+        <Box className="flex justify-between  rounded-md  mb-4 ">
           <FindPerson
             key={key}
             isDisabled={isPersonSelected}

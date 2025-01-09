@@ -9,8 +9,9 @@ export const useLoginHandler = () => {
   const login = async (credentials: ILogin) => {
     try {
       const response = await loginMutation(credentials).unwrap();
-      console.log("response: " + response.data.isValid);
+      console.log("response: " + response.data.userName);
       dispatch(setCredentials(response.data));
+      return response;
     } catch (err) {
       //
       console.log(err);

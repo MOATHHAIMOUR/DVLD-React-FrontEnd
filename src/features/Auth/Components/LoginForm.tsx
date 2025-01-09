@@ -24,8 +24,8 @@ const LoginForm = () => {
 
   // Submit handler
   const onSubmit = async (data: ILogin) => {
-    await login(data);
-    navigate("/people/people-management", { replace: true }); // Programmatically navigate
+    const response = await login(data);
+    if (response?.data.isValid) navigate("/", { replace: true }); // Programmatically navigate
   };
 
   return (

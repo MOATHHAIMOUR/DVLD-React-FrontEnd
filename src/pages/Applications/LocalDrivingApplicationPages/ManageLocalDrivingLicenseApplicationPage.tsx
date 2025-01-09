@@ -4,7 +4,7 @@ import ManageLocalDrivingLicenseApplication from "../../../features/Applications
 
 const ManageLocalDrivingLicenseApplicationPage = () => {
   return (
-    <Box className="flex flex-col gap-6 h-full">
+    <Box className="p-8 flex flex-col gap-6 h-full">
       <Logo
         image="/src/assets/images/license.png"
         direction="COL"

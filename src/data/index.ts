@@ -7,6 +7,7 @@ import {
   MdPersonAdd,
   MdSupervisorAccount,
   MdOutlineHelpOutline,
+  MdDashboard,
 } from "react-icons/md";
 import { RiFileDamageLine } from "react-icons/ri";
 import { TbReplaceFilled } from "react-icons/tb";
@@ -16,36 +17,40 @@ import { FaCarSide, FaCarCrash, FaPassport, FaFileAlt } from "react-icons/fa";
 import { HiDocumentText, HiOutlineDocumentAdd } from "react-icons/hi";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { INavbar } from "../interfaces";
-
 export const NavData: Array<INavbar> = [
   // People Management
   {
-    name: "Manage People",
+    nameKey: "sideBar.dashboard",
+    Icon: MdDashboard,
+    path: "/",
+  },
+  {
+    nameKey: "sideBar.manage_people",
     Icon: IoIosPeople,
     path: "",
     children: [
       {
-        name: "People Management",
+        nameKey: "sideBar.people_management",
         path: "/people/people-management",
         Icon: RiTeamFill,
       },
       {
-        name: "Find Person",
+        nameKey: "sideBar.find_person",
         path: "/people/find-person",
         Icon: MdPersonSearch,
       },
       {
-        name: "Add Person",
+        nameKey: "sideBar.add_person",
         path: "/people/add-person",
         Icon: MdPersonAdd,
       },
       {
-        name: "Edit Person",
+        nameKey: "sideBar.edit_person",
         path: "/people/edit-person",
         Icon: MdModeEdit,
       },
       {
-        name: "Delete Person",
+        nameKey: "sideBar.delete_person",
         path: "/people/delete-person",
         Icon: MdDelete,
       },
@@ -54,32 +59,32 @@ export const NavData: Array<INavbar> = [
 
   // User Management
   {
-    name: "Manage Users",
+    nameKey: "sideBar.manage_users",
     Icon: RiUser2Fill,
     path: "",
     children: [
       {
-        name: "Users Management",
+        nameKey: "sideBar.users_management",
         path: "users/users-management",
         Icon: MdSupervisorAccount,
       },
       {
-        name: "Find User",
+        nameKey: "sideBar.find_user",
         path: "users/find-user",
         Icon: MdPersonSearch,
       },
       {
-        name: "Add User",
+        nameKey: "sideBar.add_user",
         path: "users/add-user",
         Icon: MdPersonAdd,
       },
       {
-        name: "Edit User",
+        nameKey: "sideBar.edit_user",
         path: "users/edit-user",
         Icon: MdModeEdit,
       },
       {
-        name: "Delete User",
+        nameKey: "sideBar.delete_user",
         path: "users/delete-user",
         Icon: MdDelete,
       },
@@ -88,28 +93,28 @@ export const NavData: Array<INavbar> = [
 
   // Applications Management
   {
-    name: "Applications Management",
+    nameKey: "sideBar.applications_management",
     Icon: FaCarSide,
     path: "",
     children: [
       // Local Licenses
       {
-        name: "Local Licenses Applications",
+        nameKey: "sideBar.local_licenses_applications",
         path: "local-driving",
         Icon: HiDocumentText,
         children: [
           {
-            name: "Manage Local Licenses",
+            nameKey: "sideBar.manage_local_licenses",
             path: "/local-driving-license/manage-local-driving-licenses",
             Icon: HiDocumentText,
           },
           {
-            name: "Add Local License",
+            nameKey: "sideBar.add_local_license",
             path: "/local-driving/add-local-driving-licenses",
             Icon: HiOutlineDocumentAdd,
           },
           {
-            name: "Lookup Local Licenses",
+            nameKey: "sideBar.lookup_local_licenses",
             path: "/local-driving/lookup-local-driving-licenses",
             Icon: MdHistory,
           },
@@ -118,17 +123,17 @@ export const NavData: Array<INavbar> = [
 
       // Detain & Release
       {
-        name: "Detain & Release",
+        nameKey: "sideBar.detain_and_release",
         path: "detain-release",
         Icon: FaCarCrash,
         children: [
           {
-            name: "Release Licenses",
+            nameKey: "sideBar.release_licenses",
             path: "/detain-release/release-licenses",
             Icon: FaCarSide,
           },
           {
-            name: "Detain Licenses",
+            nameKey: "sideBar.detain_licenses",
             path: "/detain-release/detain-licenses",
             Icon: FaCarCrash,
           },
@@ -137,17 +142,17 @@ export const NavData: Array<INavbar> = [
 
       // Replacement
       {
-        name: "Replace Damage & Lost License ",
+        nameKey: "sideBar.replace_damage_lost_license",
         path: "",
         Icon: TbReplaceFilled,
         children: [
           {
-            name: "Replace Damage License",
+            nameKey: "sideBar.replace_damage_license",
             path: "/replace/replace-damage-local-license",
             Icon: RiFileDamageLine,
           },
           {
-            name: "Replace Lost License",
+            nameKey: "sideBar.replace_lost_license",
             path: "/replace/replace-lost-local-license",
             Icon: MdOutlineHelpOutline,
           },
@@ -156,17 +161,17 @@ export const NavData: Array<INavbar> = [
 
       // International Licenses
       {
-        name: "International Licenses",
+        nameKey: "sideBar.international_licenses",
         path: "international",
         Icon: FaPassport,
         children: [
           {
-            name: "Add International License",
+            nameKey: "sideBar.add_international_license",
             path: "/international/add-international-license",
             Icon: FaPassport,
           },
           {
-            name: "Lookup International Licenses",
+            nameKey: "sideBar.lookup_international_licenses",
             path: "/international/lookup-international-license",
             Icon: MdHistory,
           },
@@ -174,24 +179,24 @@ export const NavData: Array<INavbar> = [
       },
 
       {
-        name: "Licenses History",
+        nameKey: "sideBar.licenses_history",
         path: "licenses",
         Icon: MdHistory,
         children: [
           {
-            name: "Licenses History",
+            nameKey: "sideBar.licenses_history",
             path: "/licenses/history",
             Icon: MdHistory,
           },
         ],
       },
       {
-        name: "Renew Licenses Applications",
+        nameKey: "sideBar.renew_licenses_applications",
         Icon: AiOutlineSchedule,
         path: "",
         children: [
           {
-            name: "Renew Local Licenses",
+            nameKey: "sideBar.renew_local_licenses",
             path: "/renew/renew-local-licenses",
             Icon: AiOutlineSchedule,
           },
@@ -199,12 +204,12 @@ export const NavData: Array<INavbar> = [
       },
       // Types
       {
-        name: "Applications Sittings",
+        nameKey: "sideBar.applications_settings",
         path: "types",
         Icon: FaFileAlt,
         children: [
           {
-            name: "Application Types",
+            nameKey: "sideBar.application_types",
             path: "/types/application-types",
             Icon: FaFileAlt,
           },

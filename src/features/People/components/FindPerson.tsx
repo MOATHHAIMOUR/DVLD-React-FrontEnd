@@ -13,18 +13,13 @@ interface IProps {
   isLoading?: boolean;
   isDisabled?: boolean;
 }
-const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
-  /* ────────────── state  ────────────── */
 
+const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
   const [selectedFilterBy, setSelectedFilterBy] = useState<IFilterByComboBox>(
     FindPersonData[0]
   );
-
   const refQuery = useRef<HTMLInputElement>(null!);
-
   const [error, setError] = useState<string | null>(null);
-
-  /* ────────────── Handlers  ────────────── */
 
   const handleOnChangeFilterBy = useCallback((FilterByName: string) => {
     const FilterBy = FilterByPersonData.find(
@@ -35,51 +30,48 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
       setSelectedFilterBy(FilterBy);
       setError(null);
       if (refQuery.current) {
-        refQuery.current.value = ""; // Reset the input value if the ref is valid
+        refQuery.current.value = "";
       }
     }
   }, []);
 
-  function handleChangeQuery(
+  const handleChangeQuery = (
     FilterType: IFilterByComboBox["type"],
     value: string
-  ) {
+  ) => {
     switch (FilterType) {
-      // accept the value only if it's a number otherwise less
       case "number":
         if (value !== "" && !isNumber(value)) {
-          setError("Value Should be a number");
+          setError("Value should be a number");
           return;
         }
         setError(null);
         break;
       case "string":
         if (isNumber(value)) {
-          setError("Value Should be a text");
+          setError("Value should be a text");
           return;
         }
         setError(null);
-
         break;
       default:
         break;
     }
-  }
+  };
 
-  function HandleOnFindPerson() {
-    if (refQuery.current?.value === "") {
-      setError("please provide Value First");
+  const handleOnFindPerson = () => {
+    if (!refQuery.current?.value.trim()) {
+      setError("Please provide a value first.");
       return;
     }
     onFindPerson({
       Filter: {
         FilterBy: selectedFilterBy.value.name,
-        FilterValue: refQuery.current?.value,
+        FilterValue: refQuery.current?.value.trim(),
       },
     });
-  }
+  };
 
-  /* ────────────── Render  ────────────── */
   const renderFilterBys = useMemo(
     () =>
       FindPersonData.map((filterBy, index) => (
@@ -95,17 +87,17 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
       case "string":
       case "number":
         return (
-          <div className="flex items-center gap-2">
+          <Box className="flex flex-col gap-2 w-60">
             <Input
               ref={refQuery}
               onChange={(e) =>
                 handleChangeQuery(selectedFilterBy.type, e.target.value)
               }
-              placeholder={`${selectedFilterBy.value.displayName.toLocaleLowerCase()}`}
-              className="shadow-2xl border-2"
+              placeholder={`Enter ${selectedFilterBy.value.displayName.toLowerCase()}`}
+              className=" shadow-md border rounded-lg p-2 focus:ring-2 focus:ring-primary-hover outline-none transition"
             />
-            {error && <ErrorMsg message={error} />}
-          </div>
+            {error && <ErrorMsg message={error} className="text-red-600" />}
+          </Box>
         );
       case "category":
         switch (selectedFilterBy.value.name) {
@@ -113,47 +105,56 @@ const FindPerson = ({ onFindPerson, isDisabled, isLoading }: IProps) => {
             return (
               <SelectMenu
                 onChange={(e) => handleOnChangeFilterBy(e.target.value)}
+                className="rounded-lg border p-2 shadow-sm"
               >
                 <>
-                  <option value={"Male"}>{"Male"}</option>
-                  <option value={"Female"}>{"Female"}</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </>
               </SelectMenu>
             );
           default:
-            return <p>No Option is Selected</p>;
+            return (
+              <p className="text-gray-500 text-nowrap">No option selected.</p>
+            );
         }
       default:
         return (
-          <p className="font-semibold text-[#1A1F24]">No Option is Selected</p>
+          <p className="font-semibold text-gray-700 text-nowrap">
+            No option selected.
+          </p>
         );
     }
   };
 
   return (
-    <Box disabled={isDisabled} className="flex gap-4 items-center">
-      <Box className="flex  justify-between w-full">
-        <Box className="flex gap-5 items-center">
-          <p className="text-[18px] text-[#1A1F24] font-semibold">Find by:</p>
-          <Box className="w-44">
-            <SelectMenu
-              value={selectedFilterBy.value.name}
-              onChange={(e) => handleOnChangeFilterBy(e.target.value)}
-            >
-              {renderFilterBys}
-            </SelectMenu>
-          </Box>
-          <Box>{renderFilterByQueryBox()}</Box>
-          <Button
-            type="button"
-            isLoading={isLoading}
-            error={error !== null || selectedFilterBy.value.name === "None"}
-            onClick={HandleOnFindPerson}
-            className={` w-28 p-1 bg-primary hover:bg-primaryHover text-white rounded-md`}
-          >
-            Find
-          </Button>
-        </Box>
+    <Box
+      disabled={isDisabled}
+      className="flex flex-col md:flex-row items-center gap-4"
+    >
+      <Box className="flex flex-col md:flex-row gap-4 items-center w-full">
+        <p className="text-xl font-semibold text-gray-800 text-nowrap">
+          Find by:
+        </p>
+        <SelectMenu
+          value={selectedFilterBy.value.name}
+          onChange={(e) => handleOnChangeFilterBy(e.target.value)}
+          className="text-[20px] rounded-lg border p-2 shadow-sm"
+        >
+          {renderFilterBys}
+        </SelectMenu>
+        <Box>{renderFilterByQueryBox()}</Box>
+        <Button
+          type="button"
+          isLoading={isLoading}
+          disabled={
+            isDisabled || !!error || selectedFilterBy.value.name === "None"
+          }
+          onClick={handleOnFindPerson}
+          className="bg-primary hover:bg-primaryHover text-white font-medium px-10 py-2 rounded-lg transition shadow-md hover:bg-primary-hover"
+        >
+          Find
+        </Button>
       </Box>
     </Box>
   );

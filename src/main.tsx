@@ -6,15 +6,16 @@ import { store } from "./store.ts";
 import { Provider as ReduxProvider } from "react-redux";
 import NetworkProvider from "./providers/NetworkProvider.tsx";
 import ThemeProvider from "./providers/ThemeProvider.tsx";
+import "./i18n";
 
 createRoot(document.getElementById("root")!).render(
-  <NetworkProvider>
-    <ReduxProvider store={store}>
+  <ReduxProvider store={store}>
+    <NetworkProvider>
       <ThemeProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </ThemeProvider>
-    </ReduxProvider>
-  </NetworkProvider>
+    </NetworkProvider>
+  </ReduxProvider>
 );

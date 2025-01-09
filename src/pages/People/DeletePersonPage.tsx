@@ -3,7 +3,7 @@ import LookupPersonToDelete from "../../features/People/components/LookupPersonT
 
 const DeletePersonPage = () => {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 p-8">
       <Logo
         image="/src/assets/images/deletePerson.png"
         direction="ROW"

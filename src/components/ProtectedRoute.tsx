@@ -4,13 +4,14 @@ import { Navigate } from "react-router-dom";
 interface IProps {
   isAllowed: boolean;
   children: ReactNode;
+  redirectPath: string;
 }
 
-const ProtectedRoute = ({ children, isAllowed }: IProps) => {
+const ProtectedRoute = ({ children, isAllowed, redirectPath }: IProps) => {
   if (!isAllowed) {
-    console.log("Not allowed. Redirecting to /auth/login");
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to={redirectPath} replace />;
   }
+
   return <>{children}</>;
 };
 

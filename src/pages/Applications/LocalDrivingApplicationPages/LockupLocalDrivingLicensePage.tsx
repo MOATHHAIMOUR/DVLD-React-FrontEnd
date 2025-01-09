@@ -4,7 +4,7 @@ import LookupLocalDrivingLicenseView from "../../../features/Applications/LocalD
 
 const LockupLocalDrivingLicensePage = () => {
   return (
-    <Box className="flex flex-col gap-10 h-[100%]">
+    <Box className="p-8 flex flex-col gap-10 h-[100%]">
       <Logo
         title="Local Driving License Information"
         direction="ROW"

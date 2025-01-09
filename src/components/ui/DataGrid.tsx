@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { BsSortDown, BsSortUp } from "react-icons/bs";
 import { IGenericContextMenuItem, IHeaderData } from "../../interfaces";
 import Tippy from "@tippyjs/react";
+import { useTranslation } from "react-i18next";
 
 interface IProps<T extends string> {
   tableHeader: IHeaderData[];
@@ -26,6 +27,7 @@ const DataGrid = <T extends string>({
     y: 0,
   });
 
+  const { t } = useTranslation();
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -191,7 +193,7 @@ const DataGrid = <T extends string>({
                 className="text-[#1A1F24]  dark:text-white"
                 size={20}
               />
-              <a className="block px-4 text-gray-700">{item.operation}</a>
+              <a className="block px-4 text-gray-700">{t(item.name)}</a>
             </span>
           </Tippy>
 
@@ -262,7 +264,7 @@ const DataGrid = <T extends string>({
       className="px-4 cursor-pointer  text-center w-auto whitespace-nowrap py-3"
     >
       <div className="flex gap-2 items-center justify-center">
-        <span>{head.displayName}</span>
+        <span>{t(head.displayName)}</span>
         {selectedHeaderCell === head.name && renderSortIcon()}
       </div>
     </th>

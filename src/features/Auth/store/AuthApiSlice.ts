@@ -26,10 +26,10 @@ export const AuthApiSlice = createApi({
           });
 
           if (result?.data) {
-            console.log("result.data:", result.data);
+            console.log("result.data:", result.data?.data);
 
             // Dispatch the new credentials to Redux
-            api.dispatch(setCredentials(result.data));
+            api.dispatch(setCredentials(result.data?.data));
 
             // Return successful data response
             return { data: result.data as IGenericApiResponse<IAuthResponse> };

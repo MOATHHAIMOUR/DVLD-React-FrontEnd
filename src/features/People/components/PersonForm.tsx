@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // Global Data
-import { PersonFieldsData } from "../data";
+import { countries, PersonFieldsData } from "../data";
 
 // UI Components
 import Box from "../../../components/ui/Box";
@@ -19,11 +19,15 @@ import { IFetchPerson, IPostPerson } from "../interfaces";
 import { personSchema } from "../validations";
 
 // Shared APIs
-import { useFetchCountriesQuery } from "../../../store/SharedApiSlice";
 import { usePersonFormHandler } from "../hooks/usePersonFormHandler";
 import { enumFormMode, EnumGender } from "../../../Enums";
 import ErrorHandler from "../../../components/ui/ErrorHandler";
-import { useEffect } from "react";
+import { RefObject, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import DatePickerComponent, {
+  DatePickerRef,
+} from "../../../components/ui/DatePickerComponent";
+import DatePicker from "react-flatpickr";
 
 interface IProps {
   PersonData?: IFetchPerson;
@@ -39,8 +43,7 @@ const PersonForm = ({
   isDisabled,
 }: IProps) => {
   /* ────────────── STATE  ────────────── */
-  const { data: countries } = useFetchCountriesQuery();
-
+  const { t } = useTranslation();
   const {
     handlePersonFormSubmit,
     isAddSuccess,
@@ -56,6 +59,7 @@ const PersonForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAddSuccess, isUpdateSuccess]);
 
+  const datePickerRef = useRef<DatePickerRef>(null);
   const {
     register,
     handleSubmit,
@@ -74,48 +78,63 @@ const PersonForm = ({
 
   /* ────────────── RERENDER  ────────────── */
   const personFields = [
-    ...PersonFieldsData.map((field, i) => (
-      <Box key={i}>
-        <label className="block text-sm font-medium text-gray-700">
-          {field.displayName}
-        </label>
-        <Input
-          {...register(field.name)}
-          type={field.type}
-          name={field.name}
-          className="text-black"
-          placeholder={field.placeholder}
-          PrefixIcon={field.Icon}
-        />
-        {errors[field.name] && (
-          <ErrorMsg message={errors[field.name]?.message ?? ""} />
-        )}
-      </Box>
-    )),
+    ...PersonFieldsData.map((field, i) => {
+      return (
+        <Box key={i}>
+          <label className="block text-sm font-medium text-gray-700">
+            {t(field.displayName)}
+          </label>
+          <Input
+            {...register(field.name)}
+            type={field.type}
+            name={field.name}
+            className="text-black"
+            placeholder={t(field.placeholder)}
+            PrefixIcon={field.Icon}
+          />
+          {errors[field.name] && (
+            <ErrorMsg message={errors[field.name]?.message ?? ""} />
+          )}
+        </Box>
+      );
+    }),
+    <Box className="flex  flex-col   h-full" key={"dateOfBirth"}>
+      <span>{t("People.tb_data.DateOfBirth")}</span>
+      <DatePickerComponent
+        placeholder={t("People.placeHolders.date")}
+        ref={datePickerRef}
+        className="w-full"
+      />
+      {errors["dateOfBirth"] && (
+        <ErrorMsg message={errors["dateOfBirth"]?.message ?? ""} />
+      )}
+    </Box>,
     <Box key={"countryId"}>
-      {countries?.data && (
+      {
         <SelectSearchMenu
+          title={t("People.filter_options.nationality")}
           control={control}
           name="countryId"
-          title="Nationality"
-          list={countries.data.map((country) => ({
-            label: country.name,
-            value: country.countryId,
+          placeHolder={t("People.placeHolders.nationality")}
+          list={countries.map((country) => ({
+            label: t(country.name),
+            value: country.id,
           }))}
         />
-      )}
+      }
       {errors["countryId"] && (
         <ErrorMsg message={errors["countryId"]?.message ?? ""} />
       )}
     </Box>,
     <Box key={"gender"}>
       <SelectSearchMenu
+        title={t("People.filter_options.gender")}
         name="gender"
         control={control}
-        title="Gender"
+        placeHolder={t("People.placeHolders.gender")}
         list={[
-          { label: "Male", value: EnumGender.Male },
-          { label: "Female", value: EnumGender.Female },
+          { label: t("People.Gender.Male"), value: EnumGender.Male },
+          { label: t("People.Gender.Female"), value: EnumGender.Female },
         ]}
       />
       {errors["gender"] && (
@@ -165,7 +184,7 @@ const PersonForm = ({
           <Box className="grid grid-cols-3 gap-8 h-[70%]">{personFields}</Box>
           <Box className="w-[300px]    flex flex-col justify-between">
             <Box>
-              <h1 className="text-2xl py-3">Upload Your Image</h1>
+              <h1 className="text-2xl py-3">{t("People.uploadImage")}</h1>
               <FileUploader
                 isReadOnly={false}
                 onRemoveImage={() => {

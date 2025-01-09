@@ -18,12 +18,14 @@ import { TestApiSlice } from "./features/Applications/Tests/Store/TestApiSlice";
 import { DetainLicenseApiSlice } from "./features/Applications/DetainReleaseLicenseApplication/Store/DetainLicenseApiSlice";
 
 import { AuthApiSlice } from "./features/Auth/store/AuthApiSlice";
+import netWorkSlice from "./store/NetworkSlice";
 
 export const store = configureStore({
   reducer: {
     auth: AuthSlice,
     theme: themeSlice,
     peopleSlice: peopleSlice,
+    netWorkSlice,
     [InternationalLicenseApiSlice.reducerPath]:
       InternationalLicenseApiSlice.reducer,
     [LocalDrivingLicenseApplicationApiSlice.reducerPath]:

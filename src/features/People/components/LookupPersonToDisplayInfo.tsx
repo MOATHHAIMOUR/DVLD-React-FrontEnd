@@ -30,7 +30,7 @@ const LookupPersonToDisplayInfo = () => {
   }, [dispatch]);
 
   return (
-    <Box className="flex flex-col gap-8">
+    <Box className="flex flex-col gap-8 ">
       <ErrorHandler error={error} />
       <FindPerson
         isLoading={isFetching || isLoading}

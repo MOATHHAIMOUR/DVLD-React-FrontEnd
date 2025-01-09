@@ -4,10 +4,11 @@ export interface ILogin {
 }
 
 export interface IAuthResponse {
-  userId: string;
+  userName: string;
   password: string;
   authenticationMessage: string;
   jwtToken: string;
+  imageUrl: string;
   refreshToken: string;
   tokenExpirersAt: Date;
   refreshTokenExpiration: Date;

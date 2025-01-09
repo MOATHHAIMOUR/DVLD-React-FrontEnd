@@ -16,6 +16,7 @@ interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
   name: string;
+  placeHolder: string;
 }
 
 // Define the custom styles for react-select
@@ -43,6 +44,7 @@ const SelectSearchMenu: React.FC<IProps> = ({
   title,
   list,
   isLoading,
+  placeHolder,
   control,
   name,
 }) => {
@@ -56,7 +58,7 @@ const SelectSearchMenu: React.FC<IProps> = ({
           <Select
             {...field}
             options={list}
-            placeholder={`Select ${title}`}
+            placeholder={placeHolder}
             className="text-gray-600"
             styles={customStyles}
             isClearable

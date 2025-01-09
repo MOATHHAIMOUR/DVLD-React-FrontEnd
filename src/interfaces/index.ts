@@ -1,7 +1,7 @@
 import { ElementType } from "react";
 
 export interface INavbar {
-  name: string;
+  nameKey: string;
   path: string;
   Icon: ElementType;
   children?: Array<INavbar>;
@@ -50,6 +50,7 @@ export interface IHeaderData {
 export interface IGenericContextMenuItem<T> {
   operation: T;
   Icon: ElementType;
+  name?: string;
   isSubMenu?: boolean;
   children?: Array<IGenericContextMenuItem<T>>;
   isDisabled?: boolean;

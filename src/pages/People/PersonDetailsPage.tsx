@@ -10,7 +10,7 @@ const PersonDetailsPage = () => {
   const personId = queryParams.get("personId");
 
   return (
-    <div className="h-[100%] flex flex-col gap-10">
+    <div className="h-[100%] flex flex-col gap-10 p-8">
       <Logo
         image="/src/assets/images/personDetails.png"
         direction="ROW"

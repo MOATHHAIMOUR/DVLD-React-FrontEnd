@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Box from "../../components/ui/Box";
 import LoginForm from "../../features/Auth/Components/LoginForm";
 
@@ -6,6 +7,11 @@ const LoginPage = () => {
     <Box className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300">
       {/* Main Form Section */}
       <Box className="z-10 w-full max-w-xl bg-white rounded-lg shadow-lg p-8 space-y-10">
+        <img
+          className="w-[170px] mx-auto"
+          src="/src/assets/images/darkthemelogo.png"
+        />
+
         <Box className="text-center">
           <h2 className="text-4xl font-extrabold text-gray-800">
             Driving License Management System

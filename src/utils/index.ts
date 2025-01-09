@@ -77,3 +77,30 @@ export const formatDate = (date: Date): string => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+// Utility function for date formatting
+export const formatDate2 = (date: Date, language: string) => {
+  const formatter = new Intl.DateTimeFormat(language, {
+    weekday: "short", // Short weekday name
+    year: "numeric", // Full year
+    month: "long", // Full month name
+    day: "2-digit", // Day with leading zero
+  });
+
+  return formatter.format(date);
+};
+
+export const toArabicNumbers = (num: number | string): string => {
+  const westernNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+
+  return num
+    .toString()
+    .split("")
+    .map((char) =>
+      westernNumbers.includes(char)
+        ? arabicNumbers[westernNumbers.indexOf(char)]
+        : char
+    )
+    .join("");
+};
